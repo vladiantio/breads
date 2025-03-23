@@ -1,0 +1,105 @@
+@utility thread-content {
+  @apply leading-normal break-words;
+
+  & > * + * {
+    @apply mt-3;
+  }
+
+  li + li {
+    @apply mt-1;
+  }
+
+  li > p + p {
+    @apply mt-6;
+  }
+
+  strong {
+    @apply font-semibold;
+  }
+
+  a {
+    @apply text-primary font-semibold;
+  }
+
+  strong a {
+    @apply font-bold;
+  }
+
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply first:mt-4 font-semibold mt-6 mb-4 text-balance;
+  }
+
+  p {
+    @apply text-pretty;
+  }
+
+  h1 {
+    @apply leading-tight border-b text-xl pb-2;
+  }
+
+  h2 {
+    @apply leading-tight border-b text-lg pb-2;
+  }
+
+  h3 {
+    @apply leading-snug text-lg;
+  }
+
+  h4 {
+    @apply leading-none text-base;
+  }
+
+  h5 {
+    @apply leading-tight text-sm;
+  }
+
+  h6 {
+    @apply leading-tight text-sm text-muted-foreground;
+  }
+
+  blockquote {
+    @apply text-base border-l-4 border-accent pl-4 pr-4 text-muted-foreground;
+  }
+
+  pre, code {
+    @apply font-mono text-sm;
+  }
+
+  :not(pre) > code {
+    @apply inline bg-accent rounded-sm px-1 py-0.5;
+  }
+
+  pre > code {
+    @apply block bg-card text-foreground border rounded-2xl px-4 py-3 overflow-auto;
+  }
+
+  ul {
+    @apply text-base pl-8 list-disc;
+  }
+
+  ol {
+    @apply text-base pl-8 list-decimal;
+  }
+
+  kbd {
+    @apply text-xs inline-block rounded-sm border px-1 py-0.5 align-middle font-normal font-mono shadow;
+  }
+
+  table {
+    @apply text-base border;
+  }
+
+  th {
+    @apply border py-1 px-3;
+  }
+
+  td {
+    @apply border py-1 px-3;
+  }
+
+  /* Override pygments style background color. */
+  .highlight pre {
+    @apply !bg-neutral-100;
+  }
+}
