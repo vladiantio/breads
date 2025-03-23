@@ -1,3 +1,5 @@
+import PostCard from '@/components/feed/PostCard'
+import { getFeedPosts } from '@/data/posts'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -6,8 +8,12 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
-    </div>
+    <>
+      <div>
+        {getFeedPosts().map(post => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    </>
   )
 }
