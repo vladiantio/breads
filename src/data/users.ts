@@ -8,7 +8,6 @@ export interface User {
   followers: number;
   joinDate: string;
   isFollowing?: boolean;
-  isVerified?: boolean;
 }
 
 export const users: User[] = [
