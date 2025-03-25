@@ -11,4 +11,10 @@
   body {
     @apply bg-background text-foreground overflow-x-hidden;
   }
+  [role=button], button {
+    @apply cursor-pointer;
+  }
+  :disabled {
+    @apply cursor-default;
+  }
 }
