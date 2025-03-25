@@ -2,8 +2,13 @@ import React from 'react';
 import { Button } from '../ui/button';
 import UserAvatar from '../shared/UserAvatar';
 import { getCurrentUser } from '@/data/users';
-import { BellIcon, HomeIcon, SearchIcon, SettingsIcon, SquarePenIcon, UserIcon } from 'lucide-react';
-import { NavLink } from './NavLink';
+import HomeIcon from '@/icons/home.svg?react';
+import SearchIcon from '@/icons/search.svg?react';
+import SquarePenIcon from '@/icons/square-pen.svg?react';
+import BellIcon from '@/icons/bell.svg?react';
+import UserIcon from '@/icons/person-rounded.svg?react';
+import { SettingsIcon } from 'lucide-react';
+import { NavIconLink } from './NavIconLink';
 
 export const Navbar: React.FC = () => {
   return (
@@ -12,13 +17,14 @@ export const Navbar: React.FC = () => {
         <UserAvatar user={getCurrentUser()} />
       </div>
       <div className="p-2 flex flex-col items-center gap-3">
-        <NavLink 
+        <NavIconLink 
           icon={HomeIcon}
           label="Home"
           to="/"
+          fillOnHover
         />
 
-        <NavLink 
+        <NavIconLink 
           icon={SearchIcon}
           label="Search"
           to="/search"
@@ -31,20 +37,22 @@ export const Navbar: React.FC = () => {
           <SquarePenIcon className="size-6" />
         </Button>
 
-        <NavLink 
+        <NavIconLink 
           icon={BellIcon}
           label="Notifications"
           to="/notifications"
+          fillOnHover
         />
 
-        <NavLink 
+        <NavIconLink 
           icon={UserIcon}
           label="Profile"
           to="/profile"
+          fillOnHover
         />
       </div>
       <div className="p-2 flex flex-col items-center gap-3">
-        <NavLink 
+        <NavIconLink 
           icon={SettingsIcon}
           label="Settings"
           to="/settings"

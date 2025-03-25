@@ -1,19 +1,24 @@
 import React from 'react';
-import { BellIcon, HomeIcon, SearchIcon, SquarePenIcon, UserIcon } from 'lucide-react';
-import { NavLink } from './NavLink';
+import HomeIcon from '@/icons/home.svg?react';
+import SearchIcon from '@/icons/search.svg?react';
+import SquarePenIcon from '@/icons/square-pen.svg?react';
+import BellIcon from '@/icons/bell.svg?react';
+import UserIcon from '@/icons/person-rounded.svg?react';
+import { NavIconLink } from './NavIconLink';
 import { Button } from '../ui/button';
 
 export const MobileNav: React.FC = () => {
   return (
     <nav className="sticky bottom-0 inset-x-0 bg-background border-t z-50">
       <div className="flex items-center justify-around p-2">
-        <NavLink 
+        <NavIconLink 
           icon={HomeIcon}
           label="Home"
           to="/"
+          fillOnHover
         />
 
-        <NavLink 
+        <NavIconLink 
           icon={SearchIcon}
           label="Search"
           to="/search"
@@ -26,16 +31,18 @@ export const MobileNav: React.FC = () => {
           <SquarePenIcon className="size-6" />
         </Button>
 
-        <NavLink 
+        <NavIconLink 
           icon={BellIcon}
           label="Notifications"
           to="/notifications"
+          fillOnHover
         />
 
-        <NavLink 
+        <NavIconLink 
           icon={UserIcon}
           label="Profile"
           to="/profile"
+          fillOnHover
         />
       </div>
     </nav>
