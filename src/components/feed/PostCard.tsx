@@ -55,19 +55,19 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
 
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
     // Simulate share action
+    navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
     toast("Share options", {
       description: "Copy link, share to other platforms...",
       duration: 2000,
     });
   };
 
-  const handleCopyLink = (e: React.MouseEvent) => {
+  const handleCopyText = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
-    toast("Link copied", {
-      description: "Post link copied to clipboard",
+    navigator.clipboard.writeText(post.content);
+    toast("Text copied", {
+      description: "Post text copied to clipboard",
       duration: 2000,
     });
   };
@@ -124,17 +124,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem onClick={handleCopyLink} className="cursor-pointer">
-                    <Copy className="mr-2 h-4 w-4" />
-                    <span>Copy link to post</span>
+                  <DropdownMenuItem onClick={handleCopyText} className="cursor-pointer">
+                    <Copy className="mr-2" size={16} />
+                    <span>Copy text</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleNotInterested} className="cursor-pointer">
-                    <XCircle className="mr-2 h-4 w-4" />
+                    <XCircle className="mr-2" size={16} />
                     <span>Not interested in this post</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleReport} className="cursor-pointer text-destructive">
-                    <Flag className="mr-2 h-4 w-4" />
+                  <DropdownMenuItem onClick={handleReport} className="cursor-pointer" variant="destructive">
+                    <Flag className="mr-2" size={16} />
                     <span>Report post</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -146,7 +146,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
             </div>
 
             {post.images && post.images.length > 0 && (
-              <div className="mt-3 rounded-2xl overflow-hidden">
+              <div className="mt-3 rounded-2xl overflow-hidden border">
                 <img 
                   src={post.images[0]} 
                   alt="Post content" 
