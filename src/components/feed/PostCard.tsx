@@ -21,7 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
-import { toast } from "sonner"
+import { toast } from "sonner";
+import { useNavigate } from '@tanstack/react-router';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -29,7 +30,7 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
   
   // const isLiked = postLikeStatus[post.id];
@@ -104,7 +105,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
                   className="font-semibold truncate hover:underline cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // navigate(`/profile/${post.author.username}`);
+                    navigate({
+                      to: '/profile/$username',
+                      params: {
+                        username: post.author.username,
+                      },
+                    });
                   }}
                 >
                   {post.author.displayName}

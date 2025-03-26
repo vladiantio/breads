@@ -13,9 +13,10 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as SearchImport } from './routes/search'
-import { Route as ProfileImport } from './routes/profile'
 import { Route as NotificationsImport } from './routes/notifications'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProfileUsernameImport } from './routes/profile.$username'
+import { Route as ProfileUsernamePostPostIdImport } from './routes/profile.$username.post.$postId'
 
 // Create/Update Routes
 
@@ -31,12 +32,6 @@ const SearchRoute = SearchImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileRoute = ProfileImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const NotificationsRoute = NotificationsImport.update({
   id: '/notifications',
   path: '/notifications',
@@ -47,6 +42,18 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileUsernameRoute = ProfileUsernameImport.update({
+  id: '/profile/$username',
+  path: '/profile/$username',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileUsernamePostPostIdRoute = ProfileUsernamePostPostIdImport.update({
+  id: '/post/$postId',
+  path: '/post/$postId',
+  getParentRoute: () => ProfileUsernameRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -67,13 +74,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsImport
       parentRoute: typeof rootRoute
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
-      parentRoute: typeof rootRoute
-    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -88,59 +88,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsImport
       parentRoute: typeof rootRoute
     }
+    '/profile/$username': {
+      id: '/profile/$username'
+      path: '/profile/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof ProfileUsernameImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile/$username/post/$postId': {
+      id: '/profile/$username/post/$postId'
+      path: '/post/$postId'
+      fullPath: '/profile/$username/post/$postId'
+      preLoaderRoute: typeof ProfileUsernamePostPostIdImport
+      parentRoute: typeof ProfileUsernameImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface ProfileUsernameRouteChildren {
+  ProfileUsernamePostPostIdRoute: typeof ProfileUsernamePostPostIdRoute
+}
+
+const ProfileUsernameRouteChildren: ProfileUsernameRouteChildren = {
+  ProfileUsernamePostPostIdRoute: ProfileUsernamePostPostIdRoute,
+}
+
+const ProfileUsernameRouteWithChildren = ProfileUsernameRoute._addFileChildren(
+  ProfileUsernameRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/profile/$username': typeof ProfileUsernameRouteWithChildren
+  '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/profile/$username': typeof ProfileUsernameRouteWithChildren
+  '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/profile/$username': typeof ProfileUsernameRouteWithChildren
+  '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/notifications' | '/profile' | '/search' | '/settings'
+  fullPaths:
+    | '/'
+    | '/notifications'
+    | '/search'
+    | '/settings'
+    | '/profile/$username'
+    | '/profile/$username/post/$postId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/notifications' | '/profile' | '/search' | '/settings'
-  id: '__root__' | '/' | '/notifications' | '/profile' | '/search' | '/settings'
+  to:
+    | '/'
+    | '/notifications'
+    | '/search'
+    | '/settings'
+    | '/profile/$username'
+    | '/profile/$username/post/$postId'
+  id:
+    | '__root__'
+    | '/'
+    | '/notifications'
+    | '/search'
+    | '/settings'
+    | '/profile/$username'
+    | '/profile/$username/post/$postId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NotificationsRoute: typeof NotificationsRoute
-  ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
+  ProfileUsernameRoute: typeof ProfileUsernameRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NotificationsRoute: NotificationsRoute,
-  ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,
+  ProfileUsernameRoute: ProfileUsernameRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -155,9 +203,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/notifications",
-        "/profile",
         "/search",
-        "/settings"
+        "/settings",
+        "/profile/$username"
       ]
     },
     "/": {
@@ -166,14 +214,21 @@ export const routeTree = rootRoute
     "/notifications": {
       "filePath": "notifications.tsx"
     },
-    "/profile": {
-      "filePath": "profile.tsx"
-    },
     "/search": {
       "filePath": "search.tsx"
     },
     "/settings": {
       "filePath": "settings.tsx"
+    },
+    "/profile/$username": {
+      "filePath": "profile.$username.tsx",
+      "children": [
+        "/profile/$username/post/$postId"
+      ]
+    },
+    "/profile/$username/post/$postId": {
+      "filePath": "profile.$username.post.$postId.tsx",
+      "parent": "/profile/$username"
     }
   }
 }

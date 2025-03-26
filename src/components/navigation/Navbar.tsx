@@ -47,7 +47,10 @@ export const Navbar: React.FC = () => {
         <NavIconLink 
           icon={UserIcon}
           label="Profile"
-          to="/profile"
+          to="/profile/$username"
+          params={{
+            username: getCurrentUser().username,
+          }}
           fillOnHover
         />
       </div>

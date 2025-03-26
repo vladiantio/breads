@@ -6,6 +6,7 @@ import BellIcon from '@/icons/bell.svg?react';
 import UserIcon from '@/icons/person-rounded.svg?react';
 import { NavIconLink } from './NavIconLink';
 import { Button } from '../ui/button';
+import { getCurrentUser } from '@/data/users';
 
 export const MobileNav: React.FC = () => {
   return (
@@ -41,7 +42,10 @@ export const MobileNav: React.FC = () => {
         <NavIconLink 
           icon={UserIcon}
           label="Profile"
-          to="/profile"
+          to="/profile/$username"
+          params={{
+            username: getCurrentUser().username,
+          }}
           fillOnHover
         />
       </div>
