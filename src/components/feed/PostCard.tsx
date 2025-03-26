@@ -186,28 +186,28 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
               <Button
                 aria-label="Repost"
                 variant="ghost"
-                className={cn('rounded-full text-muted-foreground')}
+                className={cn('rounded-full text-muted-foreground', isReposted && '!text-green-500')}
                 onClick={handleRepost}
               >
                 {isReposted
-                  ? <Repeat1 className='size-5 text-foreground' />
+                  ? <Repeat1 className='size-5' />
                   : <Repeat className='size-5' />}
-                {post.reposts > 0 && (
-                  <span>{formatNumber(post.reposts)}</span>
+                {post.reposts + (isReposted ? 1 : 0) > 0 && (
+                  <span>{formatNumber(post.reposts + (isReposted ? 1 : 0))}</span>
                 )}
               </Button>
 
               <Button
                 aria-label="Like"
                 variant="ghost"
-                className={cn('rounded-full text-muted-foreground')}
+                className={cn('rounded-full text-muted-foreground', isLiked && '!text-red-500')}
                 onClick={handleLike}
               >
                 <Heart
-                  className={cn('size-5', isLiked && 'text-red-500 fill-current')}
+                  className={cn('size-5', isLiked && 'fill-current')}
                 />
-                {post.likes > 0 && (
-                  <span>{formatNumber(post.likes)}</span>
+                {post.likes + (isLiked ? 1 : 0) > 0 && (
+                  <span>{formatNumber(post.likes + (isLiked ? 1 : 0))}</span>
                 )}
               </Button>
 
