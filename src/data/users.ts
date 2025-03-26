@@ -85,7 +85,7 @@ export const getUserByUsername = (username: string): User | undefined => {
 };
 
 export const getCurrentUser = (): User => {
-  return users.find(user => user.username === "currentuser") || users[5];
+  return users[0];
 };
 
 export const getRecommendedUsers = (): User[] => {
