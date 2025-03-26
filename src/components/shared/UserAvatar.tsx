@@ -29,7 +29,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
   return (
     <div className="relative inline-block">
       <Avatar 
-        className={`${sizeClasses[size]} ${clickable ? 'cursor-pointer' : ''} transition-all duration-200 hover:opacity-90`}
+        className={`border ${sizeClasses[size]} ${clickable ? 'cursor-pointer' : ''} transition-all duration-200 hover:opacity-90`}
         onClick={handleClick}
       >
         <AvatarImage src={user.avatar} alt={user.displayName} className="object-cover blur" />
