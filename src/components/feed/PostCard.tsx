@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Heart,
   MessageCircle,
@@ -7,7 +7,8 @@ import {
   Copy,
   XCircle,
   Flag,
-  Share2
+  Share2,
+  Repeat1
 } from 'lucide-react';
 import { PostWithAuthor } from '@/data/posts';
 import UserAvatar from '../shared/UserAvatar';
@@ -23,6 +24,8 @@ import {
 } from '../ui/dropdown-menu';
 import { toast } from "sonner";
 import { useNavigate } from '@tanstack/react-router';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -35,8 +38,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
   
   // const isLiked = postLikeStatus[post.id];
   // const isReposted = postRepostStatus[post.id];
-  const isLiked = false;
-  const isReposted = false;
+  const [ isLiked, setIsLiked ] = useState(false);
+  const [ isReposted, setIsReposted ] = useState(false);
 
   const handlePostClick = () => {
     if (!isDetail) {
@@ -46,11 +49,13 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsLiked(status => !status);
     // toggleLike(post.id);
   };
 
   const handleRepost = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsReposted(status => !status);
     // toggleRepost(post.id);
   };
 
@@ -94,7 +99,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
       className={`not-first:border-t ${isDetail ? 'mb-0' : ''}`}
       onClick={handlePostClick}
     >
-      <div className="p-4">
+      <div className="p-3">
         <div className="flex items-start space-x-3">
           <UserAvatar user={post.author} />
 
@@ -162,48 +167,58 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
               </div>
             )}
 
-            <div className="flex items-center gap-x-8 mt-3 pt-2">
-              <button
+            <div className="flex items-center gap-x-1 mt-2 -mx-3">
+              <Button
                 aria-label="Reply"
-                className="flex items-center space-x-1 text-muted-foreground hover:text-sky-500 transition-colors"
+                variant="ghost"
                 onClick={(e) => {
                   e.stopPropagation();
                   // navigate(`/post/${post.id}`);
                 }}
+                className="rounded-full text-muted-foreground"
               >
-                <MessageCircle size={18} />
-                <span>{formatNumber(post.replies)}</span>
-              </button>
+                <MessageCircle className='size-5' />
+                {post.replies > 0 && (
+                  <span>{formatNumber(post.replies)}</span>
+                )}
+              </Button>
 
-              <button
+              <Button
                 aria-label="Repost"
-                className={`flex items-center space-x-1 transition-colors ${
-                  isReposted ? 'text-green-500' : 'text-muted-foreground hover:text-green-500'
-                }`}
+                variant="ghost"
+                className={cn('rounded-full text-muted-foreground')}
                 onClick={handleRepost}
               >
-                <Repeat size={18} />
-                <span>{formatNumber(post.reposts)}</span>
-              </button>
+                {isReposted
+                  ? <Repeat1 className='size-5 text-foreground' />
+                  : <Repeat className='size-5' />}
+                {post.reposts > 0 && (
+                  <span>{formatNumber(post.reposts)}</span>
+                )}
+              </Button>
 
-              <button
+              <Button
                 aria-label="Like"
-                className={`like-button flex items-center space-x-1 transition-colors ${
-                  isLiked ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
-                }`}
+                variant="ghost"
+                className={cn('rounded-full text-muted-foreground')}
                 onClick={handleLike}
               >
-                <Heart size={18} />
-                <span>{formatNumber(post.likes)}</span>
-              </button>
+                <Heart
+                  className={cn('size-5', isLiked && 'text-red-500 fill-current')}
+                />
+                {post.likes > 0 && (
+                  <span>{formatNumber(post.likes)}</span>
+                )}
+              </Button>
 
-              <button
+              <Button
                 aria-label="Share"
-                className="flex items-center space-x-1 text-muted-foreground hover:text-sky-500 transition-colors"
+                variant="ghost"
+                className="rounded-full text-muted-foreground"
                 onClick={handleShare}
               >
-                <Share2 size={18} />
-              </button>
+                <Share2 className='size-5' />
+              </Button>
             </div>
           </div>
         </div>
