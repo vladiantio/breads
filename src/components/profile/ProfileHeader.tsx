@@ -5,8 +5,7 @@ import { ProfileTabs } from './ProfileTabs';
 import { formatNumber } from '@/utils/number';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
-// import FollowButton from '../shared/FollowButton';
-// import { useNavigate } from 'react-router-dom';
+import { useRouter } from '@tanstack/react-router';
 
 interface ProfileHeaderProps {
   user: User;
@@ -14,17 +13,18 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
-  // const navigate = useNavigate();
-
-  // const formatDate = (dateStr: string) => {
-  //   const date = new Date(dateStr);
-  //   return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  // };
+  const { history } = useRouter();
 
   return (
     <>
-      <div className="sticky top-0 z-10 bg-background px-4 py-2 flex items-center justify-between">
-        <ArrowLeft />
+      <div className="sticky top-0 z-10 bg-background px-3 py-2 flex items-center justify-between">
+        <Button
+          variant="ghost"
+          className="rounded-full !p-2"
+          onClick={() => history.go(-1)}
+        >
+          <ArrowLeft className="size-5" />
+        </Button>
         <div className="text-center text-sm">
           <p className="font-bold">{user.displayName}</p>
           <p className="text-muted-foreground">@{user.username}</p>
@@ -41,20 +41,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
           )}
         </div>
       </div>
-      {/* <div className="header-blur flex items-center px-4 py-2">
-        <button 
-          className="icon-button mr-6"
-          onClick={() => navigate(-1)}
-        >
-          <ArrowLeft size={20} />
-        </button>
-        <div>
-          <h1 className="text-xl font-bold">{user.displayName}</h1>
-          <p className="text-sm text-muted-foreground">
-            {formatNumber(user.followers)} followers
-          </p>
-        </div>
-      </div> */}
 
       <div className="px-4 pb-4">
         <div
