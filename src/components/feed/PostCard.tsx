@@ -99,122 +99,120 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
       className={`not-first:border-t ${isDetail ? 'mb-0' : ''}`}
       onClick={handlePostClick}
     >
-      <div className="p-3">
-        <div className="flex items-start space-x-3">
-          <UserAvatar user={post.author} />
+      <div className="flex items-start p-3 space-x-3">
+        <UserAvatar user={post.author} />
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between gap-x-2">
-              <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
-                <Link
-                  to="/profile/$username"
-                  params={{
-                    username: post.author.username,
-                  }}
-                  className="space-x-2 truncate"
-                >
-                  <span className="font-semibold text-foreground hover:underline hover:underline-offset-4">{post.author.displayName}</span>
-                  <span>@{post.author.username}</span>
-                </Link>
-                <span>·</span>
-                <span>{formatTimestamp(post.timestamp)}</span>
-              </div>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button 
-                    className="text-muted-foreground hover:text-foreground"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <MoreHorizontal size={18} />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem onClick={handleCopyText} className="cursor-pointer">
-                    <Copy className="mr-2" size={16} />
-                    <span>Copy text</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleNotInterested} className="cursor-pointer">
-                    <XCircle className="mr-2" size={16} />
-                    <span>Not interested in this post</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleReport} className="cursor-pointer" variant="destructive">
-                    <Flag className="mr-2" size={16} />
-                    <span>Report post</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            <div className="mt-1">
-              <ThreadContentRenderer content={post.content} />
-            </div>
-
-            {post.images && post.images.length > 0 && (
-              <div className="mt-3 rounded-2xl overflow-hidden border">
-                <img 
-                  src={post.images[0]} 
-                  alt="Post content" 
-                  className="w-full h-auto"
-                  loading="lazy"
-                />
-              </div>
-            )}
-
-            <div className="flex items-center gap-x-1 mt-2 -mx-3">
-              <Button
-                aria-label="Reply"
-                variant="ghost"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // navigate(`/post/${post.id}`);
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-x-2">
+            <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
+              <Link
+                to="/profile/$username"
+                params={{
+                  username: post.author.username,
                 }}
-                className="rounded-full text-muted-foreground"
+                className="space-x-2 truncate"
               >
-                <MessageCircle className='size-5' />
-                {post.replies > 0 && (
-                  <span>{formatNumber(post.replies)}</span>
-                )}
-              </Button>
-
-              <Button
-                aria-label="Repost"
-                variant="ghost"
-                className={cn('rounded-full text-muted-foreground', isReposted && '!text-green-500')}
-                onClick={handleRepost}
-              >
-                {isReposted
-                  ? <Repeat1 className='size-5' />
-                  : <Repeat className='size-5' />}
-                {post.reposts + (isReposted ? 1 : 0) > 0 && (
-                  <span>{formatNumber(post.reposts + (isReposted ? 1 : 0))}</span>
-                )}
-              </Button>
-
-              <Button
-                aria-label="Like"
-                variant="ghost"
-                className={cn('rounded-full text-muted-foreground', isLiked && '!text-red-500')}
-                onClick={handleLike}
-              >
-                <Heart
-                  className={cn('size-5', isLiked && 'fill-current')}
-                />
-                {post.likes + (isLiked ? 1 : 0) > 0 && (
-                  <span>{formatNumber(post.likes + (isLiked ? 1 : 0))}</span>
-                )}
-              </Button>
-
-              <Button
-                aria-label="Share"
-                variant="ghost"
-                className="rounded-full text-muted-foreground"
-                onClick={handleShare}
-              >
-                <Share2 className='size-5' />
-              </Button>
+                <span className="font-semibold text-foreground hover:underline hover:underline-offset-4">{post.author.displayName}</span>
+                <span>@{post.author.username}</span>
+              </Link>
+              <span>·</span>
+              <span>{formatTimestamp(post.timestamp)}</span>
             </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button 
+                  className="text-muted-foreground hover:text-foreground"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreHorizontal size={18} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={handleCopyText} className="cursor-pointer">
+                  <Copy className="mr-2" size={16} />
+                  <span>Copy text</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleNotInterested} className="cursor-pointer">
+                  <XCircle className="mr-2" size={16} />
+                  <span>Not interested in this post</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleReport} className="cursor-pointer" variant="destructive">
+                  <Flag className="mr-2" size={16} />
+                  <span>Report post</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <div className="mt-1">
+            <ThreadContentRenderer content={post.content} />
+          </div>
+
+          {post.images && post.images.length > 0 && (
+            <div className="mt-3 rounded-2xl overflow-hidden border">
+              <img 
+                src={post.images[0]} 
+                alt="Post content" 
+                className="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+          )}
+
+          <div className="flex items-center gap-x-1 mt-2 -mx-3">
+            <Button
+              aria-label="Reply"
+              variant="ghost"
+              onClick={(e) => {
+                e.stopPropagation();
+                // navigate(`/post/${post.id}`);
+              }}
+              className="rounded-full text-muted-foreground"
+            >
+              <MessageCircle className='size-5' />
+              {post.replies > 0 && (
+                <span>{formatNumber(post.replies)}</span>
+              )}
+            </Button>
+
+            <Button
+              aria-label="Repost"
+              variant="ghost"
+              className={cn('rounded-full text-muted-foreground', isReposted && '!text-green-500')}
+              onClick={handleRepost}
+            >
+              {isReposted
+                ? <Repeat1 className='size-5' />
+                : <Repeat className='size-5' />}
+              {post.reposts + (isReposted ? 1 : 0) > 0 && (
+                <span>{formatNumber(post.reposts + (isReposted ? 1 : 0))}</span>
+              )}
+            </Button>
+
+            <Button
+              aria-label="Like"
+              variant="ghost"
+              className={cn('rounded-full text-muted-foreground', isLiked && '!text-red-500')}
+              onClick={handleLike}
+            >
+              <Heart
+                className={cn('size-5', isLiked && 'fill-current')}
+              />
+              {post.likes + (isLiked ? 1 : 0) > 0 && (
+                <span>{formatNumber(post.likes + (isLiked ? 1 : 0))}</span>
+              )}
+            </Button>
+
+            <Button
+              aria-label="Share"
+              variant="ghost"
+              className="rounded-full text-muted-foreground"
+              onClick={handleShare}
+            >
+              <Share2 className='size-5' />
+            </Button>
           </div>
         </div>
       </div>
