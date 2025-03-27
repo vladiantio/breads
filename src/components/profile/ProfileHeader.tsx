@@ -17,7 +17,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
 
   return (
     <>
-      <div className="sticky top-0 z-10 bg-background px-3 h-14 flex items-center justify-between">
+      <div className="sticky top-0 z-10 bg-background px-3 h-14 flex items-center justify-between gap-x-3">
         <Button
           variant="ghost"
           className="rounded-full !p-2"
@@ -25,7 +25,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
         >
           <ArrowLeft className="size-5" />
         </Button>
-        <div className="text-center text-sm">
+        <div className="text-center text-sm overflow-hidden [&>*]:truncate">
           <p className="font-bold">{user.displayName}</p>
           <p className="text-muted-foreground">@{user.username}</p>
         </div>
@@ -48,8 +48,8 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
           style={{ backgroundImage: `url(${user.banner})` }}
         />
 
-        <div className="mt-3 grid grid-cols-[1fr_calc(var(--spacing)_*_16)] gap-x-16 items-center">
-          <div>
+        <div className="mt-3 flex gap-x-4 items-center justify-between">
+          <div className="overflow-hidden [&>*]:truncate">
             <h1 className="text-xl font-bold">{user.displayName}</h1>
             <p className="text-muted-foreground">@{user.username}</p>
           </div>
