@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { User } from '@/data/users';
 import UserAvatar from '../shared/UserAvatar';
 import { ProfileTabs } from './ProfileTabs';
+import { formatNumber } from '@/utils/number';
 // import FollowButton from '../shared/FollowButton';
 // import { useNavigate } from 'react-router-dom';
 
@@ -17,16 +18,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
   //   const date = new Date(dateStr);
   //   return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   // };
-
-  const formatNumber = (num: number): string => {
-    if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + ' M';
-    }
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + ' K';
-    }
-    return num.toString();
-  };
 
   return (
     <>
