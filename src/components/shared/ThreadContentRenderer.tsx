@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import Markdown, { ReactRenderer } from 'marked-react';
 import Lowlight from 'react-lowlight';
-import { formatContentWithHashtags } from '@/utils/formatContentWithHashtags';
+import { formatContent } from '@/utils/formatContent';
 import javascript from 'highlight.js/lib/languages/javascript';
 import css from 'highlight.js/lib/languages/css';
 
@@ -23,7 +23,7 @@ const renderer: Partial<ReactRenderer> = {
       children instanceof Array
       ? children.map((value: React.ReactNode) => (
         typeof value === 'string'
-          ? formatContentWithHashtags(value)
+          ? formatContent(value)
           : value
       ))
       : children
