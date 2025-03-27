@@ -16,8 +16,8 @@ export const Layout: React.FC<LayoutProps> = ({
     <div className="grid grid-rows-[1fr_auto] min-h-dvh bg-background">
       {!isMobile && <Navbar />}
 
-      <div className="md:px-15 py-4">
-        <div className="max-w-[75ch] mx-auto">
+      <div className="md:px-15">
+        <div className="max-w-[65ch] mx-auto">
           {children}
         </div>
       </div>
