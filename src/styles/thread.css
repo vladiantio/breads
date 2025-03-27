@@ -18,7 +18,7 @@
   }
 
   a {
-    @apply text-primary font-semibold;
+    @apply text-link font-medium hover:text-[color-mix(in_oklab,var(--link)_60%,var(--foreground))] transition-[background,color];
   }
 
   strong a {
