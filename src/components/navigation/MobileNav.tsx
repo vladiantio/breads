@@ -10,7 +10,7 @@ import { getCurrentUser } from '@/data/users';
 
 export const MobileNav: React.FC = () => {
   return (
-    <nav className="sticky bottom-0 inset-x-0 bg-background border-t z-50">
+    <nav className="sticky bottom-0 inset-x-0 bg-background z-50">
       <div className="flex items-center justify-around p-2">
         <NavIconLink 
           icon={HomeIcon}
