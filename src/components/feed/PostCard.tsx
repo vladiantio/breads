@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
 import { toast } from "sonner";
-import { useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +33,7 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
   
   // const isLiked = postLikeStatus[post.id];
@@ -104,25 +104,20 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
           <UserAvatar user={post.author} />
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span
-                  className="font-semibold truncate hover:underline cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate({
-                      to: '/profile/$username',
-                      params: {
-                        username: post.author.username,
-                      },
-                    });
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
+                <Link
+                  to="/profile/$username"
+                  params={{
+                    username: post.author.username,
                   }}
+                  className="space-x-2 truncate"
                 >
-                  {post.author.displayName}
-                </span>
-                <span className="text-muted-foreground">@{post.author.username}</span>
-                <span className="text-muted-foreground">·</span>
-                <span className="text-muted-foreground">{formatTimestamp(post.timestamp)}</span>
+                  <span className="font-semibold text-foreground hover:underline hover:underline-offset-4">{post.author.displayName}</span>
+                  <span>@{post.author.username}</span>
+                </Link>
+                <span>·</span>
+                <span>{formatTimestamp(post.timestamp)}</span>
               </div>
 
               <DropdownMenu>
