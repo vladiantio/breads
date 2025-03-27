@@ -5,11 +5,21 @@ import Lowlight from 'react-lowlight';
 import { formatContent } from '@/utils/formatContent';
 import javascript from 'highlight.js/lib/languages/javascript';
 import css from 'highlight.js/lib/languages/css';
+import { removeHttpAndWww } from '@/utils/string';
 
 Lowlight.registerLanguage('javascript', javascript);
 Lowlight.registerLanguage('css', css);
 
 const renderer: Partial<ReactRenderer> = {
+  link(href, text) {
+    return <a href={href} rel="noopener noreferrer" target="_blank">
+      {typeof text === 'string'
+        ? removeHttpAndWww(text)
+        : text instanceof Array
+        ? text.map(t => typeof t === 'string' ? removeHttpAndWww(t) : t)
+        : text}
+    </a>;
+  },
   code(snippet, lang) {
     return <Lowlight
       key={this.elementId}
