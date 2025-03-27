@@ -17,7 +17,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
 
   return (
     <>
-      <div className="sticky top-0 z-10 bg-background px-3 py-2 flex items-center justify-between">
+      <div className="sticky top-0 z-10 bg-background px-3 h-14 flex items-center justify-between">
         <Button
           variant="ghost"
           className="rounded-full !p-2"

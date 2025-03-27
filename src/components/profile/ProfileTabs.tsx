@@ -6,7 +6,7 @@ export const ProfileTabs: FC = () => {
   const [activeTab, setActiveTab] = useState('posts');
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab}>
+    <Tabs className="sticky bg-background top-14 z-10" value={activeTab} onValueChange={setActiveTab}>
       <ScrollArea>
         <TabsList className="gap-2 rounded-none border-b bg-transparent px-0 py-1 min-w-full">
           <TabsTrigger
