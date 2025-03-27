@@ -31,25 +31,23 @@ function RouteComponent() {
   if (!user)
     return "Nothing to show!";
 
-  return <div className="pb-20 animate-fade-in">
+  return <>
     <ProfileHeader user={user} isCurrentUser={isCurrentUser} />
     
-    <div className="px-4 pt-2">
-      {userPosts.length > 0 ? (
-        <div className="space-y-1">
-          {userPosts.map(post => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-lg font-medium mb-2">No posts yet</p>
-          <p className="text-muted-foreground">
-            When {isCurrentUser ? 'you post' : `@${user?.username} posts`}, 
-            they'll appear here
-          </p>
-        </div>
-      )}
-    </div>
-  </div>
+    {userPosts.length > 0 ? (
+      <div>
+        {userPosts.map(post => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+    ) : (
+      <div className="text-center py-12">
+        <p className="text-lg font-medium mb-2">No posts yet</p>
+        <p className="text-muted-foreground">
+          When {isCurrentUser ? 'you post' : `@${user?.username} posts`}, 
+          they'll appear here
+        </p>
+      </div>
+    )}
+  </>
 }
