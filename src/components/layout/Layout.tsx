@@ -13,10 +13,10 @@ export const Layout: React.FC<LayoutProps> = ({
   const isMobile = useIsMobile();
   
   return (
-    <div className="grid grid-rows-[1fr_auto] min-h-dvh bg-background">
+    <div className="flex flex-col min-h-dvh bg-background">
       {!isMobile && <Navbar />}
 
-      <div className="md:px-15">
+      <div className="md:px-15 flex-1">
         <div className="max-w-[65ch] mx-auto">
           {children}
         </div>
