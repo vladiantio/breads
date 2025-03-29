@@ -6,10 +6,13 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border decoration-1 outline-ring/50;
+  }
+  html {
+    @apply motion-safe:scroll-smooth;
   }
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
+    @apply antialiased bg-background min-h-dvh text-foreground;
   }
   [role=button], button {
     @apply cursor-pointer;
