@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Fragment, isValidElement, ReactElement, ReactNode } from 'react';
+import { HashtagLimiter } from './HashtagLimiter';
 
 /**
  * Formats text content by converting hashtags to clickable links
@@ -10,7 +11,24 @@ export const formatContentWithHashtags = (content: string): ReactNode[] => {
   
   // Split the content by hashtags
   const parts = content.split(hashtagRegex);
+    
+  // Extract all hashtags from the content
+  const hashtags = content.match(hashtagRegex) || [];
   
+  // If we have more than 3 hashtags, we'll need to handle them specially
+  if (hashtags.length > 3) {
+    // Create a collapsed version that will show the hashtag component later
+    return [
+      <HashtagLimiter 
+        key="hashtag-limiter" 
+        content={content} 
+        parts={parts} 
+        hashtags={hashtags} 
+        regex={hashtagRegex}
+      />
+    ];
+  }
+
   // Map each part to either plain text or a hashtag link
   return parts.map((part, index) => {
     if (part.match(hashtagRegex)) {
@@ -18,7 +36,6 @@ export const formatContentWithHashtags = (content: string): ReactNode[] => {
         <Link 
           key={index}
           to="/search"
-          className="bg-primary/10 hover:bg-primary/20 rounded-md px-2 py-0.5 -my-0.5"
         >
           {part}
         </Link>
@@ -52,7 +69,6 @@ export const formatContentWithMentions = (content: string): ReactNode[] => {
           key={index}
           to="/profile/$username"
           params={{ username }}
-          className="bg-primary/10 hover:bg-primary/20 rounded-md px-2 py-0.5 -my-0.5"
         >
           {part}
         </Link>
