@@ -18,7 +18,7 @@
   }
 
   a {
-    @apply text-link font-medium hover:text-[color-mix(in_oklab,var(--link)_60%,var(--foreground))] transition-[background,color];
+    @apply text-link hover:underline active:opacity-60;
   }
 
   strong a {
