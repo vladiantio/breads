@@ -112,7 +112,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
                 }}
                 className="space-x-2 truncate"
               >
-                <span className="font-semibold text-foreground hover:underline hover:underline-offset-4">{post.author.displayName}</span>
+                <span className="font-semibold text-foreground hover:underline active:opacity-60">{post.author.displayName}</span>
                 <span>@{post.author.username}</span>
               </Link>
               <span>·</span>
