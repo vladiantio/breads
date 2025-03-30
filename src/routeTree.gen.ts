@@ -16,6 +16,7 @@ import { Route as SearchImport } from './routes/search'
 import { Route as NotificationsImport } from './routes/notifications'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProfileUsernameImport } from './routes/profile.$username'
+import { Route as HashtagTagImport } from './routes/hashtag.$tag'
 import { Route as ProfileUsernamePostPostIdImport } from './routes/profile.$username.post.$postId'
 
 // Create/Update Routes
@@ -47,6 +48,12 @@ const IndexRoute = IndexImport.update({
 const ProfileUsernameRoute = ProfileUsernameImport.update({
   id: '/profile/$username',
   path: '/profile/$username',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const HashtagTagRoute = HashtagTagImport.update({
+  id: '/hashtag/$tag',
+  path: '/hashtag/$tag',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsImport
       parentRoute: typeof rootRoute
     }
+    '/hashtag/$tag': {
+      id: '/hashtag/$tag'
+      path: '/hashtag/$tag'
+      fullPath: '/hashtag/$tag'
+      preLoaderRoute: typeof HashtagTagImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/$username': {
       id: '/profile/$username'
       path: '/profile/$username'
@@ -124,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/hashtag/$tag': typeof HashtagTagRoute
   '/profile/$username': typeof ProfileUsernameRouteWithChildren
   '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
@@ -133,6 +148,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/hashtag/$tag': typeof HashtagTagRoute
   '/profile/$username': typeof ProfileUsernameRouteWithChildren
   '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
@@ -143,6 +159,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/hashtag/$tag': typeof HashtagTagRoute
   '/profile/$username': typeof ProfileUsernameRouteWithChildren
   '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
@@ -154,6 +171,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/settings'
+    | '/hashtag/$tag'
     | '/profile/$username'
     | '/profile/$username/post/$postId'
   fileRoutesByTo: FileRoutesByTo
@@ -162,6 +180,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/settings'
+    | '/hashtag/$tag'
     | '/profile/$username'
     | '/profile/$username/post/$postId'
   id:
@@ -170,6 +189,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/settings'
+    | '/hashtag/$tag'
     | '/profile/$username'
     | '/profile/$username/post/$postId'
   fileRoutesById: FileRoutesById
@@ -180,6 +200,7 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
+  HashtagTagRoute: typeof HashtagTagRoute
   ProfileUsernameRoute: typeof ProfileUsernameRouteWithChildren
 }
 
@@ -188,6 +209,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,
+  HashtagTagRoute: HashtagTagRoute,
   ProfileUsernameRoute: ProfileUsernameRouteWithChildren,
 }
 
@@ -205,6 +227,7 @@ export const routeTree = rootRoute
         "/notifications",
         "/search",
         "/settings",
+        "/hashtag/$tag",
         "/profile/$username"
       ]
     },
@@ -219,6 +242,9 @@ export const routeTree = rootRoute
     },
     "/settings": {
       "filePath": "settings.tsx"
+    },
+    "/hashtag/$tag": {
+      "filePath": "hashtag.$tag.tsx"
     },
     "/profile/$username": {
       "filePath": "profile.$username.tsx",
