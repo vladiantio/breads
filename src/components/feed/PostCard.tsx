@@ -112,7 +112,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
         <UserAvatar user={post.author} />
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-x-2">
+          <div className="flex items-center justify-between gap-x-2 mb-1">
             <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
               <Link
                 to="/profile/$username"
@@ -155,9 +155,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
             </DropdownMenu>
           </div>
 
-          {fromATP
-            ? <RichTextRenderer className="my-1" text={post.content} facets={post.facets} />
-            : <ThreadContentRenderer className="my-1" content={post.content} />}
+          {post.content
+            ? fromATP
+              ? <RichTextRenderer className="my-1" text={post.content} facets={post.facets} />
+              : <ThreadContentRenderer className="my-1" content={post.content} />
+            : null}
 
           {post.embedImages && post.embedImages.length > 0
             && (
