@@ -1,7 +1,4 @@
-import CreatePost from '@/components/feed/CreatePost'
-import FeedTabs from '@/components/feed/FeedTabs'
-import PostCard from '@/components/feed/PostCard'
-import { getFeedPosts } from '@/data/posts'
+import { Timeline } from '@/components/feed/Timeline'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -9,13 +6,5 @@ export const Route = createFileRoute('/')({
 })
 
 function Index() {
-  return (
-    <>
-      <FeedTabs />
-      <CreatePost />
-      {getFeedPosts().map(post => (
-        <PostCard post={post} />
-      ))}
-    </>
-  )
+  return <Timeline />
 }
