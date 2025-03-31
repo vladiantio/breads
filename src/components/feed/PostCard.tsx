@@ -10,7 +10,6 @@ import {
   Share2,
   Repeat1
 } from 'lucide-react';
-import { PostWithAuthor } from '@/data/posts';
 import UserAvatar from '../shared/UserAvatar';
 import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
 import { formatTimestamp } from '@/utils/date';
@@ -26,13 +25,17 @@ import { toast } from "sonner";
 import { Link } from '@tanstack/react-router';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { PostWithAuthor } from '@/types/ResponseSchema';
+import { RichTextRenderer } from '../shared/RichTextRenderer';
+import { convertRichTextToPlainText } from '@/lib/atproto-helpers';
 
 interface PostCardProps {
   post: PostWithAuthor;
   isDetail?: boolean;
+  fromATP?: boolean;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = false }) => {
   // const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
   
@@ -71,7 +74,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
 
   const handleCopyText = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(post.content);
+    const text = fromATP
+      ? convertRichTextToPlainText(post.content, post.facets)
+      : post.content;
+    navigator.clipboard.writeText(text);
     toast("Text copied", {
       description: "Post text copied to clipboard",
       duration: 2000,
@@ -108,7 +114,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
               <Link
                 to="/profile/$username"
                 params={{
-                  username: post.author.username,
+                  username: post.author.username!,
                 }}
                 className="space-x-2 truncate"
               >
@@ -146,9 +152,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
             </DropdownMenu>
           </div>
 
-          <div className="mt-1">
-            <ThreadContentRenderer content={post.content} />
-          </div>
+          {fromATP
+            ? <RichTextRenderer className="mt-1" text={post.content} facets={post.facets} />
+            : <ThreadContentRenderer className="mt-1" content={post.content} />}
 
           {post.images && post.images.length > 0 && (
             <div className="mt-3 rounded-2xl overflow-hidden border">
@@ -158,6 +164,22 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false }) => {
                 className="w-full h-auto"
                 loading="lazy"
               />
+            </div>
+          )}
+
+          {post.embedImages && post.embedImages.length > 0 && (
+            <div className="mt-3 flex gap-x-2">
+              {post.embedImages.map(image => (
+                <div>
+                  <img 
+                    src={image.thumb} 
+                    alt={image.alt}
+                    className="w-full rounded-2xl border"
+                    loading="lazy"
+                    style={{aspectRatio: image.aspectRatio ? `${image.aspectRatio.width} / ${image.aspectRatio.height}` : undefined}}
+                  />
+                </div>
+              ))}
             </div>
           )}
 
