@@ -63,15 +63,9 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
           <span>Joined {formatDate(user.joinDate)}</span>
         </div> */}
 
-        <div className="flex space-x-4 mt-3">
-          <div>
-            <span className="font-semibold">{formatNumber(user.followers)}</span>
-            <span className="text-muted-foreground ml-1">followers</span>
-          </div>
-          <div>
-            <span className="font-semibold">{formatNumber(user.following)}</span>
-            <span className="text-muted-foreground ml-1">following</span>
-          </div>
+        <div className="mt-3">
+          <span className="font-semibold">{formatNumber(user.followers)}</span>
+          <span className="text-muted-foreground ml-1">followers</span>
         </div>
       </div>
 
