@@ -8,7 +8,9 @@ import {
   XCircle,
   Flag,
   Share2,
-  Repeat1
+  Repeat1,
+  EyeIcon,
+  EyeOffIcon,
 } from 'lucide-react';
 import UserAvatar from '../shared/UserAvatar';
 import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
@@ -43,6 +45,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
   // const isReposted = postRepostStatus[post.id];
   const [ isLiked, setIsLiked ] = useState(false);
   const [ isReposted, setIsReposted ] = useState(false);
+  const [ showImages, setShowImages ] = useState(false);
 
   const handlePostClick = () => {
     if (!isDetail) {
@@ -153,8 +156,16 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
           </div>
 
           {fromATP
-            ? <RichTextRenderer className="mt-1" text={post.content} facets={post.facets} />
-            : <ThreadContentRenderer className="mt-1" content={post.content} />}
+            ? <RichTextRenderer className="my-1" text={post.content} facets={post.facets} />
+            : <ThreadContentRenderer className="my-1" content={post.content} />}
+
+          {post.embedImages && post.embedImages.length > 0
+            && (
+            <Button size="sm" variant="outline" onClick={() => setShowImages(show => !show)}>
+              { showImages ? <EyeOffIcon /> : <EyeIcon /> }
+              { showImages ? 'Hide' : 'Show' } images
+            </Button>
+          )}
 
           {post.images && post.images.length > 0 && (
             <div className="mt-3 rounded-2xl overflow-hidden border">
@@ -167,7 +178,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
             </div>
           )}
 
-          {post.embedImages && post.embedImages.length > 0 && (
+          {showImages && post.embedImages && post.embedImages.length > 0 && (
             <div className="mt-3 flex gap-x-2">
               {post.embedImages.map(image => (
                 <div>
