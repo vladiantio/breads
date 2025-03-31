@@ -183,13 +183,19 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
           {showImages && post.embedImages && post.embedImages.length > 0 && (
             <div className="mt-3 flex gap-x-2">
               {post.embedImages.map(image => (
-                <div>
+                <div
+                  className="max-h-[26rem]"
+                  style={{
+                    aspectRatio: image.aspectRatio ? image.aspectRatio.width / image.aspectRatio.height : undefined
+                  }}
+                >
                   <img 
                     src={image.thumb} 
                     alt={image.alt}
-                    className="w-full rounded-2xl border"
+                    className="max-h-full max-w-full rounded-lg border object-cover"
                     loading="lazy"
-                    style={{aspectRatio: image.aspectRatio ? `${image.aspectRatio.width} / ${image.aspectRatio.height}` : undefined}}
+                    width={image.aspectRatio?.width}
+                    height={image.aspectRatio?.height}
                   />
                 </div>
               ))}
