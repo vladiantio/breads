@@ -1,9 +1,9 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from '@/data/users';
+import { User } from '@/types/ResponseSchema';
 
 interface UserAvatarProps {
-  user: User;
+  user: Partial<User>;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   clickable?: boolean;
 }
@@ -34,7 +34,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
         onClick={handleClick}
       >
         <AvatarImage src={user.avatar} alt={user.displayName} className="object-cover blur" />
-        <AvatarFallback>{user.displayName.charAt(0)}</AvatarFallback>
+        <AvatarFallback>{user.displayName!.charAt(0)}</AvatarFallback>
       </Avatar>
     </div>
   );
