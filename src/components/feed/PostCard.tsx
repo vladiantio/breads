@@ -215,7 +215,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
                   href={post.embedExternal.uri}
                   rel="noopener noreferrer"
                   target="_blank"
-                  className="line-clamp-2 before:absolute before:inset-0 before:block before:size-full"
+                  className="line-clamp-2 text-pretty before:absolute before:inset-0 before:block before:size-full"
                 >
                   {post.embedExternal.title}
                 </a>
