@@ -1,4 +1,4 @@
-import { AppBskyEmbedImages, Facet } from "@atproto/api";
+import { AppBskyEmbedExternal, AppBskyEmbedImages, Facet } from "@atproto/api";
 
 export interface ResponseSchema {
   posts: PostWithAuthor[];
@@ -17,6 +17,7 @@ export interface Post {
   reposted?: boolean;
   facets?: Facet[];
   embedImages?: AppBskyEmbedImages.ViewImage[];
+  embedExternal?: AppBskyEmbedExternal.ViewExternal;
 }
 
 export interface PostWithAuthor extends Post {

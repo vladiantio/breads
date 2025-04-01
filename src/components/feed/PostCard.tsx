@@ -112,7 +112,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
         <UserAvatar user={post.author} />
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-x-2 mb-1">
+          <div className="flex items-center justify-between gap-x-2">
             <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
               <Link
                 to="/profile/$username"
@@ -157,52 +157,74 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
 
           {post.content
             ? fromATP
-              ? <RichTextRenderer className="my-1" text={post.content} facets={post.facets} />
-              : <ThreadContentRenderer className="my-1" content={post.content} />
+              ? <RichTextRenderer text={post.content} facets={post.facets} />
+              : <ThreadContentRenderer content={post.content} />
             : null}
 
           {post.embedImages && post.embedImages.length > 0
             && (
-            <Button size="sm" variant="outline" onClick={() => setShowImages(show => !show)}>
-              { showImages ? <EyeOffIcon /> : <EyeIcon /> }
-              { showImages ? 'Hide' : 'Show' } images
-            </Button>
-          )}
+            <>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowImages(show => !show)}
+                className="mt-3"
+              >
+                { showImages ? <EyeOffIcon /> : <EyeIcon /> }
+                { showImages ? 'Hide' : 'Show' } images
+              </Button>
 
-          {post.images && post.images.length > 0 && (
-            <div className="mt-3 rounded-2xl overflow-hidden border">
-              <img 
-                src={post.images[0]} 
-                alt="Post content" 
-                className="w-full h-auto"
-                loading="lazy"
-              />
-            </div>
-          )}
-
-          {showImages && post.embedImages && post.embedImages.length > 0 && (
-            <div className="mt-3 flex gap-x-2">
-              {post.embedImages.map(image => (
-                <div
-                  className="max-h-[26rem]"
-                  style={{
-                    aspectRatio: image.aspectRatio ? image.aspectRatio.width / image.aspectRatio.height : undefined
-                  }}
-                >
-                  <img 
-                    src={image.thumb} 
-                    alt={image.alt}
-                    className="max-h-full max-w-full rounded-lg border object-cover"
-                    loading="lazy"
-                    width={image.aspectRatio?.width}
-                    height={image.aspectRatio?.height}
-                  />
+              {showImages && (
+                <div className="mt-3 flex gap-x-2">
+                  {post.embedImages.map(image => (
+                    <div
+                      className="max-h-[26rem]"
+                      style={{
+                        aspectRatio: image.aspectRatio ? image.aspectRatio.width / image.aspectRatio.height : undefined
+                      }}
+                    >
+                      <img 
+                        src={image.thumb} 
+                        alt={image.alt}
+                        className="max-h-full max-w-full rounded-lg border object-cover"
+                        loading="lazy"
+                        width={image.aspectRatio?.width}
+                        height={image.aspectRatio?.height}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
+            </>
+          )}
+
+          {post.embedExternal && (
+            <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
+              {post.embedExternal.thumb && (
+                <img
+                  src={post.embedExternal.thumb}
+                  width="1200"
+                  height="630"
+                  loading="lazy"
+                  className="max-h-full max-w-full aspect-[120/63] bg-secondary object-cover"
+                />
+              )}
+              <div className="pt-2 pb-3 px-3 border-t">
+                <small className="text-muted-foreground">{new URL(post.embedExternal.uri).hostname.replace('www.', '')}</small>
+                <a
+                  href={post.embedExternal.uri}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  className="line-clamp-2 before:absolute before:inset-0 before:block before:size-full"
+                >
+                  {post.embedExternal.title}
+                </a>
+                <small className="mt-1 line-clamp-1">{post.embedExternal.description}</small>
+              </div>           
             </div>
           )}
 
-          <div className="flex items-center gap-x-1 mt-2 -mx-3">
+          <div className="flex items-center gap-x-1 mt-3 -mx-3">
             <Button
               aria-label="Reply"
               variant="ghost"

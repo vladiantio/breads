@@ -1,5 +1,5 @@
 import { PostWithAuthor, ResponseSchema } from "@/types/ResponseSchema";
-import { $Typed, Agent, AppBskyEmbedImages, CredentialSession, Facet, RichText } from "@atproto/api";
+import { $Typed, Agent, AppBskyEmbedExternal, AppBskyEmbedImages, CredentialSession, Facet, RichText } from "@atproto/api";
 
 const API_BASE_URL = "https://api.bsky.app";
 
@@ -31,7 +31,8 @@ export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30,
     likes: post.likeCount ?? 0,
     replies: post.replyCount ?? 0,
     reposts: post.repostCount ?? 0,
-    embedImages: post.embed?.$type === 'app.bsky.embed.images#view' ? (post.embed as $Typed<AppBskyEmbedImages.View>).images : undefined
+    embedImages: post.embed?.$type === 'app.bsky.embed.images#view' ? (post.embed as $Typed<AppBskyEmbedImages.View>).images : undefined,
+    embedExternal: post.embed?.$type === 'app.bsky.embed.external#view' ? (post.embed as $Typed<AppBskyEmbedExternal.View>).external : undefined,
   }));
   const res: ResponseSchema = { posts, nextPage: cursor };
   return res;
