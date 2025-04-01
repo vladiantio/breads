@@ -33,7 +33,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
         className={`border ${sizeClasses[size]} ${clickable ? 'cursor-pointer' : ''} transition-all duration-200 hover:opacity-90`}
         onClick={handleClick}
       >
-        <AvatarImage src={user.avatar} alt={user.displayName} className="object-cover blur" />
+        <AvatarImage src={user.avatar} alt={user.displayName} className="object-cover" />
         <AvatarFallback>{user.displayName!.charAt(0)}</AvatarFallback>
       </Avatar>
     </div>
