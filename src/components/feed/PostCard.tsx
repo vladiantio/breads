@@ -31,6 +31,7 @@ import { cn } from '@/lib/utils';
 import { PostWithAuthor } from '@/types/ResponseSchema';
 import { RichTextRenderer } from '../shared/RichTextRenderer';
 import { convertRichTextToPlainText } from '@/lib/atproto-helpers';
+import HLSPlayer from '../shared/HLSPlayer';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -46,7 +47,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
   // const isReposted = postRepostStatus[post.id];
   const [ isLiked, setIsLiked ] = useState(false);
   const [ isReposted, setIsReposted ] = useState(false);
-  const [ showImages, setShowImages ] = useState(false);
+  const [ showEmbed, setShowEmbed ] = useState(false);
 
   const handlePostClick = () => {
     if (!isDetail) {
@@ -168,14 +169,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => setShowImages(show => !show)}
+                onClick={() => setShowEmbed(show => !show)}
                 className="mt-3"
               >
-                { showImages ? <EyeOffIcon /> : <EyeIcon /> }
-                { showImages ? 'Hide' : 'Show' } images
+                { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
+                { showEmbed ? 'Hide' : 'Show' } images
               </Button>
 
-              {showImages && (
+              {showEmbed && (
                 <div className="mt-3 flex gap-x-2">
                   {post.embedImages.map(image => (
                     <div
@@ -198,6 +199,38 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
               )}
             </>
           )}
+
+          {post.embedVideo !== undefined ? (
+            <>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowEmbed(show => !show)}
+                className="mt-3"
+              >
+                { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
+                { showEmbed ? 'Hide' : 'Show' } video
+              </Button>
+
+              {showEmbed && (
+                <div
+                  className="mt-3 max-h-[26rem]"
+                  style={{
+                    aspectRatio: post.embedVideo.aspectRatio ? post.embedVideo.aspectRatio.width / post.embedVideo.aspectRatio.height : undefined
+                  }}
+                >
+                  <HLSPlayer
+                    autoPlay
+                    src={post.embedVideo.playlist}
+                    width={post.embedVideo.aspectRatio?.width}
+                    height={post.embedVideo.aspectRatio?.height}
+                    poster={post.embedVideo.thumbnail}
+                    className="max-h-full max-w-full rounded-lg border object-cover"
+                  />
+                </div>
+              )}
+            </>
+          ) : null}
 
           {post.embedExternal && (
             <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
