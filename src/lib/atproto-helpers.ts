@@ -35,7 +35,7 @@ export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30,
     embedVideo: post.embed?.$type === 'app.bsky.embed.video#view' ? (post.embed as $Typed<AppBskyEmbedVideo.View>) : undefined,
     embedExternal: post.embed?.$type === 'app.bsky.embed.external#view' ? (post.embed as $Typed<AppBskyEmbedExternal.View>).external : undefined,
   }));
-  const res: ResponseSchema = { posts, nextPage: cursor };
+  const res: ResponseSchema = { posts, cursor };
   return res;
 }
 

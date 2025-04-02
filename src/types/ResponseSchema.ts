@@ -2,7 +2,7 @@ import { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, Facet } fr
 
 export interface ResponseSchema {
   posts: PostWithAuthor[];
-  nextPage?: string;
+  cursor?: string;
 }
 
 export interface Post {
