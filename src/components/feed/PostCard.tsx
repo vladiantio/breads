@@ -11,6 +11,7 @@ import {
   Repeat1,
   EyeIcon,
   EyeOffIcon,
+  GlobeIcon,
 } from 'lucide-react';
 import UserAvatar from '../shared/UserAvatar';
 import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
@@ -201,16 +202,21 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
           {post.embedExternal && (
             <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
               {post.embedExternal.thumb && (
-                <img
-                  src={post.embedExternal.thumb}
-                  width="1200"
-                  height="630"
-                  loading="lazy"
-                  className="max-h-full max-w-full aspect-[120/63] bg-secondary object-cover"
-                />
+                <div className="bg-secondary border-b">
+                  <img
+                    src={post.embedExternal.thumb}
+                    width="1200"
+                    height="630"
+                    loading="lazy"
+                    className="max-h-full max-w-full aspect-[120/63] object-cover"
+                  />
+                </div>
               )}
-              <div className="pt-2 pb-3 px-3 border-t">
-                <small className="text-muted-foreground">{new URL(post.embedExternal.uri).hostname.replace('www.', '')}</small>
+              <div className="flex flex-col gap-y-1 py-3 px-3">
+                <small className="text-muted-foreground flex items-center gap-x-1">
+                  <GlobeIcon size="1em" />
+                  {new URL(post.embedExternal.uri).hostname.replace('www.', '')}
+                </small>
                 <a
                   href={post.embedExternal.uri}
                   rel="noopener noreferrer"
@@ -219,7 +225,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
                 >
                   {post.embedExternal.title}
                 </a>
-                <small className="mt-1 line-clamp-1">{post.embedExternal.description}</small>
+                {post.embedExternal.description ? <small className="line-clamp-1">{post.embedExternal.description}</small> : null}
               </div>           
             </div>
           )}
