@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { User } from '@/data/users';
+import { User } from '@/types/ResponseSchema';
 import UserAvatar from '../shared/UserAvatar';
 import { ProfileTabs } from './ProfileTabs';
 import { formatNumber } from '@/utils/number';
@@ -43,12 +43,14 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
       </div>
 
       <div className="px-4 pb-4">
-        <div
-          className="bg-muted rounded-2xl w-full aspect-[3/1] bg-center bg-cover"
-          style={{ backgroundImage: `url(${user.banner})` }}
-        />
+        {user.banner ? (
+          <div
+            className="bg-muted rounded-2xl w-full aspect-[3/1] bg-center bg-cover mb-3"
+            style={{ backgroundImage: `url(${user.banner})` }}
+          />
+        ) : null}
 
-        <div className="mt-3 flex gap-x-4 items-center justify-between">
+        <div className="flex gap-x-4 items-center justify-between">
           <div className="overflow-hidden [&>*]:truncate">
             <h1 className="text-xl font-bold">{user.displayName}</h1>
             <p className="text-muted-foreground">@{user.username}</p>
@@ -57,11 +59,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
         </div>
 
         <p className="mt-3">{user.bio}</p>
-
-        {/* <div className="flex items-center mt-3 text-muted-foreground text-sm">
-          <Calendar size={16} className="mr-1" />
-          <span>Joined {formatDate(user.joinDate)}</span>
-        </div> */}
 
         <div className="mt-3">
           <span className="font-semibold">{formatNumber(user.followers)}</span>
