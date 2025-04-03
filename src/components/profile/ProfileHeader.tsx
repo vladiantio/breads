@@ -6,6 +6,7 @@ import { formatNumber } from '@/utils/number';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
+import { parseBio } from '@/utils/parseBio';
 
 interface ProfileHeaderProps {
   user: User;
@@ -60,7 +61,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
 
         <div className="mt-3 space-y-3">
           {user.bio.split('\n\n').map((para) => (
-            <p className="whitespace-pre-wrap">{para}</p>
+            <p className="whitespace-pre-wrap">{parseBio(para)}</p>
           ))}
         </div>
 
