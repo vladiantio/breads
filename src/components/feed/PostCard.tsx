@@ -12,6 +12,7 @@ import {
   EyeIcon,
   EyeOffIcon,
   GlobeIcon,
+  PinIcon,
 } from 'lucide-react';
 import UserAvatar from '../shared/UserAvatar';
 import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
@@ -37,9 +38,15 @@ interface PostCardProps {
   post: PostWithAuthor;
   isDetail?: boolean;
   fromATP?: boolean;
+  isPinned?: boolean;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = false }) => {
+const PostCard: React.FC<PostCardProps> = ({
+  post,
+  isDetail = false,
+  fromATP = false,
+  isPinned = false,
+}) => {
   // const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
   
@@ -110,7 +117,13 @@ const PostCard: React.FC<PostCardProps> = ({ post, isDetail = false, fromATP = f
       className={`not-first:border-t ${isDetail ? 'mb-0' : ''}`}
       onClick={handlePostClick}
     >
-      <div className="flex items-start p-3 space-x-3">
+      {isPinned && (
+        <div className="flex items-center pt-3 px-3 gap-x-3 text-sm text-muted-foreground">
+          <PinIcon className="size-4 ml-5" />
+          Pinned
+        </div>
+      )}
+      <div className="flex p-3 gap-x-3">
         <UserAvatar user={post.author} />
 
         <div className="flex-1 min-w-0">
