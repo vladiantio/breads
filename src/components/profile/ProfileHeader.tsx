@@ -18,10 +18,10 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
 
   return (
     <>
-      <div className="sticky top-0 z-10 bg-background px-3 h-14 flex items-center justify-between gap-x-3">
+      <div className="sticky top-0 z-10 bg-background px-4 h-14 flex items-center justify-between gap-x-3">
         <Button
           variant="ghost"
-          className="rounded-full !p-2"
+          className="rounded-full !p-2 -ml-1"
           onClick={() => history.go(-1)}
         >
           <ArrowLeft className="size-5" />
