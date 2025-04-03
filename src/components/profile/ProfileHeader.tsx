@@ -58,7 +58,11 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
           <UserAvatar user={user} size="xl" clickable={false} />
         </div>
 
-        <p className="mt-3">{user.bio}</p>
+        <div className="mt-3 space-y-3">
+          {user.bio.split('\n\n').map((para) => (
+            <p className="whitespace-pre-wrap">{para}</p>
+          ))}
+        </div>
 
         <div className="mt-3">
           <span className="font-semibold">{formatNumber(user.followers)}</span>
