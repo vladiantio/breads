@@ -8,7 +8,7 @@ export function createAgent(): Agent {
   return new Agent(session);
 }
 
-export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30, cursor?: string) {
+export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30, cursor?: string): Promise<ResponseSchema> {
   const { data } = await agent.app.bsky.feed.getFeed(
     { feed: feedUrl, limit, cursor },
     {
@@ -35,8 +35,7 @@ export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30,
     embedVideo: post.embed?.$type === 'app.bsky.embed.video#view' ? (post.embed as $Typed<AppBskyEmbedVideo.View>) : undefined,
     embedExternal: post.embed?.$type === 'app.bsky.embed.external#view' ? (post.embed as $Typed<AppBskyEmbedExternal.View>).external : undefined,
   }));
-  const res: ResponseSchema = { posts, cursor };
-  return res;
+  return { posts, cursor: data.cursor };
 }
 
 export const convertRichTextToPlainText = (text: string, facets?: Facet[]): string => {
