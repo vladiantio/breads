@@ -1,9 +1,5 @@
 @utility thread-content {
-  @apply leading-normal break-words;
-
-  & > * + * {
-    @apply mt-3;
-  }
+  @apply leading-normal break-words space-y-3;
 
   li + li {
     @apply mt-1;
@@ -31,7 +27,7 @@
   }
 
   p {
-    @apply text-pretty;
+    @apply text-pretty whitespace-pre-wrap;
   }
 
   h1 {
