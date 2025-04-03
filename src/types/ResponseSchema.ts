@@ -1,4 +1,4 @@
-import { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, Facet } from "@atproto/api";
+import { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, ComAtprotoRepoStrongRef, Facet } from "@atproto/api";
 
 export interface ResponseSchema {
   posts: PostWithAuthor[];
@@ -35,4 +35,5 @@ export interface User {
   following: number;
   followers: number;
   isFollowing?: boolean;
+  pinnedPost?: ComAtprotoRepoStrongRef.Main;
 }

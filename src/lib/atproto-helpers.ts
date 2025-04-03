@@ -1,23 +1,19 @@
-import { PostWithAuthor, ResponseSchema } from "@/types/ResponseSchema";
-import { $Typed, Agent, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, CredentialSession, Facet, RichText } from "@atproto/api";
+import { PostWithAuthor, ResponseSchema, User } from "@/types/ResponseSchema";
+import { $Typed, Agent, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, AppBskyFeedDefs, CredentialSession, Facet, RichText } from "@atproto/api";
 
 const API_BASE_URL = "https://api.bsky.app";
+
+const headers = {
+  "Accept-Language": "en",
+};
 
 export function createAgent(): Agent {
   const session = new CredentialSession(new URL(API_BASE_URL));
   return new Agent(session);
 }
 
-export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30, cursor?: string): Promise<ResponseSchema> {
-  const { data } = await agent.app.bsky.feed.getFeed(
-    { feed: feedUrl, limit, cursor },
-    {
-      headers: {
-        "Accept-Language": "en",
-      },
-    },
-  );
-  const posts: PostWithAuthor[] = data.feed.map(({ post }) => ({
+function mapFeedToPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] {
+  return feed.map(({ post }) => ({
     id: post.cid,
     author: {
       id: post.author.did,
@@ -35,6 +31,63 @@ export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30,
     embedVideo: post.embed?.$type === 'app.bsky.embed.video#view' ? (post.embed as $Typed<AppBskyEmbedVideo.View>) : undefined,
     embedExternal: post.embed?.$type === 'app.bsky.embed.external#view' ? (post.embed as $Typed<AppBskyEmbedExternal.View>).external : undefined,
   }));
+}
+
+export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30, cursor?: string): Promise<ResponseSchema> {
+  const { data } = await agent.app.bsky.feed.getFeed(
+    { feed: feedUrl, limit, cursor },
+    { headers },
+  );
+  const posts = mapFeedToPosts(data.feed);
+  return { posts, cursor: data.cursor };
+}
+
+export async function getProfile(agent: Agent, handle: string) {
+  const { data: { did } } = await agent.com.atproto.identity.resolveHandle({ handle });
+  const { data: {
+    avatar,
+    banner,
+    description,
+    displayName,
+    followersCount,
+    followsCount,
+    pinnedPost,
+  } } = await agent.app.bsky.actor.getProfile(
+    { actor: did },
+    { headers },
+  );
+  return {
+    id: did,
+    avatar,
+    banner,
+    bio: description,
+    displayName,
+    followers: followersCount,
+    following: followsCount,
+    username: handle,
+    pinnedPost,
+  } as User;
+}
+
+export async function getAuthorFeed(
+  agent: Agent,
+  did: string,
+  cursor?: string,
+  filter: "posts_and_author_threads" | "posts_with_replies" | "posts_no_replies" | "posts_with_media" | "posts_with_video" | (string & {}) = 'posts_and_author_threads',
+  includePins: boolean = true,
+  limit: number = 30
+): Promise<ResponseSchema> {
+  const { data } = await agent.app.bsky.feed.getAuthorFeed(
+    {
+      actor: did,
+      cursor,
+      filter,
+      includePins,
+      limit,
+    },
+    { headers },
+  );
+  const posts = mapFeedToPosts(data.feed);
   return { posts, cursor: data.cursor };
 }
 
