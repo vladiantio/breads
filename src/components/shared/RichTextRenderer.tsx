@@ -1,4 +1,4 @@
-import { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import { FC, Fragment, JSX, useCallback, useEffect, useState } from 'react';
 import { Facet, RichText, RichTextSegment } from '@atproto/api';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
@@ -16,7 +16,7 @@ interface RichTextRendererProps {
 const TextSegment: FC<{
   segment: RichTextSegment;
   linkify: boolean;
-  index: string;
+  index: number;
 }> = ({ segment, linkify, index }) => {
   if (!linkify) {
     return <Fragment key={`text-${index}`}>{segment.text}</Fragment>;
@@ -62,42 +62,31 @@ const TextSegment: FC<{
   return <Fragment key={`text-${index}`}>{segment.text}</Fragment>;
 };
 
-// Component for rendering a paragraph with rich text segments
-const RichTextParagraph: FC<{
-  text: string;
-  facets: Facet[];
-  linkify: boolean;
-  index: number;
-}> = ({ text, facets, linkify, index }) => {
-  const renderSegments = useCallback(() => {
-    try {
-      // If paragraph is empty, render a non-breaking space
-      if (text.trim() === '') {
-        return <>&nbsp;</>;
-      }
-      
-      // Create a RichText instance for this paragraph
-      const richText = new RichText({ text, facets });
-      
-      // Get segments and render them
-      const segments = richText.segments();
-      return [...segments].map((segment, i) => (
-        <TextSegment
-          key={`segment-${i}`}
-          segment={segment}
-          linkify={linkify}
-          index={`${index}-${i}`}
-        />
-      ));
-    } catch (error) {
-      console.error('Error rendering paragraph:', error);
-      return text;
-    }
-  }, [text, facets, linkify, index]);
+// Helper function to calculate byte indices
+const calculateByteIndices = (texts: string[], index: number, separator: string = '') => {
+  const previousTexts = texts.slice(0, index).join(separator);
+  const separatorLength = index > 0 ? new TextEncoder().encode(separator).length : 0;
+  const startByteIndex = new TextEncoder().encode(previousTexts).length + separatorLength;
+  const currentText = texts[index];
+  const endByteIndex = startByteIndex + new TextEncoder().encode(currentText).length;
+  
+  return { startByteIndex, endByteIndex };
+};
 
-  return (
-    <p key={`p-${index}`}>{renderSegments()}</p>
-  );
+// Helper function to filter and adjust facets for a text segment
+const adjustFacetsForSegment = (facets: Facet[], startIndex: number, endIndex: number) => {
+  return facets
+    .filter(facet => 
+      facet.index.byteStart >= startIndex && 
+      facet.index.byteEnd <= endIndex
+    )
+    .map(facet => ({
+      ...facet,
+      index: {
+        byteStart: facet.index.byteStart - startIndex,
+        byteEnd: facet.index.byteEnd - startIndex
+      }
+    }));
 };
 
 /**
@@ -108,7 +97,7 @@ const RichTextParagraph: FC<{
  * @param {Object} props - The component props
  * @param {string} props.text - The text content to render
  * @param {Facet[]} [props.facets] - Array of facets containing styling/link information
- * @param {string} [props.className=''] - Additional CSS class names
+ * @param {string} [props.className] - Additional CSS class names
  * @param {boolean} [props.linkify=true] - Whether to automatically convert URLs to links
  * 
  * @example
@@ -133,73 +122,125 @@ const RichTextParagraph: FC<{
 export const RichTextRenderer: FC<RichTextRendererProps> = ({
   text,
   facets,
-  className = '',
+  className,
   linkify = true,
 }) => {
-  const [paragraphs, setParagraphs] = useState<{
-    text: string;
-    facets: Facet[];
-  }[]>([]);
+  const [paragraphs, setParagraphs] = useState<JSX.Element[]>([]);
+
+  // Create a RichText line renderer (extracted for reuse)
+  const renderLine = useCallback((
+    lineText: string, 
+    facets: Facet[], 
+    paragraphIndex: number, 
+    lineIndex: number
+  ) => {
+    const lineRichText = new RichText({ text: lineText });
+    lineRichText.facets = facets;
+
+    const segments = lineRichText.segments();
+
+    return [...segments].map((segment, i) => (
+      <TextSegment
+        key={`segment-${paragraphIndex}-${lineIndex}-${i}`}
+        segment={segment}
+        linkify={linkify}
+        index={i}
+      />
+    ));
+  }, [linkify]);
 
   useEffect(() => {
-    try {        
+    try {
+      // Create and configure the RichText instance
+      const richText = new RichText({ text, facets });
+
       // Split the text into paragraphs
       const paragraphTexts = text.split('\n\n');
-      const processedParagraphs = [];
-        
+      const renderedParagraphs: JSX.Element[] = [];
+
       // Calculate byte indices and distribute facets to paragraphs
-      let byteIndex = 0;
-      for (const paragraphText of paragraphTexts) {
-        const paragraphByteLength = new TextEncoder().encode(paragraphText).length;
-        const paragraphEndByteIndex = byteIndex + paragraphByteLength;
-        
-        // Find facets that belong to this paragraph and adjust their indices
-        const paragraphFacets = (facets ?? [])
-          .filter(facet => 
-            facet.index.byteStart >= byteIndex && 
-            facet.index.byteEnd <= paragraphEndByteIndex
-          )
-          .map(facet => ({
-            ...facet,
-            index: {
-              byteStart: facet.index.byteStart - byteIndex,
-              byteEnd: facet.index.byteEnd - byteIndex
-            }
-          }));
-        
-        processedParagraphs.push({
-          text: paragraphText,
-          facets: paragraphFacets
+      paragraphTexts.forEach((paragraphText, paragraphIndex) => {
+        // Handle empty paragraphs
+        if (paragraphText.trim() === '') {
+          renderedParagraphs.push(
+            <p key={`p-empty-${paragraphIndex}`}>&nbsp;</p>
+          );
+          return;
+        }
+
+        // Get paragraph byte indices
+        const { startByteIndex, endByteIndex } = calculateByteIndices(
+          paragraphTexts, 
+          paragraphIndex, 
+          '\n\n'
+        );
+
+        // Filter and adjust facets for this paragraph
+        const paragraphFacets = adjustFacetsForSegment(
+          richText.facets || [], 
+          startByteIndex, 
+          endByteIndex
+        );
+
+        // Split paragraph into lines
+        const lines = paragraphText.split('\n');
+        const paragraphContent: JSX.Element[] = [];
+
+        // Process each line
+        lines.forEach((lineText, lineIndex) => {
+          // Get line byte indices
+          const { startByteIndex: lineStartByteIndex, endByteIndex: lineEndByteIndex } = 
+            calculateByteIndices(lines, lineIndex, '\n');
+
+          // Filter and adjust facets for this line
+          const lineFacets = adjustFacetsForSegment(
+            paragraphFacets, 
+            lineStartByteIndex, 
+            lineEndByteIndex
+          );
+
+          // Render the line
+          const lineSegments = renderLine(lineText, lineFacets, paragraphIndex, lineIndex);
+
+          // Add line content with line breaks
+          paragraphContent.push(
+            <Fragment key={`line-${paragraphIndex}-${lineIndex}`}>
+              {lineSegments}
+              {lineIndex < lines.length - 1 && <br />}
+            </Fragment>
+          );
         });
-        
-        // Update byte index for the next paragraph (add paragraph text length plus newlines)
-        byteIndex = paragraphEndByteIndex + 2; // +2 for '\n\n'
-      }
-      
-      setParagraphs(processedParagraphs);
+
+        // Add the paragraph with all its lines
+        renderedParagraphs.push(
+          <p key={`p-${paragraphIndex}`}>{paragraphContent}</p>
+        );
+      });
+
+      setParagraphs(renderedParagraphs);
     } catch (error) {
-      console.error('Error processing rich text:', error);
-      // Fallback to simple paragraph splitting
-      const simpleParagraphs = text.split('\n\n').map(p => ({ 
-        text: p, 
-        facets: [] 
-      }));
-      
-      setParagraphs(simpleParagraphs);
+      console.error('Error rendering rich text:', error);
+
+      // Create fallback paragraphs
+      const fallbackParagraphs = text.split('\n\n').map((p, i) => {
+        const lines = p.split('\n');
+        const lineElements = lines.map((line, j) => (
+          <Fragment key={`fallback-line-${i}-${j}`}>
+            {line}
+            {j < lines.length - 1 && <br />}
+          </Fragment>
+        ));
+
+        return <p key={`fallback-p-${i}`}>{lineElements}</p>;
+      });
+
+      setParagraphs(fallbackParagraphs);
     }
-  }, [text, facets]);
+  }, [text, facets, renderLine]);
 
   return (
     <div className={cn("thread-content", className)}>
-      {paragraphs.map((paragraph, index) => (
-        <RichTextParagraph
-          key={`para-${index}`}
-          text={paragraph.text}
-          facets={paragraph.facets}
-          linkify={linkify}
-          index={index}
-        />
-      ))}
+      {paragraphs}
     </div>
   );
 };
