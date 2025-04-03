@@ -140,7 +140,7 @@ const PostCard: React.FC<PostCardProps> = ({
                 <span>@{post.author.username}</span>
               </Link>
               <span>·</span>
-              <span>{formatTimestamp(post.timestamp)}</span>
+              <time dateTime={post.timestamp} className="shrink-0">{formatTimestamp(post.timestamp)}</time>
             </div>
 
             <DropdownMenu>
