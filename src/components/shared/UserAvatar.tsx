@@ -1,6 +1,7 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from '@/types/ResponseSchema';
+import { useRouter } from '@tanstack/react-router';
 
 interface UserAvatarProps {
   user: Partial<User>;
@@ -12,7 +13,9 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
   user, 
   size = 'md',
   clickable = true
-}) => {  
+}) => {
+  const { navigate } = useRouter();
+
   const sizeClasses = {
     sm: 'size-8',
     md: 'size-10',
@@ -22,9 +25,12 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
   };
   
   const handleClick = () => {
-    // if (clickable) {
-    //   navigate(`/profile/${user.username}`);
-    // }
+    if (clickable) {
+      navigate({
+        to: '/profile/$username',
+        params: { username: user.username! }
+      });
+    }
   };
   
   return (
