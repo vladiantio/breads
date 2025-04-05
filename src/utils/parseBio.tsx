@@ -2,7 +2,7 @@ import { removeHttpAndWww, truncateString } from "./string";
 import { Fragment } from "react";
 
 // Regular expressions for URLs and email addresses
-const urlRegex = /^(https?:\/\/[^\s]+)|(www\.[^\s]+\.[^\s]+)/;
+const urlRegex = /^(https?:\/\/[^\s]+)|((www\.)?[^\s]+\.[^\s]+)/;
 const emailRegex = /^([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/;
 
 const aClassName = "text-link hover:underline active:opacity-60";
@@ -16,7 +16,7 @@ const processLine = (line: string) => {
 
     // Check if the word is a URL
     if (urlRegex.test(word)) {
-      const href = word.startsWith('www.') ? `https://${word}` : word.replace(/^http:/, 'https:');
+      const href = word.startsWith('http') ? word.replace(/^http:/, 'https:') : `https://${word}`;
       return (
         <Fragment key={`word-${wordIndex}`}>
           <a
