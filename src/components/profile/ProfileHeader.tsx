@@ -1,12 +1,10 @@
 import { FC } from 'react';
-import { User } from '@/types/ResponseSchema';
-import UserAvatar from '../shared/UserAvatar';
-import { ProfileTabs } from './ProfileTabs';
-import { formatNumber } from '@/utils/number';
-import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
-import { parseBio } from '@/utils/parseBio';
+import { User } from '@/types/ResponseSchema';
+import { Button } from '../ui/button';
+import { ProfileDisplay } from './ProfileDisplay';
+import { ProfileTabs } from './ProfileTabs';
 
 interface ProfileHeaderProps {
   user: User;
@@ -51,24 +49,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
           />
         ) : null}
 
-        <div className="flex gap-x-4 items-center justify-between">
-          <div className="overflow-hidden [&>*]:truncate">
-            <h1 className="text-xl font-bold">{user.displayName}</h1>
-            <p className="text-muted-foreground">@{user.username}</p>
-          </div>
-          <UserAvatar user={user} size="xl" clickable={false} />
-        </div>
-
-        <div className="mt-3 space-y-3">
-          {user.bio.split('\n\n').map((para) => (
-            <p className="whitespace-pre-wrap">{parseBio(para)}</p>
-          ))}
-        </div>
-
-        <div className="mt-3">
-          <span className="font-semibold">{formatNumber(user.followers)}</span>
-          <span className="text-muted-foreground ml-1">followers</span>
-        </div>
+        <ProfileDisplay user={user} />
       </div>
 
       <ProfileTabs />
