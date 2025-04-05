@@ -1,38 +1,12 @@
-import React, { useState } from 'react';
-import {
-  Heart,
-  MessageCircle,
-  Repeat,
-  MoreHorizontal,
-  Copy,
-  XCircle,
-  Flag,
-  Share2,
-  Repeat1,
-  EyeIcon,
-  EyeOffIcon,
-  GlobeIcon,
-  PinIcon,
-} from 'lucide-react';
+import { useState } from 'react';
+import { PinIcon } from 'lucide-react';
 import UserAvatar from '../shared/UserAvatar';
-import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
-import { formatTimestamp } from '@/utils/date';
-import { formatNumber } from '@/utils/number';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '../ui/dropdown-menu';
 import { toast } from "sonner";
-import { Link } from '@tanstack/react-router';
-import { Button } from '../ui/button';
-import { cn } from '@/lib/utils';
 import { PostWithAuthor } from '@/types/ResponseSchema';
-import { RichTextRenderer } from '../shared/RichTextRenderer';
 import { convertRichTextToPlainText } from '@/lib/atproto-helpers';
-import HLSPlayer from '../shared/HLSPlayer';
+import PostCardActions from './PostCardActions';
+import PostCardContent from './PostCardContent';
+import PostCardHeader from './PostCardHeader';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -74,6 +48,11 @@ const PostCard: React.FC<PostCardProps> = ({
     // toggleRepost(post.id);
   };
 
+  const handleReply = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // navigate(`/post/${post.id}`);
+  };
+
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
     // Simulate share action
@@ -112,10 +91,10 @@ const PostCard: React.FC<PostCardProps> = ({
     });
   };
 
-  const handleToggleEmbed = (e: React.MouseEvent) => {
+  const handleEmbedToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     setShowEmbed(show => !show);
-  }
+  };
 
   return (
     <article
@@ -132,210 +111,36 @@ const PostCard: React.FC<PostCardProps> = ({
         <UserAvatar user={post.author} clickable />
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-x-2">
-            <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
-              <Link
-                to="/profile/$username"
-                params={{
-                  username: post.author.username!,
-                }}
-                className="space-x-2 truncate"
-              >
-                <span className="font-semibold text-foreground hover:underline active:opacity-60">{post.author.displayName}</span>
-                <span>@{post.author.username}</span>
-              </Link>
-              <span>·</span>
-              <time dateTime={post.timestamp} className="shrink-0">{formatTimestamp(post.timestamp)}</time>
-            </div>
+          <PostCardHeader
+            author={post.author}
+            timestamp={post.timestamp}
+            onCopyText={handleCopyText}
+            onNotInterested={handleNotInterested}
+            onReport={handleReport}
+          />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button 
-                  className="text-muted-foreground hover:text-foreground"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <MoreHorizontal size={18} />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem onClick={handleCopyText} className="cursor-pointer">
-                  <Copy className="mr-2" size={16} />
-                  <span>Copy text</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleNotInterested} className="cursor-pointer">
-                  <XCircle className="mr-2" size={16} />
-                  <span>Not interested in this post</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleReport} className="cursor-pointer" variant="destructive">
-                  <Flag className="mr-2" size={16} />
-                  <span>Report post</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <PostCardContent
+            fromATP={fromATP}
+            content={post.content}
+            facets={post.facets}
+            embedImages={post.embedImages}
+            embedVideo={post.embedVideo}
+            embedExternal={post.embedExternal}
+            showEmbed={showEmbed}
+            onEmbedToggle={handleEmbedToggle}
+          />
 
-          {post.content
-            ? fromATP
-              ? <RichTextRenderer text={post.content} facets={post.facets} />
-              : <ThreadContentRenderer content={post.content} />
-            : null}
-
-          {post.embedImages && post.embedImages.length > 0
-            && (
-            <>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleToggleEmbed}
-                className="mt-3"
-              >
-                { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
-                { showEmbed ? 'Hide' : 'Show' } images
-              </Button>
-
-              {showEmbed && (
-                <div className="mt-2 flex gap-x-2">
-                  {post.embedImages.map(image => (
-                    <div
-                      className="max-h-[26rem]"
-                      style={{
-                        aspectRatio: image.aspectRatio ? image.aspectRatio.width / image.aspectRatio.height : undefined
-                      }}
-                    >
-                      <img 
-                        src={image.thumb} 
-                        alt={image.alt}
-                        className="max-h-full max-w-full rounded-lg border object-cover"
-                        loading="lazy"
-                        width={image.aspectRatio?.width}
-                        height={image.aspectRatio?.height}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-
-          {post.embedVideo !== undefined ? (
-            <>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleToggleEmbed}
-                className="mt-3"
-              >
-                { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
-                { showEmbed ? 'Hide' : 'Show' } video
-              </Button>
-
-              {showEmbed && (
-                <div
-                  className="mt-2 max-h-[26rem]"
-                  style={{
-                    aspectRatio: post.embedVideo.aspectRatio ? post.embedVideo.aspectRatio.width / post.embedVideo.aspectRatio.height : undefined
-                  }}
-                >
-                  <HLSPlayer
-                    autoPlay
-                    className="max-h-full max-w-full rounded-lg border object-cover"
-                    src={post.embedVideo.playlist}
-                    width={post.embedVideo.aspectRatio?.width}
-                    height={post.embedVideo.aspectRatio?.height}
-                    poster={post.embedVideo.thumbnail}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </div>
-              )}
-            </>
-          ) : null}
-
-          {post.embedExternal && (
-            <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
-              {post.embedExternal.thumb && (
-                <div className="bg-secondary border-b">
-                  <img
-                    src={post.embedExternal.thumb}
-                    width="1200"
-                    height="630"
-                    loading="lazy"
-                    className="max-h-full max-w-full aspect-[120/63] object-cover"
-                  />
-                </div>
-              )}
-              <div className="flex flex-col gap-y-1 py-3 px-3">
-                <small className="text-muted-foreground flex items-center gap-x-1">
-                  <GlobeIcon size="1em" />
-                  {new URL(post.embedExternal.uri).hostname.replace('www.', '')}
-                </small>
-                <a
-                  className="line-clamp-2 text-pretty before:absolute before:inset-0 before:block before:size-full"
-                  href={post.embedExternal.uri}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {post.embedExternal.title}
-                </a>
-                {post.embedExternal.description ? <small className="line-clamp-1">{post.embedExternal.description}</small> : null}
-              </div>           
-            </div>
-          )}
-
-          <div className="flex items-center gap-x-1 mt-2 -mx-3">
-            <Button
-              aria-label="Reply"
-              variant="ghost"
-              onClick={(e) => {
-                e.stopPropagation();
-                // navigate(`/post/${post.id}`);
-              }}
-              className="rounded-full text-muted-foreground"
-            >
-              <MessageCircle className='size-5' />
-              {post.replies > 0 && (
-                <span>{formatNumber(post.replies)}</span>
-              )}
-            </Button>
-
-            <Button
-              aria-label="Repost"
-              variant="ghost"
-              className={cn('rounded-full text-muted-foreground', isReposted && '!text-green-500')}
-              onClick={handleRepost}
-            >
-              {isReposted
-                ? <Repeat1 className='size-5' />
-                : <Repeat className='size-5' />}
-              {post.reposts + (isReposted ? 1 : 0) > 0 && (
-                <span>{formatNumber(post.reposts + (isReposted ? 1 : 0))}</span>
-              )}
-            </Button>
-
-            <Button
-              aria-label="Like"
-              variant="ghost"
-              className={cn('rounded-full text-muted-foreground', isLiked && '!text-red-500')}
-              onClick={handleLike}
-            >
-              <Heart
-                className={cn('size-5', isLiked && 'fill-current')}
-              />
-              {post.likes + (isLiked ? 1 : 0) > 0 && (
-                <span>{formatNumber(post.likes + (isLiked ? 1 : 0))}</span>
-              )}
-            </Button>
-
-            <Button
-              aria-label="Share"
-              variant="ghost"
-              className="rounded-full text-muted-foreground"
-              onClick={handleShare}
-            >
-              <Share2 className='size-5' />
-            </Button>
-          </div>
+          <PostCardActions
+            likes={post.likes}
+            replies={post.replies}
+            reposts={post.reposts}
+            isLiked={isLiked}
+            isReposted={isReposted}
+            onLike={handleLike}
+            onRepost={handleRepost}
+            onShare={handleShare}
+            onReply={handleReply}
+          />
         </div>
       </div>
     </article>
