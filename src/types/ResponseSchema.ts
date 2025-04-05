@@ -29,7 +29,7 @@ export interface User {
   id: string;
   username: string;
   displayName: string;
-  avatar: string;
+  avatar?: string;
   banner?: string;
   bio: string;
   following: number;

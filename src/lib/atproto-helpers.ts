@@ -44,7 +44,13 @@ export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30,
 
 export async function getProfile(agent: Agent, handle: string) {
   const { data: { did } } = await agent.com.atproto.identity.resolveHandle({ handle });
+  return getActorProfile(agent, did);
+}
+
+export async function getActorProfile(agent: Agent, actor: string): Promise<User> {
   const { data: {
+    did,
+    handle,
     avatar,
     banner,
     description,
@@ -53,20 +59,20 @@ export async function getProfile(agent: Agent, handle: string) {
     followsCount,
     pinnedPost,
   } } = await agent.app.bsky.actor.getProfile(
-    { actor: did },
+    { actor },
     { headers },
   );
   return {
     id: did,
+    username: handle,
     avatar,
     banner,
-    bio: description,
-    displayName,
-    followers: followersCount,
-    following: followsCount,
-    username: handle,
+    bio: description ?? '',
+    displayName: displayName!,
+    followers: followersCount ?? 0,
+    following: followsCount ?? 0,
     pinnedPost,
-  } as User;
+  };
 }
 
 export async function getAuthorFeed(
