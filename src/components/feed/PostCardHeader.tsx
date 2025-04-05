@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { User } from '@/data/users';
 import { formatTimestamp } from '@/utils/date';
 import { PostCardMenu, PostCardMenuProps } from './PostCardMenu';
+import { AuthorHoverCard } from './AuthorHoverCard';
 
 interface PostCardHeaderProps extends PostCardMenuProps {
   author: Partial<User>;
@@ -23,7 +24,9 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
           }}
           className="space-x-2 truncate"
         >
-          <span className="font-semibold text-foreground hover:underline active:opacity-60">{author.displayName}</span>
+          <AuthorHoverCard did={author.id!}>
+            <span className="font-semibold text-foreground hover:underline active:opacity-60">{author.displayName}</span>
+          </AuthorHoverCard>
           <span>@{author.username}</span>
         </Link>
         <span>·</span>
