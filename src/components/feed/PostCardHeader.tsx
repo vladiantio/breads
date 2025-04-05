@@ -17,18 +17,17 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
   return (
     <div className="flex items-center justify-between gap-x-2">
       <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
-        <Link
-          to="/profile/$username"
-          params={{
-            username: author.username!,
-          }}
-          className="space-x-2 truncate"
-        >
-          <AuthorHoverCard did={author.id!}>
-            <span className="font-semibold text-foreground hover:underline active:opacity-60">{author.displayName}</span>
-          </AuthorHoverCard>
-          <span>@{author.username}</span>
-        </Link>
+        <AuthorHoverCard did={author.id!}>
+          <Link
+            to="/profile/$username"
+            params={{
+              username: author.username!,
+            }}
+            className="font-semibold text-foreground hover:underline active:opacity-60 truncate"
+          >
+            {author.username}
+          </Link>
+        </AuthorHoverCard>
         <span>·</span>
         <time dateTime={timestamp} className="shrink-0">{formatTimestamp(timestamp)}</time>
       </div>
