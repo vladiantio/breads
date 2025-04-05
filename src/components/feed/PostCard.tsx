@@ -112,19 +112,24 @@ const PostCard: React.FC<PostCardProps> = ({
     });
   };
 
+  const handleToggleEmbed = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowEmbed(show => !show);
+  }
+
   return (
     <article
-      className={`not-first:border-t ${isDetail ? 'mb-0' : ''}`}
+      className="m-1 transition-[background-color] hover:bg-card active:bg-card/60 rounded-lg"
       onClick={handlePostClick}
     >
       {isPinned && (
-        <div className="flex items-center pt-3 px-3 gap-x-3 text-sm text-muted-foreground">
+        <div className="flex items-center gap-x-3 text-sm text-muted-foreground pt-3 px-2 -mb-1">
           <PinIcon className="size-4 ml-5" />
           Pinned
         </div>
       )}
-      <div className="flex p-3 gap-x-3">
-        <UserAvatar user={post.author} />
+      <div className="flex px-2 py-3 gap-x-3">
+        <UserAvatar user={post.author} clickable />
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-x-2">
@@ -182,7 +187,7 @@ const PostCard: React.FC<PostCardProps> = ({
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => setShowEmbed(show => !show)}
+                onClick={handleToggleEmbed}
                 className="mt-3"
               >
                 { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
@@ -190,7 +195,7 @@ const PostCard: React.FC<PostCardProps> = ({
               </Button>
 
               {showEmbed && (
-                <div className="mt-3 flex gap-x-2">
+                <div className="mt-2 flex gap-x-2">
                   {post.embedImages.map(image => (
                     <div
                       className="max-h-[26rem]"
@@ -218,7 +223,7 @@ const PostCard: React.FC<PostCardProps> = ({
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => setShowEmbed(show => !show)}
+                onClick={handleToggleEmbed}
                 className="mt-3"
               >
                 { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
@@ -227,18 +232,19 @@ const PostCard: React.FC<PostCardProps> = ({
 
               {showEmbed && (
                 <div
-                  className="mt-3 max-h-[26rem]"
+                  className="mt-2 max-h-[26rem]"
                   style={{
                     aspectRatio: post.embedVideo.aspectRatio ? post.embedVideo.aspectRatio.width / post.embedVideo.aspectRatio.height : undefined
                   }}
                 >
                   <HLSPlayer
                     autoPlay
+                    className="max-h-full max-w-full rounded-lg border object-cover"
                     src={post.embedVideo.playlist}
                     width={post.embedVideo.aspectRatio?.width}
                     height={post.embedVideo.aspectRatio?.height}
                     poster={post.embedVideo.thumbnail}
-                    className="max-h-full max-w-full rounded-lg border object-cover"
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
               )}
@@ -264,10 +270,11 @@ const PostCard: React.FC<PostCardProps> = ({
                   {new URL(post.embedExternal.uri).hostname.replace('www.', '')}
                 </small>
                 <a
+                  className="line-clamp-2 text-pretty before:absolute before:inset-0 before:block before:size-full"
                   href={post.embedExternal.uri}
                   rel="noopener noreferrer"
                   target="_blank"
-                  className="line-clamp-2 text-pretty before:absolute before:inset-0 before:block before:size-full"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   {post.embedExternal.title}
                 </a>
@@ -276,7 +283,7 @@ const PostCard: React.FC<PostCardProps> = ({
             </div>
           )}
 
-          <div className="flex items-center gap-x-1 mt-3 -mx-3">
+          <div className="flex items-center gap-x-1 mt-2 -mx-3">
             <Button
               aria-label="Reply"
               variant="ghost"
