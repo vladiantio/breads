@@ -2,6 +2,7 @@ import { FC, Fragment, JSX, useEffect, useState } from 'react';
 import { Facet, RichText, RichTextSegment } from '@atproto/api';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { AuthorHoverCard } from '../feed/AuthorHoverCard';
 
 interface RichTextRendererProps {
   text: string;
@@ -37,13 +38,15 @@ const TextSegment: FC<{
 
   if (segment.isMention()) {
     return (
-      <Link
-        key={`mention-${index}`}
-        to="/profile/$username"
-        params={{ username: segment.mention!.did }}
-      >
-        {segment.text}
-      </Link>
+      <AuthorHoverCard did={segment.mention!.did}>
+        <Link
+          key={`mention-${index}`}
+          to="/profile/$username"
+          params={{ username: segment.mention!.did }}
+        >
+          {segment.text}
+        </Link>
+      </AuthorHoverCard>
     );
   }
 
