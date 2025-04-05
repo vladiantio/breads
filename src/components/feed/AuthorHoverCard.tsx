@@ -1,4 +1,4 @@
-import { createAgent, getActorProfile } from "@/lib/atproto-helpers";
+import { createAgent, getActorProfile, getProfile } from "@/lib/atproto-helpers";
 import { User } from "@/types/ResponseSchema";
 import { FC, PropsWithChildren, useCallback, useState } from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
@@ -8,20 +8,24 @@ import { Button } from "../ui/button";
 const agent = createAgent();
 
 interface AuthorHoverCardProps extends PropsWithChildren {
-  did: string;
+  did?: string;
+  handle?: string;
 }
 
 export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
   did,
+  handle,
   children,
 }) => {
   const [open, setOpen] = useState(false);
   const [author, setAuthor] = useState<User | undefined>(undefined);
 
   const fetchAuthor = useCallback(async () => {
-    const user = await getActorProfile(agent, did);
-    setAuthor(user);
-  }, [did]);
+    if (handle)
+      setAuthor(await getProfile(agent, handle));
+    else if (did)
+      setAuthor(await getActorProfile(agent, did));
+  }, [did, handle]);
 
   const handleOpen = (isOpen: boolean) => {
     if (isOpen && author === undefined) {
