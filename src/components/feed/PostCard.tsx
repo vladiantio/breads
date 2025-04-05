@@ -123,7 +123,7 @@ const PostCard: React.FC<PostCardProps> = ({
       onClick={handlePostClick}
     >
       {isPinned && (
-        <div className="flex items-center gap-x-3 text-sm text-muted-foreground pt-3 px-2 -mb-1">
+        <div className="flex items-center gap-x-3 text-sm text-muted-foreground pt-2 px-2 -mb-1">
           <PinIcon className="size-4 ml-5" />
           Pinned
         </div>
