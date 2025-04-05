@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useEffect, useRef } from 'react';
+import { CSSProperties, FC, MouseEventHandler, useEffect, useRef } from 'react';
 import Hls, { ErrorData } from 'hls.js';
 import { toast } from 'sonner';
 
@@ -14,6 +14,7 @@ interface HLSPlayerProps {
   style?: CSSProperties;
   onError?: (error: ErrorEvent | ErrorData) => void;
   onReady?: () => void;
+  onClick?: MouseEventHandler<HTMLVideoElement>;
 }
 
 const HLSPlayer: FC<HLSPlayerProps> = ({
@@ -27,7 +28,8 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
   className,
   style,
   onError,
-  onReady
+  onReady,
+  onClick,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -131,6 +133,7 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
       muted={muted}
       className={className}
       style={style}
+      onClick={onClick}
     />
   );
 };
