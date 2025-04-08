@@ -13,7 +13,7 @@ const fetchFeed = (did:string, cursor?: string) => {
   return getAuthorFeed(agent, did, cursor);
 }
 
-export const Route = createFileRoute('/profile/$username')({
+export const Route = createFileRoute('/profile/$username/')({
   loader: ({ params: { username } }) => {
     if (username.startsWith('did:'))
       return getActorProfile(agent, username);
