@@ -13,8 +13,10 @@ import HLSPlayer from '../shared/HLSPlayer';
 import { RichTextRenderer } from '../shared/RichTextRenderer';
 import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
 import { Button } from '../ui/button';
+import YouTubeEmbed from '../shared/YouTubeEmbed';
 
 const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
+const ytUriRegex = /(?:(?:youtu.be\/)|(?:v\/)|(?:\/u\/\w\/)|(?:embed\/)|(?:watch\?))\??v?=?([^#&?]*)/;
 
 interface PostCardContentProps {
   fromATP: boolean;
@@ -140,7 +142,17 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
               </div>
             )}
           </>
-        ) : (
+        )
+        : ytUriRegex.test(embedExternal.uri)
+        ? (
+          <YouTubeEmbed
+            id={ytUriRegex.exec(embedExternal.uri)![1]}
+            title={embedExternal.title}
+            className="mt-3"
+            onClick={(e) => e.stopPropagation()}
+          />
+        )
+        : (
           <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
             {embedExternal.thumb && (
               <div className="bg-secondary border-b">
