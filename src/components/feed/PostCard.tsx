@@ -120,7 +120,7 @@ const PostCard: React.FC<PostCardProps> = ({
       )}
 
       {isDetail ? (
-        <div className="px-2">
+        <div className="px-2 pb-3">
           <div className="flex items-center gap-x-3 mb-3">
             <UserAvatar user={post.author} clickable />
 
