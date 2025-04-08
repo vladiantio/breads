@@ -13,7 +13,7 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
     <>
       <div className="flex gap-x-4 items-center justify-between">
         <div>
-          <h1 className="text-pretty text-xl font-bold">{user.displayName ?? user.username}</h1>
+          <h1 className="text-pretty text-xl font-bold">{user.displayName || user.username}</h1>
           <p className="text-muted-foreground">@{user.username}</p>
         </div>
         <UserAvatar user={user} size="xl" clickable={false} />
