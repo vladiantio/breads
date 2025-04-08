@@ -7,6 +7,8 @@ import { convertRichTextToPlainText } from '@/lib/atproto-helpers';
 import PostCardActions from './PostCardActions';
 import PostCardContent from './PostCardContent';
 import PostCardHeader from './PostCardHeader';
+import { useNavigate } from '@tanstack/react-router';
+import { cn } from '@/lib/utils';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -21,7 +23,7 @@ const PostCard: React.FC<PostCardProps> = ({
   fromATP = false,
   isPinned = false,
 }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
   
   // const isLiked = postLikeStatus[post.id];
@@ -32,7 +34,13 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const handlePostClick = () => {
     if (!isDetail) {
-      // navigate(`/post/${post.id}`);
+      navigate({
+        to: '/profile/$username/post/$postId',
+        params: {
+          username: post.author.username!,
+          postId: post.uri.split('app.bsky.feed.post/')[1],
+        },
+      });
     }
   };
 
@@ -98,7 +106,10 @@ const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <article
-      className="m-1 transition-[background-color] hover:bg-card active:bg-card/60 rounded-lg"
+      className={cn(
+        "m-1 transition-[background-color] rounded-lg",
+        !isDetail && "hover:bg-card active:bg-card/60"
+      )}
       onClick={handlePostClick}
     >
       {isPinned && (
@@ -107,17 +118,22 @@ const PostCard: React.FC<PostCardProps> = ({
           Pinned
         </div>
       )}
-      <div className="flex px-2 py-3 gap-x-3">
-        <UserAvatar user={post.author} clickable />
 
-        <div className="flex-1 min-w-0">
-          <PostCardHeader
-            author={post.author}
-            timestamp={post.timestamp}
-            onCopyText={handleCopyText}
-            onNotInterested={handleNotInterested}
-            onReport={handleReport}
-          />
+      {isDetail ? (
+        <div className="px-2">
+          <div className="flex items-center gap-x-3 mb-3">
+            <UserAvatar user={post.author} clickable />
+
+            <div className="flex-1 min-w-0">
+              <PostCardHeader
+                author={post.author}
+                timestamp={post.timestamp}
+                onCopyText={handleCopyText}
+                onNotInterested={handleNotInterested}
+                onReport={handleReport}
+              />
+            </div>
+          </div>
 
           <PostCardContent
             fromATP={fromATP}
@@ -142,7 +158,44 @@ const PostCard: React.FC<PostCardProps> = ({
             onReply={handleReply}
           />
         </div>
-      </div>
+      ) : (
+        <div className="flex px-2 py-3 gap-x-3">
+          <UserAvatar user={post.author} clickable />
+
+          <div className="flex-1 min-w-0">
+            <PostCardHeader
+              author={post.author}
+              timestamp={post.timestamp}
+              onCopyText={handleCopyText}
+              onNotInterested={handleNotInterested}
+              onReport={handleReport}
+            />
+
+            <PostCardContent
+              fromATP={fromATP}
+              content={post.content}
+              facets={post.facets}
+              embedImages={post.embedImages}
+              embedVideo={post.embedVideo}
+              embedExternal={post.embedExternal}
+              showEmbed={showEmbed}
+              onEmbedToggle={handleEmbedToggle}
+            />
+
+            <PostCardActions
+              likes={post.likes}
+              replies={post.replies}
+              reposts={post.reposts}
+              isLiked={isLiked}
+              isReposted={isReposted}
+              onLike={handleLike}
+              onRepost={handleRepost}
+              onShare={handleShare}
+              onReply={handleReply}
+            />
+          </div>
+        </div>
+      )}
     </article>
   );
 };
