@@ -103,7 +103,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
             >
               <HLSPlayer
                 autoPlay
-                className="max-h-full max-w-full rounded-lg border object-cover"
+                className="max-h-full max-w-full rounded-lg border object-contain"
                 src={embedVideo.playlist}
                 width={embedVideo.aspectRatio?.width}
                 height={embedVideo.aspectRatio?.height}
