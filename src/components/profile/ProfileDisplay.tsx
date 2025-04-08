@@ -13,7 +13,7 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
     <>
       <div className="flex gap-x-4 items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold">{user.displayName}</h1>
+          <h1 className="text-pretty text-xl font-bold">{user.displayName}</h1>
           <p className="text-muted-foreground">@{user.username}</p>
         </div>
         <UserAvatar user={user} size="xl" clickable={false} />
@@ -21,7 +21,7 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
 
       <div className="mt-3 space-y-3">
         {user.bio.split('\n\n').map((para) => (
-          <p className="whitespace-pre-wrap">{parseBio(para)}</p>
+          <p className="text-pretty whitespace-pre-wrap">{parseBio(para)}</p>
         ))}
       </div>
 
