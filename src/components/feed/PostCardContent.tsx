@@ -14,6 +14,8 @@ import { RichTextRenderer } from '../shared/RichTextRenderer';
 import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
 import { Button } from '../ui/button';
 
+const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
+
 interface PostCardContentProps {
   fromATP: boolean;
   content: string;
@@ -114,35 +116,61 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
       ) : null}
 
       {embedExternal && (
-        <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
-          {embedExternal.thumb && (
-            <div className="bg-secondary border-b">
-              <img
-                src={embedExternal.thumb}
-                width="1200"
-                height="630"
-                loading="lazy"
-                className="max-h-full max-w-full aspect-[120/63] object-cover"
-              />
-            </div>
-          )}
-          <div className="flex flex-col gap-y-1 py-3 px-3">
-            <small className="text-muted-foreground flex items-center gap-x-1">
-              <GlobeIcon size="1em" />
-              {new URL(embedExternal.uri).hostname.replace('www.', '')}
-            </small>
-            <a
-              className="line-clamp-2 text-pretty before:absolute before:inset-0 before:block before:size-full"
-              href={embedExternal.uri}
-              rel="noopener noreferrer"
-              target="_blank"
-              onClick={(e) => e.stopPropagation()}
+        gifUriRegex.test(embedExternal.uri)
+        ? (
+          <>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={onEmbedToggle}
+              className="mt-3"
             >
-              {embedExternal.title}
-            </a>
-            {embedExternal.description ? <small className="line-clamp-1">{embedExternal.description}</small> : null}
+              { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
+              { showEmbed ? 'Hide' : 'Show' } GIF
+            </Button>
+
+            {showEmbed && (
+              <div className="max-h-[26rem] mt-2">
+                <img 
+                  src={embedExternal.uri} 
+                  alt={embedExternal.title}
+                  className="max-h-full max-w-full rounded-lg border object-cover"
+                  loading="lazy"
+                />
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
+            {embedExternal.thumb && (
+              <div className="bg-secondary border-b">
+                <img
+                  src={embedExternal.thumb}
+                  width="1200"
+                  height="630"
+                  loading="lazy"
+                  className="max-h-full max-w-full aspect-[120/63] object-cover"
+                />
+              </div>
+            )}
+            <div className="flex flex-col gap-y-1 py-3 px-3">
+              <small className="text-muted-foreground flex items-center gap-x-1">
+                <GlobeIcon size="1em" />
+                {new URL(embedExternal.uri).hostname.replace('www.', '')}
+              </small>
+              <a
+                className="line-clamp-2 text-pretty before:absolute before:inset-0 before:block before:size-full"
+                href={embedExternal.uri}
+                rel="noopener noreferrer"
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {embedExternal.title}
+              </a>
+              {embedExternal.description ? <small className="line-clamp-1">{embedExternal.description}</small> : null}
+            </div>
           </div>
-        </div>
+        )
       )}
     </>
   );
