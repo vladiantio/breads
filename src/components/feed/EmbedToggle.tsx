@@ -2,15 +2,15 @@ import { PropsWithChildren, useState } from "react";
 import { Button } from "../ui/button";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-interface EmbedToggleProps extends PropsWithChildren {
-  className?: string
+interface EmbedToggleProps extends PropsWithChildren, React.HTMLAttributes<HTMLDivElement> {
   label: string
 }
 
 export function EmbedToggle({
-  className,
   children,
   label,
+  onClick,
+  ...props
 }: EmbedToggleProps) {
   const [ showEmbed, setShowEmbed ] = useState(false);
 
@@ -20,8 +20,11 @@ export function EmbedToggle({
 
   return (
     <div
-      className={className}
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.(e);
+      }}
+      {...props}
     >
       <Button
         size="sm"

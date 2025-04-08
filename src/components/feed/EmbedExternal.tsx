@@ -3,6 +3,7 @@ import { EmbedToggle } from "./EmbedToggle";
 import { parseTenorGif } from "@/lib/embed-player";
 import YouTubeEmbed from "../shared/YouTubeEmbed";
 import { GlobeIcon } from "lucide-react";
+import { useImagePreload } from "@/hooks/use-image-preload";
 
 const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
 const ytUriRegex = /(?:(?:youtu.be\/)|(?:v\/)|(?:\/u\/\w\/)|(?:embed\/)|(?:watch\?))\??v?=?([^#&?]*)/;
@@ -10,9 +11,14 @@ const ytUriRegex = /(?:(?:youtu.be\/)|(?:v\/)|(?:\/u\/\w\/)|(?:embed\/)|(?:watch
 interface EmbedGifProps {
   uri: string
   title: string
+  thumb?: string
 }
 
-function EmbedGif({title, uri}: EmbedGifProps) {
+function EmbedGif({
+  title,
+  uri,
+  thumb,
+}: EmbedGifProps) {
   const tenorGif = parseTenorGif(new URL(uri));
   if (tenorGif.success) {
     return (
@@ -26,6 +32,7 @@ function EmbedGif({title, uri}: EmbedGifProps) {
           autoPlay
           disablePictureInPicture
           loop
+          poster={thumb}
           src={tenorGif.playerUri}
           title={title}
           height={tenorGif.dimensions.height}
@@ -53,13 +60,20 @@ interface EmbedExternalProps {
 }
 
 export function EmbedExternal({ view }: EmbedExternalProps) {
+  const { hoverProps } = useImagePreload(view.thumb);
+
   if (gifUriRegex.test(view.uri)) {
     return (
       <EmbedToggle
         className="mt-3"
         label="GIF"
+        {...hoverProps}
       >
-        <EmbedGif title={view.title} uri={view.uri} />
+        <EmbedGif
+          thumb={view.thumb}
+          title={view.title}
+          uri={view.uri}
+        />
       </EmbedToggle>
     )
   } else if (ytUriRegex.test(view.uri)) {

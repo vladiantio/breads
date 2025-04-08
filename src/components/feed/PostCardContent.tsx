@@ -4,11 +4,11 @@ import {
   AppBskyEmbedVideo,
   Facet
 } from '@atproto/api';
-import HLSPlayer from '../shared/HLSPlayer';
 import { RichTextRenderer } from '../shared/RichTextRenderer';
 import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
 import { EmbedExternal } from './EmbedExternal';
-import { EmbedToggle } from './EmbedToggle';
+import { EmbedImages } from './EmbedImages';
+import { EmbedVideo } from './EmbedVideo';
 
 interface PostCardContentProps {
   fromATP: boolean;
@@ -36,49 +36,11 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
         : null}
 
       {embedImages && embedImages.length > 0 && (
-        <EmbedToggle className="mt-3" label="images">
-          <div className="mt-2 flex gap-x-2">
-            {embedImages.map(image => (
-              <div
-                key={image.thumb}
-                className="max-h-[26rem] w-fit"
-                style={{
-                  aspectRatio: image.aspectRatio ? image.aspectRatio.width / image.aspectRatio.height : undefined
-                }}
-              >
-                <img 
-                  src={image.thumb} 
-                  alt={image.alt}
-                  className="max-h-full max-w-full rounded-lg border object-cover"
-                  loading="lazy"
-                  width={image.aspectRatio?.width}
-                  height={image.aspectRatio?.height}
-                />
-              </div>
-            ))}
-          </div>
-        </EmbedToggle>
+        <EmbedImages views={embedImages} />
       )}
 
       {embedVideo !== undefined ? (
-        <EmbedToggle className="mt-3" label="video">
-          <div
-            className="mt-2 max-h-[26rem] w-fit"
-            style={{
-              aspectRatio: embedVideo.aspectRatio ? embedVideo.aspectRatio.width / embedVideo.aspectRatio.height : undefined
-            }}
-          >
-            <HLSPlayer
-              autoPlay
-              className="max-h-full max-w-full rounded-lg border object-contain"
-              src={embedVideo.playlist}
-              width={embedVideo.aspectRatio?.width}
-              height={embedVideo.aspectRatio?.height}
-              poster={embedVideo.thumbnail}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </EmbedToggle>
+        <EmbedVideo view={embedVideo} />
       ) : null}
 
       {embedExternal && (
