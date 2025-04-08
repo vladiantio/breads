@@ -1,4 +1,4 @@
-import { PostWithAuthor, ResponseSchema, User } from "@/types/ResponseSchema";
+import { PostWithAuthor, ResponseSchema, ThreadResponseSchema, User } from "@/types/ResponseSchema";
 import { $Typed, Agent, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, AppBskyFeedDefs, CredentialSession, Facet, RichText } from "@atproto/api";
 
 const API_BASE_URL = "https://api.bsky.app";
@@ -12,9 +12,10 @@ export function createAgent(): Agent {
   return new Agent(session);
 }
 
-function mapFeedToPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] {
-  return feed.map(({ post }) => ({
+function mapPostWithAuthor(post: AppBskyFeedDefs.PostView): PostWithAuthor {
+  return {
     id: post.cid,
+    uri: post.uri,
     author: {
       id: post.author.did,
       displayName: post.author.displayName,
@@ -30,7 +31,31 @@ function mapFeedToPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] 
     embedImages: post.embed?.$type === 'app.bsky.embed.images#view' ? (post.embed as $Typed<AppBskyEmbedImages.View>).images : undefined,
     embedVideo: post.embed?.$type === 'app.bsky.embed.video#view' ? (post.embed as $Typed<AppBskyEmbedVideo.View>) : undefined,
     embedExternal: post.embed?.$type === 'app.bsky.embed.external#view' ? (post.embed as $Typed<AppBskyEmbedExternal.View>).external : undefined,
-  }));
+  };
+}
+
+function mapFeedToPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] {
+  return feed.map(({ post }) => mapPostWithAuthor(post));
+}
+
+function mapThreads(thread:
+  | $Typed<AppBskyFeedDefs.ThreadViewPost>
+  | $Typed<AppBskyFeedDefs.NotFoundPost>
+  | $Typed<AppBskyFeedDefs.BlockedPost>
+  | { $type: string }): ThreadResponseSchema {
+  if (thread.$type === 'app.bsky.feed.defs#threadViewPost') {
+    const { post, replies } = thread as $Typed<AppBskyFeedDefs.ThreadViewPost>;
+    return {
+      post: mapPostWithAuthor(post),
+      replies: replies?.filter(thread => thread.$type === 'app.bsky.feed.defs#threadViewPost')
+        .map(thread => mapThreads(thread)) ?? []
+    }
+  } else {
+    return {
+      post: undefined,
+      replies: []
+    };
+  }
 }
 
 export async function getFeed(agent: Agent, feedUrl: string, limit: number = 30, cursor?: string): Promise<ResponseSchema> {
@@ -96,6 +121,19 @@ export async function getAuthorFeed(
   const posts = mapFeedToPosts(data.feed);
   return { posts, cursor: data.cursor };
 }
+
+export async function getPostThreads(
+  agent: Agent,
+  uri: string,
+  depth: number = 10,
+): Promise<ThreadResponseSchema> {
+  const { data: { thread } } = await agent.app.bsky.feed.getPostThread({
+    uri,
+    depth,
+  });
+
+  return mapThreads(thread);
+} 
 
 export const convertRichTextToPlainText = (text: string, facets?: Facet[]): string => {
   try {

@@ -5,8 +5,14 @@ export interface ResponseSchema {
   cursor?: string;
 }
 
+export interface ThreadResponseSchema {
+  post?: PostWithAuthor;
+  replies: ThreadResponseSchema[];
+}
+
 export interface Post {
   id: string;
+  uri: string;
   content: string;
   images?: string[];
   timestamp: string;
