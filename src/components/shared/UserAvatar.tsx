@@ -44,10 +44,14 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
       >
         <AvatarImage
           src={user.avatar}
-          alt={user.displayName}
+          alt={user.displayName ?? user.username}
           className={cn("object-cover", blurred && "blur-sm")}
         />
-        <AvatarFallback>{user.displayName!.charAt(0)}</AvatarFallback>
+        <AvatarFallback>
+          {user.displayName
+            ? user.displayName?.charAt(0).toUpperCase()
+            : user.username?.charAt(0).toUpperCase()}
+        </AvatarFallback>
       </Avatar>
     </div>
   );
