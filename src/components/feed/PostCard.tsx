@@ -14,14 +14,12 @@ interface PostCardProps {
   post: PostWithAuthor;
   isDetail?: boolean;
   fromATP?: boolean;
-  isPinned?: boolean;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
   post,
   isDetail = false,
   fromATP = false,
-  isPinned = false,
 }) => {
   const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
@@ -112,12 +110,14 @@ const PostCard: React.FC<PostCardProps> = ({
       )}
       onClick={handlePostClick}
     >
-      {isPinned && (
+      {post.reason?.$type === 'app.bsky.feed.defs#reasonPin'
+      ? (
         <div className="flex items-center gap-x-3 text-sm text-muted-foreground pt-2 px-2 -mb-1">
           <PinIcon className="size-4 ml-5" />
           Pinned
         </div>
-      )}
+      )
+      : null }
 
       {isDetail ? (
         <div className="px-2 pb-3">
