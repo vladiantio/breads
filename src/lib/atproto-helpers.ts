@@ -1,4 +1,4 @@
-import { PostWithAuthor, ResponseSchema, ThreadResponseSchema, User } from "@/types/ResponseSchema";
+import { PostWithAuthor, Reason, ResponseSchema, ThreadResponseSchema, User } from "@/types/ResponseSchema";
 import { $Typed, Agent, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, AppBskyFeedDefs, CredentialSession, Facet, RichText } from "@atproto/api";
 
 const API_BASE_URL = "https://api.bsky.app";
@@ -12,7 +12,7 @@ export function createAgent(): Agent {
   return new Agent(session);
 }
 
-function mapPostWithAuthor(post: AppBskyFeedDefs.PostView): PostWithAuthor {
+function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reason): PostWithAuthor {
   return {
     id: post.cid,
     uri: post.uri,
@@ -31,11 +31,12 @@ function mapPostWithAuthor(post: AppBskyFeedDefs.PostView): PostWithAuthor {
     embedImages: post.embed?.$type === 'app.bsky.embed.images#view' ? (post.embed as $Typed<AppBskyEmbedImages.View>).images : undefined,
     embedVideo: post.embed?.$type === 'app.bsky.embed.video#view' ? (post.embed as $Typed<AppBskyEmbedVideo.View>) : undefined,
     embedExternal: post.embed?.$type === 'app.bsky.embed.external#view' ? (post.embed as $Typed<AppBskyEmbedExternal.View>).external : undefined,
+    reason,
   };
 }
 
 function mapFeedToPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] {
-  return feed.map(({ post }) => mapPostWithAuthor(post));
+  return feed.map(({ post, reason }) => mapPostWithAuthor(post, reason));
 }
 
 function mapThreads(thread:

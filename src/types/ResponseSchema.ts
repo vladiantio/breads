@@ -1,4 +1,4 @@
-import { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, ComAtprotoRepoStrongRef, Facet } from "@atproto/api";
+import { $Typed, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, AppBskyFeedDefs, ComAtprotoRepoStrongRef, Facet } from "@atproto/api";
 
 export interface ResponseSchema {
   posts: PostWithAuthor[];
@@ -9,6 +9,8 @@ export interface ThreadResponseSchema {
   post?: PostWithAuthor;
   replies: ThreadResponseSchema[];
 }
+
+export type Reason = $Typed<AppBskyFeedDefs.ReasonRepost> | $Typed<AppBskyFeedDefs.ReasonPin> | { $type: string }
 
 export interface Post {
   id: string;
@@ -25,6 +27,7 @@ export interface Post {
   embedImages?: AppBskyEmbedImages.ViewImage[];
   embedVideo?: AppBskyEmbedVideo.View;
   embedExternal?: AppBskyEmbedExternal.ViewExternal;
+  reason?: Reason
 }
 
 export interface PostWithAuthor extends Post {
