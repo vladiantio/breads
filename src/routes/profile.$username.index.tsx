@@ -61,7 +61,6 @@ function RouteComponent() {
           key={`${pageIndex}-${postIndex}`}
           post={post}
           fromATP
-          isPinned={user.pinnedPost?.cid === post.id}
         />
       )
     ))}
