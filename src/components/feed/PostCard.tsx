@@ -28,7 +28,6 @@ const PostCard: React.FC<PostCardProps> = ({
   // const isReposted = postRepostStatus[post.id];
   const [ isLiked, setIsLiked ] = useState(false);
   const [ isReposted, setIsReposted ] = useState(false);
-  const [ showEmbed, setShowEmbed ] = useState(false);
 
   const handlePostClick = () => {
     if (!isDetail) {
@@ -97,11 +96,6 @@ const PostCard: React.FC<PostCardProps> = ({
     });
   };
 
-  const handleEmbedToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowEmbed(show => !show);
-  };
-
   return (
     <article
       className={cn(
@@ -142,8 +136,6 @@ const PostCard: React.FC<PostCardProps> = ({
             embedImages={post.embedImages}
             embedVideo={post.embedVideo}
             embedExternal={post.embedExternal}
-            showEmbed={showEmbed}
-            onEmbedToggle={handleEmbedToggle}
           />
 
           <PostCardActions
@@ -178,8 +170,6 @@ const PostCard: React.FC<PostCardProps> = ({
               embedImages={post.embedImages}
               embedVideo={post.embedVideo}
               embedExternal={post.embedExternal}
-              showEmbed={showEmbed}
-              onEmbedToggle={handleEmbedToggle}
             />
 
             <PostCardActions
