@@ -15,8 +15,9 @@ import { Route as SettingsImport } from './routes/settings'
 import { Route as SearchImport } from './routes/search'
 import { Route as NotificationsImport } from './routes/notifications'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProfileUsernameImport } from './routes/profile.$username'
 import { Route as HashtagTagImport } from './routes/hashtag.$tag'
+import { Route as ProfileUsernameRouteImport } from './routes/profile.$username.route'
+import { Route as ProfileUsernameIndexImport } from './routes/profile.$username.index'
 import { Route as ProfileUsernamePostPostIdImport } from './routes/profile.$username.post.$postId'
 
 // Create/Update Routes
@@ -45,22 +46,28 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileUsernameRoute = ProfileUsernameImport.update({
-  id: '/profile/$username',
-  path: '/profile/$username',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const HashtagTagRoute = HashtagTagImport.update({
   id: '/hashtag/$tag',
   path: '/hashtag/$tag',
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProfileUsernameRouteRoute = ProfileUsernameRouteImport.update({
+  id: '/profile/$username',
+  path: '/profile/$username',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileUsernameIndexRoute = ProfileUsernameIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProfileUsernameRouteRoute,
+} as any)
+
 const ProfileUsernamePostPostIdRoute = ProfileUsernamePostPostIdImport.update({
   id: '/post/$postId',
   path: '/post/$postId',
-  getParentRoute: () => ProfileUsernameRoute,
+  getParentRoute: () => ProfileUsernameRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -95,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsImport
       parentRoute: typeof rootRoute
     }
+    '/profile/$username': {
+      id: '/profile/$username'
+      path: '/profile/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof ProfileUsernameRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/hashtag/$tag': {
       id: '/hashtag/$tag'
       path: '/hashtag/$tag'
@@ -102,44 +116,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HashtagTagImport
       parentRoute: typeof rootRoute
     }
-    '/profile/$username': {
-      id: '/profile/$username'
-      path: '/profile/$username'
-      fullPath: '/profile/$username'
-      preLoaderRoute: typeof ProfileUsernameImport
-      parentRoute: typeof rootRoute
+    '/profile/$username/': {
+      id: '/profile/$username/'
+      path: '/'
+      fullPath: '/profile/$username/'
+      preLoaderRoute: typeof ProfileUsernameIndexImport
+      parentRoute: typeof ProfileUsernameRouteImport
     }
     '/profile/$username/post/$postId': {
       id: '/profile/$username/post/$postId'
       path: '/post/$postId'
       fullPath: '/profile/$username/post/$postId'
       preLoaderRoute: typeof ProfileUsernamePostPostIdImport
-      parentRoute: typeof ProfileUsernameImport
+      parentRoute: typeof ProfileUsernameRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface ProfileUsernameRouteChildren {
+interface ProfileUsernameRouteRouteChildren {
+  ProfileUsernameIndexRoute: typeof ProfileUsernameIndexRoute
   ProfileUsernamePostPostIdRoute: typeof ProfileUsernamePostPostIdRoute
 }
 
-const ProfileUsernameRouteChildren: ProfileUsernameRouteChildren = {
+const ProfileUsernameRouteRouteChildren: ProfileUsernameRouteRouteChildren = {
+  ProfileUsernameIndexRoute: ProfileUsernameIndexRoute,
   ProfileUsernamePostPostIdRoute: ProfileUsernamePostPostIdRoute,
 }
 
-const ProfileUsernameRouteWithChildren = ProfileUsernameRoute._addFileChildren(
-  ProfileUsernameRouteChildren,
-)
+const ProfileUsernameRouteRouteWithChildren =
+  ProfileUsernameRouteRoute._addFileChildren(ProfileUsernameRouteRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/profile/$username': typeof ProfileUsernameRouteRouteWithChildren
   '/hashtag/$tag': typeof HashtagTagRoute
-  '/profile/$username': typeof ProfileUsernameRouteWithChildren
+  '/profile/$username/': typeof ProfileUsernameIndexRoute
   '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
 
@@ -149,7 +165,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
   '/hashtag/$tag': typeof HashtagTagRoute
-  '/profile/$username': typeof ProfileUsernameRouteWithChildren
+  '/profile/$username': typeof ProfileUsernameIndexRoute
   '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
 
@@ -159,8 +175,9 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
+  '/profile/$username': typeof ProfileUsernameRouteRouteWithChildren
   '/hashtag/$tag': typeof HashtagTagRoute
-  '/profile/$username': typeof ProfileUsernameRouteWithChildren
+  '/profile/$username/': typeof ProfileUsernameIndexRoute
   '/profile/$username/post/$postId': typeof ProfileUsernamePostPostIdRoute
 }
 
@@ -171,8 +188,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/settings'
-    | '/hashtag/$tag'
     | '/profile/$username'
+    | '/hashtag/$tag'
+    | '/profile/$username/'
     | '/profile/$username/post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -189,8 +207,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/settings'
-    | '/hashtag/$tag'
     | '/profile/$username'
+    | '/hashtag/$tag'
+    | '/profile/$username/'
     | '/profile/$username/post/$postId'
   fileRoutesById: FileRoutesById
 }
@@ -200,8 +219,8 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
+  ProfileUsernameRouteRoute: typeof ProfileUsernameRouteRouteWithChildren
   HashtagTagRoute: typeof HashtagTagRoute
-  ProfileUsernameRoute: typeof ProfileUsernameRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -209,8 +228,8 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,
+  ProfileUsernameRouteRoute: ProfileUsernameRouteRouteWithChildren,
   HashtagTagRoute: HashtagTagRoute,
-  ProfileUsernameRoute: ProfileUsernameRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -227,8 +246,8 @@ export const routeTree = rootRoute
         "/notifications",
         "/search",
         "/settings",
-        "/hashtag/$tag",
-        "/profile/$username"
+        "/profile/$username",
+        "/hashtag/$tag"
       ]
     },
     "/": {
@@ -243,14 +262,19 @@ export const routeTree = rootRoute
     "/settings": {
       "filePath": "settings.tsx"
     },
+    "/profile/$username": {
+      "filePath": "profile.$username.route.tsx",
+      "children": [
+        "/profile/$username/",
+        "/profile/$username/post/$postId"
+      ]
+    },
     "/hashtag/$tag": {
       "filePath": "hashtag.$tag.tsx"
     },
-    "/profile/$username": {
-      "filePath": "profile.$username.tsx",
-      "children": [
-        "/profile/$username/post/$postId"
-      ]
+    "/profile/$username/": {
+      "filePath": "profile.$username.index.tsx",
+      "parent": "/profile/$username"
     },
     "/profile/$username/post/$postId": {
       "filePath": "profile.$username.post.$postId.tsx",
