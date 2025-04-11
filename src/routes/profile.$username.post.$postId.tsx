@@ -1,35 +1,39 @@
 import PostCard from '@/components/feed/PostCard';
 import AuthorHeader from '@/components/profile/AuthorHeader';
-import { createAgent, getPostThreads } from '@/lib/atproto-helpers'
+import { usePostThread } from '@/lib/atp/hooks/use-post-thread';
 import { createFileRoute } from '@tanstack/react-router'
 
-const agent = createAgent()
-
 export const Route = createFileRoute('/profile/$username/post/$postId')({
-  loader: ({ params: { username, postId } }) => {
-    return getPostThreads(agent, `at://${username}/app.bsky.feed.post/${postId}`);
-  },
+  loader: ({ params: { username, postId } }) => `at://${username}/app.bsky.feed.post/${postId}`,
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const thread = Route.useLoaderData()
+  const uri = Route.useLoaderData()
+
+  const {
+    data,
+    isLoading,
+  } = usePostThread({ uri });
+
+  if (isLoading)
+    return "Loading...";
 
   return (
     <>
       <AuthorHeader
-        user={thread.post?.author ?? {}}
+        user={data?.post?.author ?? {}}
       />
 
-      {thread.post ? (
+      {data?.post ? (
         <PostCard
-          post={thread.post}
+          post={data.post}
           fromATP
           isDetail
         />
       ) : null}
 
-      {thread.replies.map(reply => (reply.post ? (
+      {data?.replies.map(reply => (reply.post ? (
         <PostCard
           key={reply.post.id}
           fromATP
