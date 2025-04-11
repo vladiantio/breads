@@ -24,6 +24,7 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
               username: author.username!,
             }}
             className="font-semibold text-foreground hover:underline active:opacity-60 truncate"
+            onClick={(e) => e.stopPropagation()}
           >
             {author.username}
           </Link>

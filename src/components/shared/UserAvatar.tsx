@@ -27,8 +27,9 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
     '2xl': 'size-20',
   };
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
     if (clickable) {
+      e.stopPropagation();
       navigate({
         to: '/profile/$username',
         params: { username: user.username! }
@@ -45,6 +46,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
         <AvatarImage
           src={user.avatar}
           alt={user.displayName ?? user.username}
+          loading="lazy"
           className={cn("object-cover", blurred && "blur-sm")}
         />
         <AvatarFallback>
