@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as SearchImport } from './routes/search'
 import { Route as NotificationsImport } from './routes/notifications'
+import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as HashtagTagImport } from './routes/hashtag.$tag'
 import { Route as ProfileUsernameRouteImport } from './routes/profile.$username.route'
@@ -37,6 +38,12 @@ const SearchRoute = SearchImport.update({
 const NotificationsRoute = NotificationsImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/notifications': {
@@ -150,6 +164,7 @@ const ProfileUsernameRouteRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -161,6 +176,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -172,6 +188,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -185,6 +202,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
     | '/notifications'
     | '/search'
     | '/settings'
@@ -195,6 +213,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
     | '/notifications'
     | '/search'
     | '/settings'
@@ -204,6 +223,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
     | '/notifications'
     | '/search'
     | '/settings'
@@ -216,6 +236,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
@@ -225,6 +246,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,
@@ -243,6 +265,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/login",
         "/notifications",
         "/search",
         "/settings",
@@ -252,6 +275,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
     },
     "/notifications": {
       "filePath": "notifications.tsx"
