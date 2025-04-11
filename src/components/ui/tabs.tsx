@@ -12,7 +12,7 @@ const tabsTriggerVariants = cva(
         default:
           "data-[state=active]:bg-accent data-[state=active]:shadow-xs",
         underline:
-          "data-[state=active]:after:bg-primary relative after:absolute after:inset-x-0 after:mx-auto after:max-w-16 after:bottom-0 after:h-1 after:rounded-full",
+          "data-[state=active]:after:bg-foreground relative after:absolute after:inset-x-0 after:mx-auto after:max-w-16 after:bottom-0 after:h-0.5 after:rounded-full",
       },
     },
     defaultVariants: {
