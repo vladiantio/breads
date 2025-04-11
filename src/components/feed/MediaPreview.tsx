@@ -13,7 +13,7 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({
   if (!selectedImage) return null;
   
   return (
-    <div className="relative mt-2 rounded-xl overflow-hidden">
+    <div className="relative mt-4 rounded-xl overflow-hidden">
       <img 
         src={selectedImage} 
         alt="Selected" 

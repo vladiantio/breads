@@ -24,7 +24,7 @@ const PostActions: React.FC<PostActionsProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="mt-2 flex items-center justify-between">
+    <div className="mt-3 flex items-center justify-between">
       <div className="flex items-center gap-x-1 -mx-3">
         <input
           type="file"

@@ -91,7 +91,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
   
   return (
     <article>
-      <div className="flex space-x-3 p-3">
+      <div className="flex space-x-4 p-4">
         <UserAvatar user={currentUser} clickable={false} />
         
         <div className="flex-1">

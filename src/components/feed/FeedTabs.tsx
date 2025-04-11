@@ -13,7 +13,7 @@ const FeedTabs: FC = () => {
       onValueChange={setActiveTab}
     >
       <ScrollArea>
-        <TabsList className="p-1.5 min-w-full">
+        <TabsList className="p-2 min-w-full">
           <TabsTrigger
             value="discover"
             className="grow"

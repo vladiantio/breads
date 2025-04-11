@@ -99,14 +99,14 @@ const PostCard: React.FC<PostCardProps> = ({
   return (
     <article
       className={cn(
-        "m-1 transition-[background-color] rounded-lg",
+        "transition-[background-color] rounded-lg",
         !isDetail && "hover:bg-card active:bg-card/60"
       )}
       onClick={handlePostClick}
     >
       {post.reason?.$type === 'app.bsky.feed.defs#reasonPin'
       ? (
-        <div className="flex items-center gap-x-3 text-sm text-muted-foreground pt-2 px-2 -mb-1">
+        <div className="flex items-center gap-x-3 text-sm text-muted-foreground pt-3 px-4 -mb-1">
           <PinIcon className="size-4 ml-5" />
           Pinned
         </div>
@@ -114,8 +114,8 @@ const PostCard: React.FC<PostCardProps> = ({
       : null }
 
       {isDetail ? (
-        <div className="px-2 pb-3">
-          <div className="flex items-center gap-x-3 mb-3">
+        <div className="px-4 pb-4">
+          <div className="flex items-center gap-x-4 mb-4">
             <UserAvatar user={post.author} clickable />
 
             <div className="flex-1 min-w-0">
@@ -151,7 +151,7 @@ const PostCard: React.FC<PostCardProps> = ({
           />
         </div>
       ) : (
-        <div className="flex px-2 py-3 gap-x-3">
+        <div className="flex p-4 gap-x-4">
           <UserAvatar user={post.author} clickable />
 
           <div className="flex-1 min-w-0">

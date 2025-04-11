@@ -19,7 +19,7 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
         <UserAvatar user={user} size="xl" clickable={false} />
       </div>
 
-      <div className="mt-3 space-y-3">
+      <div className="mt-4 space-y-3">
         {user.bio.split('\n\n').map((para, i) => (
           <p
             key={`p-${i}`}
@@ -30,7 +30,7 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
         ))}
       </div>
 
-      <div className="mt-3">
+      <div className="mt-4">
         <span className="font-semibold">{formatNumber(user.followers)}</span>
         <span className="text-muted-foreground ml-1">followers</span>
       </div>

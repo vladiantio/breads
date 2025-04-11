@@ -7,13 +7,13 @@ export const ProfileTabs: FC = () => {
 
   return (
     <Tabs
-      className="sticky bg-background top-14 z-10"
+      className="sticky bg-background top-16 z-[1]"
       variant="underline"
       value={activeTab}
       onValueChange={setActiveTab}
     >
       <ScrollArea>
-        <TabsList className="p-1.5 min-w-full">
+        <TabsList className="p-2 min-w-full">
           <TabsTrigger
             value="posts"
             className="grow"

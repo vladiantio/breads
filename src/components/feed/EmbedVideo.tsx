@@ -12,12 +12,11 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
 
   return (
   <EmbedToggle
-    className="mt-3"
     label="video"
     {...hoverProps}
   >
     <div
-      className="mt-2 max-h-[26rem] w-fit"
+      className="mt-4 max-h-[26rem] w-fit"
       style={{
         aspectRatio: view.aspectRatio ? view.aspectRatio.width / view.aspectRatio.height : undefined
       }}

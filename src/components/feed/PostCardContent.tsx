@@ -28,7 +28,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   embedExternal,
 }) => {
   return (
-    <>
+    <div className="space-y-4">
       {content
         ? fromATP
           ? <RichTextRenderer text={content} facets={facets} />
@@ -46,7 +46,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
       {embedExternal && (
         <EmbedExternal view={embedExternal} />
       )}
-    </>
+    </div>
   );
 };
 

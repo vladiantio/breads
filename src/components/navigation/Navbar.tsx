@@ -12,11 +12,14 @@ import { NavIconLink } from './NavIconLink';
 
 export const Navbar: React.FC = () => {
   return (
-    <nav className="flex flex-col justify-between fixed left-0 inset-y-0">
-      <div className="p-2 flex flex-col items-center gap-3">
-        <UserAvatar user={getCurrentUser()} />
+    <nav className="flex flex-col justify-between fixed left-0 inset-y-0 p-4">
+      <div className="flex flex-col items-center gap-4">
+        <UserAvatar
+          size="lg"
+          user={getCurrentUser()}
+        />
       </div>
-      <div className="p-2 flex flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-4">
         <NavIconLink 
           icon={HomeIcon}
           label="Home"
@@ -32,7 +35,8 @@ export const Navbar: React.FC = () => {
 
         <Button 
           title="New Post"
-          className="py-5"
+          size="icon"
+          className="px-7 py-6"
         >
           <SquarePenIcon className="size-6" />
         </Button>
@@ -54,7 +58,7 @@ export const Navbar: React.FC = () => {
           fillOnHover
         />
       </div>
-      <div className="p-2 flex flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-4">
         <NavIconLink 
           icon={SettingsIcon}
           label="Settings"

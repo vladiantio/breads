@@ -23,7 +23,7 @@ function EmbedGif({
   if (tenorGif.success) {
     return (
       <div
-        className="mt-2 max-h-[26rem] w-fit"
+        className="mt-4 max-h-[26rem] w-fit"
         style={{
           aspectRatio: tenorGif.dimensions.width / tenorGif.dimensions.height
         }}
@@ -43,7 +43,7 @@ function EmbedGif({
     )
   } else {
     return (
-      <div className="mt-2 max-h-[26rem]">
+      <div className="mt-4 max-h-[26rem]">
         <img
           src={uri} 
           alt={title}
@@ -65,7 +65,6 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
   if (gifUriRegex.test(view.uri)) {
     return (
       <EmbedToggle
-        className="mt-3"
         label="GIF"
         {...hoverProps}
       >
@@ -81,13 +80,12 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
       <YouTubeEmbed
         id={ytUriRegex.exec(view.uri)![1]}
         title={view.title}
-        className="mt-3"
         onClick={(e) => e.stopPropagation()}
       />
     )
   } else {
     return (
-      <div className="mt-3 bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
+      <div className="bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
         {view.thumb && (
           <div className="bg-secondary border-b">
             <img
@@ -99,7 +97,7 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
             />
           </div>
         )}
-        <div className="flex flex-col gap-y-1 py-3 px-3">
+        <div className="flex flex-col gap-y-1 py-4 px-4">
           <small className="text-muted-foreground flex items-center gap-x-1">
             <GlobeIcon size="1em" />
             {new URL(view.uri).hostname.replace('www.', '')}

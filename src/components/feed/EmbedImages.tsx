@@ -11,11 +11,10 @@ export function EmbedImages({ views }: EmbedImagesProps) {
 
   return (
     <EmbedToggle
-      className="mt-3"
       label="images"
       {...hoverProps}
     >
-      <div className="mt-2 flex gap-x-2">
+      <div className="mt-4 flex gap-x-2">
         {views.map(image => (
           <div
             key={image.thumb}

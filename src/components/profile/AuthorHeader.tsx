@@ -16,7 +16,7 @@ const AuthorHeader: FC<AuthorHeaderProps> = ({
   const { history } = useRouter();
 
   return (
-    <div className="sticky top-0 z-10 bg-background px-4 h-14 flex items-center justify-between gap-x-3">
+    <div className="sticky top-0 z-[1] bg-background px-4 h-16 flex items-center justify-between gap-x-4">
       <Button
         variant="ghost"
         className="rounded-full !p-2 -ml-1"

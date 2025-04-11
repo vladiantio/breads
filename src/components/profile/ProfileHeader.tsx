@@ -20,7 +20,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
       <div className="px-4 pb-4">
         {user.banner ? (
           <div
-            className="bg-muted rounded-2xl w-full aspect-[3/1] bg-center bg-cover mb-3"
+            className="bg-muted rounded-2xl w-full aspect-[3/1] bg-center bg-cover mb-4"
             style={{ backgroundImage: `url(${user.banner})` }}
           />
         ) : null}
