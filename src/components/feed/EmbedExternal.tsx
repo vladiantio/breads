@@ -6,7 +6,7 @@ import { GlobeIcon } from "lucide-react";
 import { useImagePreload } from "@/hooks/use-image-preload";
 
 const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
-const ytUriRegex = /(?:(?:youtu.be\/)|(?:v\/)|(?:\/u\/\w\/)|(?:embed\/)|(?:watch\?))\??v?=?([^#&?]*)/;
+const ytUriRegex = /(?:(?:youtu.be\/)|(?:\/v\/)|(?:\/u\/\w\/)|(?:\/embed\/)|(?:\/watch\?)|(?:\/shorts\/))\??(?:v=)?([^#&?]*)/;
 
 interface EmbedGifProps {
   uri: string
