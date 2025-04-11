@@ -1,19 +1,23 @@
 import CreatePost from "./CreatePost";
 import FeedTabs from "./FeedTabs";
 import PostCard from "./PostCard";
-import { useQuery } from "@tanstack/react-query";
-import { createAgent, getFeed } from "@/lib/atproto-helpers";
+import { Button } from "../ui/button";
+import { ArrowDownIcon, Loader2 } from "lucide-react";
+import { useFeed } from "@/lib/atp/hooks/use-feed";
+import { useMemo } from "react";
+import PostCardSkeleton from "./PostCardSkeleton";
 
 export function Timeline() {
-  const { isPending, error, data } = useQuery({
-    queryKey: ['feedData'],
-    queryFn: () => {
-      const agent = createAgent();
-      return getFeed(agent, 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot');
-    },
-  })
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage
+  } = useFeed();
 
-  if (isPending) return 'Loading...'
+  const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
 
   if (error) return 'An error has occurred: ' + error.message
 
@@ -21,9 +25,35 @@ export function Timeline() {
     <>
       <FeedTabs />
       <CreatePost />
-      {data.posts.map(post => (
-        <PostCard post={post} fromATP />
-      ))}
+      {isLoading ? new Array(30).fill(0).map((_, i) => (
+        <PostCardSkeleton key={i} />
+      )) : (
+        <>
+          {posts.map((post, postIndex) => (
+            <PostCard
+              key={postIndex}
+              post={post}
+              fromATP
+            />
+          ))}
+          {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
+            <PostCardSkeleton key={i} />
+          ))}
+          <div className="py-4 text-center">
+            <Button
+              variant="outline"
+              onClick={() => fetchNextPage()}
+              disabled={!hasNextPage || isFetchingNextPage}
+            >
+              {isFetchingNextPage && <Loader2 className="animate-spin" />}
+              {hasNextPage
+                ? 'Load more'
+                : 'Nothing more to load'}
+              {hasNextPage && <ArrowDownIcon />}
+            </Button>
+          </div>
+        </>
+      )}
     </>
   )
 }
