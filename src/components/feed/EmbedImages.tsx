@@ -11,14 +11,14 @@ export function EmbedImages({ views }: EmbedImagesProps) {
 
   return (
     <EmbedToggle
-      label="images"
+      label={views.length > 1 ? `${views.length} images` : 'image'}
       {...hoverProps}
     >
       <div className="mt-4 flex gap-x-2">
         {views.map(image => (
           <div
             key={image.thumb}
-            className="max-h-[26rem] w-fit"
+            className="max-h-[26rem]"
             style={{
               aspectRatio: image.aspectRatio ? image.aspectRatio.width / image.aspectRatio.height : undefined
             }}
