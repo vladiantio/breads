@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
 import { Route as AppImport } from './routes/_app'
 import { Route as AppIndexImport } from './routes/_app.index'
 import { Route as AppSettingsImport } from './routes/_app.settings'
@@ -22,6 +23,12 @@ import { Route as AppProfileUsernameIndexImport } from './routes/_app.profile.$u
 import { Route as AppProfileUsernamePostPostIdImport } from './routes/_app.profile.$username.post.$postId'
 
 // Create/Update Routes
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AppRoute = AppImport.update({
   id: '/_app',
@@ -86,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AppImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/_app/notifications': {
@@ -187,6 +201,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
   '/notifications': typeof AppNotificationsRoute
   '/search': typeof AppSearchRoute
   '/settings': typeof AppSettingsRoute
@@ -198,6 +213,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/login': typeof LoginRoute
   '/notifications': typeof AppNotificationsRoute
   '/search': typeof AppSearchRoute
   '/settings': typeof AppSettingsRoute
@@ -210,6 +226,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
   '/_app/notifications': typeof AppNotificationsRoute
   '/_app/search': typeof AppSearchRoute
   '/_app/settings': typeof AppSettingsRoute
@@ -224,6 +241,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/login'
     | '/notifications'
     | '/search'
     | '/settings'
@@ -234,6 +252,7 @@ export interface FileRouteTypes {
     | '/profile/$username/post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/login'
     | '/notifications'
     | '/search'
     | '/settings'
@@ -244,6 +263,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_app'
+    | '/login'
     | '/_app/notifications'
     | '/_app/search'
     | '/_app/settings'
@@ -257,10 +277,12 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -273,7 +295,8 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_app"
+        "/_app",
+        "/login"
       ]
     },
     "/_app": {
@@ -286,6 +309,9 @@ export const routeTree = rootRoute
         "/_app/profile/$username",
         "/_app/hashtag/$tag"
       ]
+    },
+    "/login": {
+      "filePath": "login.tsx"
     },
     "/_app/notifications": {
       "filePath": "_app.notifications.tsx",
