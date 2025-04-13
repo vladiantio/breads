@@ -1,7 +1,7 @@
 import { Profile } from '@/pages/Profile'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/profile/$username/')({
+export const Route = createFileRoute('/_app/profile/$username/')({
   loader: ({ params: { username } }) => username,
   notFoundComponent: () => {
     return <div className="feed-container pt-16 text-center">
