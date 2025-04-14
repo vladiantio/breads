@@ -136,6 +136,7 @@ const PostCard: React.FC<PostCardProps> = ({
             embedImages={post.embedImages}
             embedVideo={post.embedVideo}
             embedExternal={post.embedExternal}
+            isDetail={isDetail}
           />
 
           <PostCardActions
@@ -170,6 +171,7 @@ const PostCard: React.FC<PostCardProps> = ({
               embedImages={post.embedImages}
               embedVideo={post.embedVideo}
               embedExternal={post.embedExternal}
+              isDetail={isDetail}
             />
 
             <PostCardActions

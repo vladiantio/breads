@@ -17,6 +17,7 @@ interface PostCardContentProps {
   embedImages?: AppBskyEmbedImages.ViewImage[];
   embedVideo?: AppBskyEmbedVideo.View;
   embedExternal?: AppBskyEmbedExternal.ViewExternal;
+  isDetail: boolean;
 }
 
 const PostCardContent: React.FC<PostCardContentProps> = ({
@@ -26,6 +27,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   embedImages,
   embedVideo,
   embedExternal,
+  isDetail,
 }) => {
   return (
     <div className="space-y-4">
@@ -36,7 +38,10 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
         : null}
 
       {embedImages && embedImages.length > 0 && (
-        <EmbedImages views={embedImages} />
+        <EmbedImages
+          views={embedImages}
+          isDetail={isDetail}
+        />
       )}
 
       {embedVideo !== undefined ? (
