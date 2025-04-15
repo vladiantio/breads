@@ -17,7 +17,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
       label={views.length > 1 ? `${views.length} images` : 'image'}
       {...hoverProps}
     >
-      {views.length > 1 ? (
+      {views.length > 2 ? (
         <Carousel
           className={cn(
             "mt-4 -mr-4",
@@ -28,7 +28,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
         >
           <CarouselContent
             className={cn(
-              "gap-x-2 mr-4 cursor-grab active:cursor-grabbing",
+              "mr-4 cursor-grab active:cursor-grabbing",
               isDetail ? "ml-2" : "ml-16",
             )}
           >
@@ -51,21 +51,24 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
         </Carousel>
       ) : (
         <div className="mt-4 flex gap-x-2">
-          <div
-            className="max-h-[26rem]"
-            style={{
-              aspectRatio: views[0].aspectRatio ? views[0].aspectRatio.width / views[0].aspectRatio.height : undefined
-            }}
-          >
-            <img 
-              src={views[0].thumb} 
-              alt={views[0].alt}
-              className="max-h-full max-w-full rounded-lg border object-cover"
-              loading="lazy"
-              width={views[0].aspectRatio?.width}
-              height={views[0].aspectRatio?.height}
-            />
-          </div>
+          {views.map(image => (
+            <div
+              key={image.thumb}
+              className="max-h-[26rem]"
+              style={{
+                flexBasis: image.aspectRatio ? `${image.aspectRatio.width * 100 / image.aspectRatio.height}%` : '100%',
+              }}
+            >
+              <img 
+                src={image.thumb} 
+                alt={image.alt}
+                className="h-full rounded-lg border object-cover"
+                loading="lazy"
+                width={image.aspectRatio?.width}
+                height={image.aspectRatio?.height}
+              />
+            </div>
+          ))}
         </div>
       )}
     </EmbedToggle>
