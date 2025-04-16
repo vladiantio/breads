@@ -1,7 +1,7 @@
 // source: https://github.com/akari-blue/akari/blob/main/src/lib/bluesky/store.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import AtpAgent, { AtpSessionData, Agent } from '@atproto/api';
+import { AtpSessionData, Agent } from '@atproto/api';
 
 export type AtpCredentials = {
   handle: string;
@@ -75,8 +75,8 @@ export const useAtpStore = create<AtpState>()(
         const { session, isAuthenticated } = get();
         if (session && !isAuthenticated) {
           try {
-            const agent = new AtpAgent({ service: AUTHENTICATED_ENDPOINT });
-            await agent.resumeSession(session);
+            const agent = new Agent({ service: AUTHENTICATED_ENDPOINT });
+            await agent.com.atproto.server.getSession(session);
             set({ agent, isAuthenticated: true });
           } catch (error) {
             console.error('Failed to restore session:', error);
