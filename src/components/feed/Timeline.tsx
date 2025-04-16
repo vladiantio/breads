@@ -6,6 +6,7 @@ import { ArrowDownIcon, Loader2 } from "lucide-react";
 import { useFeed } from "@/lib/atp/hooks/use-feed";
 import { useMemo } from "react";
 import PostCardSkeleton from "./PostCardSkeleton";
+import { useAtpStore } from "@/lib/atp/store";
 
 export function Timeline() {
   const {
@@ -17,6 +18,8 @@ export function Timeline() {
     isFetchingNextPage
   } = useFeed();
 
+  const { isAuthenticated } = useAtpStore();
+
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
 
   if (error) return 'An error has occurred: ' + error.message
@@ -24,7 +27,9 @@ export function Timeline() {
   return (
     <>
       <FeedTabs />
-      <CreatePost />
+      {isAuthenticated && (
+        <CreatePost />
+      )}
       {isLoading ? new Array(30).fill(0).map((_, i) => (
         <PostCardSkeleton key={i} />
       )) : (
