@@ -66,7 +66,7 @@ export function Login() {
             (error?.message === 'A sign in code has been sent to your email address' ||
             error?.message === 'Token is invalid' ? (
               <div>
-                <label className="mb-1 font-semibold block" htmlFor="authFactorToken">Two-factor token</label>
+                <label className="mb-1 font-semibold block" htmlFor="authFactorToken">Two-factor confirmation</label>
                 <Controller
                   name="authFactorToken"
                   control={control}
@@ -79,7 +79,7 @@ export function Login() {
                       pasteTransformer={otpPasteTransformer}
                       {...field}
                     >
-                      <InputOTPGroup className="basis-full [&>*]:h-14 [&>*]:w-auto">
+                      <InputOTPGroup className="basis-full [&>*]:h-14 [&>*]:w-auto [&>*]:basis-full">
                         <InputOTPSlot index={0} />
                         <InputOTPSlot index={1} />
                         <InputOTPSlot index={2} />
@@ -87,7 +87,7 @@ export function Login() {
                         <InputOTPSlot index={4} />
                       </InputOTPGroup>
                       <InputOTPSeparator />
-                      <InputOTPGroup className="basis-full [&>*]:h-14 [&>*]:w-auto">
+                      <InputOTPGroup className="basis-full [&>*]:h-14 [&>*]:w-auto [&>*]:basis-full">
                         <InputOTPSlot index={5} />
                         <InputOTPSlot index={6} />
                         <InputOTPSlot index={7} />
@@ -97,6 +97,7 @@ export function Login() {
                     </InputOTP>
                   )}
                 />
+                <p className="mt-1 text-sm text-muted-foreground">Check your email for a sign in code and enter it here.</p>
                 {errors.authFactorToken && <p className="mt-1 text-sm text-destructive">{errors.authFactorToken?.message}</p>}
               </div>
             ) : (
