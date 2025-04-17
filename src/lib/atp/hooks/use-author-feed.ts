@@ -32,6 +32,5 @@ export function useAuthorFeed({
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined,
     enabled: !!agent,
-    retry: 1,
   });
 }

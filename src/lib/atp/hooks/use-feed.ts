@@ -26,7 +26,6 @@ export function useFeed() {
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined,
     enabled: !!agent && feed !== undefined,
-    retry: 1,
     staleTime: Infinity,
   });
 }
