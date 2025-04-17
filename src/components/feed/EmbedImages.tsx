@@ -62,7 +62,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
               <img 
                 src={image.thumb} 
                 alt={image.alt}
-                className="h-full rounded-lg border object-cover"
+                className="h-full w-auto rounded-lg border object-cover"
                 loading="lazy"
                 width={image.aspectRatio?.width}
                 height={image.aspectRatio?.height}
