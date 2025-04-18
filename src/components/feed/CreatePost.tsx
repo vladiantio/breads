@@ -92,7 +92,11 @@ const CreatePost: React.FC<CreatePostProps> = ({
   return (
     <article>
       <div className="flex space-x-4 p-4">
-        <UserAvatar user={currentUser} clickable={false} />
+        <UserAvatar 
+          username={currentUser.username}
+          displayName={currentUser.displayName}
+          src={currentUser.avatar}
+        />
         
         <div className="flex-1">
           <PostEditor 

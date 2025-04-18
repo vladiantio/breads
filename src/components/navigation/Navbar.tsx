@@ -1,6 +1,5 @@
 import React from 'react';
 import UserAvatar from '../shared/UserAvatar';
-import { getCurrentUser } from '@/data/users';
 import { SettingsIcon } from 'lucide-react';
 import { NavIconLink } from './NavIconLink';
 import { NavLinks } from './NavLinks';
@@ -11,7 +10,7 @@ export const Navbar: React.FC = () => {
       <div className="flex flex-col items-center gap-4">
         <UserAvatar
           size="lg"
-          user={getCurrentUser()}
+          displayName="Guest"
         />
       </div>
       <div className="flex flex-col items-center gap-4">

@@ -116,7 +116,12 @@ const PostCard: React.FC<PostCardProps> = ({
       {isDetail ? (
         <div className="px-4 pb-4">
           <div className="flex items-center gap-x-4 mb-4">
-            <UserAvatar user={post.author} clickable />
+            <UserAvatar
+              username={post.author.username}
+              displayName={post.author.displayName}
+              src={post.author.avatar}
+              clickable
+            />
 
             <div className="flex-1 min-w-0">
               <PostCardHeader
@@ -153,7 +158,12 @@ const PostCard: React.FC<PostCardProps> = ({
         </div>
       ) : (
         <div className="flex p-4 gap-x-4">
-          <UserAvatar user={post.author} clickable />
+          <UserAvatar
+            username={post.author.username}
+            displayName={post.author.displayName}
+            src={post.author.avatar}
+            clickable
+          />
 
           <div className="flex-1 min-w-0">
             <PostCardHeader
