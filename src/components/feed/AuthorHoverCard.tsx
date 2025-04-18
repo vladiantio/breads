@@ -1,53 +1,40 @@
-import { createAgent, getActorProfile, getProfile } from "@/lib/atproto-helpers";
-import { User } from "@/types/ResponseSchema";
-import { FC, PropsWithChildren, useCallback, useState } from "react";
+import { FC, PropsWithChildren, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useProfile } from "@/lib/atp/hooks/use-profile";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
 import { ProfileDisplay } from "../profile/ProfileDisplay";
 import { Button } from "../ui/button";
 
-const agent = createAgent();
-
 interface AuthorHoverCardProps extends PropsWithChildren {
-  did?: string;
   handle?: string;
 }
 
 export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
-  did,
   handle,
   children,
 }) => {
-  const [open, setOpen] = useState(false);
-  const [author, setAuthor] = useState<User | undefined>(undefined);
-
-  const fetchAuthor = useCallback(async () => {
-    if (handle)
-      setAuthor(await getProfile(agent, handle));
-    else if (did)
-      setAuthor(await getActorProfile(agent, did));
-  }, [did, handle]);
-
-  const handleOpen = (isOpen: boolean) => {
-    if (isOpen && author === undefined) {
-      fetchAuthor();
-    }
-    setOpen(isOpen);
-  };
+  const [enabled, setEnabled] = useState(false);
+  const {
+    data,
+    isLoading,
+  } = useProfile({ handle, enabled });
 
   return (
     <HoverCard
-      open={open}
-      onOpenChange={handleOpen}
-      openDelay={300}
+      openDelay={400}
       closeDelay={200}
     >
-      <HoverCardTrigger asChild>
+      <HoverCardTrigger
+        onMouseEnter={() => setEnabled(true)}
+        asChild
+      >
         {children}
       </HoverCardTrigger>
-      <HoverCardContent className="w-80">
-        {author && (
+      <HoverCardContent className="w-96 p-6 rounded-xl">
+        {isLoading && <Loader2 className="animate-spin" />}
+        {data && (
           <>
-            <ProfileDisplay user={author} />
+            <ProfileDisplay user={data} />
             <Button className="w-full mt-3">Follow</Button>
           </>
         )}
