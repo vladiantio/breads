@@ -17,7 +17,7 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
   return (
     <div className="flex items-center justify-between gap-x-2">
       <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
-        <AuthorHoverCard did={author.id!}>
+        <AuthorHoverCard handle={author.username}>
           <Link
             to="/profile/$username"
             params={{

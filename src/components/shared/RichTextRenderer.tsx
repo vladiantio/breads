@@ -38,7 +38,7 @@ const TextSegment: FC<{
 
   if (segment.isMention()) {
     return (
-      <AuthorHoverCard did={segment.mention!.did}>
+      <AuthorHoverCard handle={segment.mention!.did}>
         <Link
           key={`mention-${index}`}
           to="/profile/$username"
