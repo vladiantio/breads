@@ -4,9 +4,13 @@ import { mapAuthor } from '../map';
 
 interface UseProfile {
   handle?: string
+  enabled?: boolean
 }
 
-export function useProfile({ handle }: UseProfile) {
+export function useProfile({
+  handle,
+  enabled = true,
+}: UseProfile) {
   const { agent } = useAtpStore();
 
   return useQuery({
@@ -18,6 +22,6 @@ export function useProfile({ handle }: UseProfile) {
 
       return mapAuthor(data);
     },
-    enabled: !!agent && !!handle,
+    enabled: enabled && !!agent && !!handle,
   });
 }
