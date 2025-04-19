@@ -27,6 +27,7 @@ export interface Post {
   embedImages?: AppBskyEmbedImages.ViewImage[];
   embedVideo?: AppBskyEmbedVideo.View;
   embedExternal?: AppBskyEmbedExternal.ViewExternal;
+  embedPost?: PostWithAuthor;
   reason?: Reason
 }
 
