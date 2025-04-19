@@ -6,7 +6,9 @@ import { NavLinks } from './NavLinks';
 
 export const Navbar: React.FC = () => {
   return (
-    <nav className="flex flex-col justify-between fixed left-0 inset-y-0 p-4">
+    <nav
+      className="flex flex-col justify-between fixed -ml-22 inset-y-0 p-4"
+    >
       <div className="flex flex-col items-center gap-4">
         <UserAvatar
           size="lg"
