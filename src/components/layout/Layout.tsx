@@ -14,15 +14,16 @@ export const Layout: React.FC<LayoutProps> = ({
   
   return (
     <div className="flex flex-col min-h-dvh bg-background">
-      {!isMobile && <Navbar />}
 
-      <div className="md:px-15 flex-1">
-        <div className="max-w-[65ch] mx-auto">
+      <div className="max-w-[64ch] mx-auto flex-1 w-full">
+        {!isMobile && <Navbar />}
+        <main>
           {children}
-        </div>
+        </main>
       </div>
 
       {isMobile && <MobileNav />}
+
     </div>
   );
 };
