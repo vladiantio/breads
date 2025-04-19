@@ -2,6 +2,7 @@ import PostCard from "@/components/feed/PostCard";
 import PostCardSkeleton from "@/components/feed/PostCardSkeleton";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import { Button } from "@/components/ui/button";
+import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useAuthorFeed } from "@/lib/atp/hooks/use-author-feed";
 import { useProfile } from "@/lib/atp/hooks/use-profile";
 import { ArrowDownIcon, Loader2 } from "lucide-react";
@@ -34,7 +35,7 @@ function Posts({ handle }: {handle: string}) {
       {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
         <PostCardSkeleton key={i} />
       ))}
-      <div className="text-center">
+      <div className="text-center p-4">
         <Button
           variant="outline"
           onClick={() => fetchNextPage()}
@@ -58,7 +59,11 @@ export function Profile({ handle }: {handle?: string}) {
   } = useProfile({
     handle
   });
-  
+
+  useDocumentTitle(data && (
+    data.displayName ? `${data.displayName} (@${data.username})` : `@${data.username}`
+  ));
+
   const isCurrentUser = false;
 
   if (!handle)
