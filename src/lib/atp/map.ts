@@ -17,6 +17,9 @@ export function mapAuthor(author: AppBskyActorDefs.ProfileViewDetailed): User {
 export function mapEmbedPostWithAuthor(post: AppBskyEmbedRecord.ViewRecord) {
   const { author } = post;
   const record = post.value;
+  const embed = post.embeds?.[0];
+
+  const embedMapped = mapEmbedViews(embed);
 
   const postWithAuthor: PostWithAuthor =  {
     id: post.cid,
@@ -33,6 +36,7 @@ export function mapEmbedPostWithAuthor(post: AppBskyEmbedRecord.ViewRecord) {
     likes: post.likeCount ?? 0,
     replies: post.replyCount ?? 0,
     reposts: post.repostCount ?? 0,
+    ...embedMapped
   };
 
   return postWithAuthor;
