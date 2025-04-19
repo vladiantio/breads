@@ -9,6 +9,8 @@ import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
 import { EmbedExternal } from './EmbedExternal';
 import { EmbedImages } from './EmbedImages';
 import { EmbedVideo } from './EmbedVideo';
+import { PostWithAuthor } from '@/types/ResponseSchema';
+import { EmbedPost } from './EmbedPost';
 
 interface PostCardContentProps {
   fromATP: boolean;
@@ -17,6 +19,7 @@ interface PostCardContentProps {
   embedImages?: AppBskyEmbedImages.ViewImage[];
   embedVideo?: AppBskyEmbedVideo.View;
   embedExternal?: AppBskyEmbedExternal.ViewExternal;
+  embedPost?: PostWithAuthor;
   isDetail: boolean;
 }
 
@@ -27,6 +30,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   embedImages,
   embedVideo,
   embedExternal,
+  embedPost,
   isDetail,
 }) => {
   return (
@@ -50,6 +54,10 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
 
       {embedExternal && (
         <EmbedExternal view={embedExternal} />
+      )}
+
+      {embedPost && (
+        <EmbedPost post={embedPost} />
       )}
     </div>
   );

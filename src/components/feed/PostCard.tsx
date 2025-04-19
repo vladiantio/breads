@@ -13,12 +13,14 @@ import { cn } from '@/lib/utils';
 interface PostCardProps {
   post: PostWithAuthor;
   isDetail?: boolean;
+  isEmbed?: boolean;
   fromATP?: boolean;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
   post,
   isDetail = false,
+  isEmbed = false,
   fromATP = false,
 }) => {
   const navigate = useNavigate();
@@ -29,8 +31,11 @@ const PostCard: React.FC<PostCardProps> = ({
   const [ isLiked, setIsLiked ] = useState(false);
   const [ isReposted, setIsReposted ] = useState(false);
 
-  const handlePostClick = () => {
-    if (!isDetail) {
+  const handlePostClick = (e: React.MouseEvent) => {
+    if (isEmbed)
+      e.stopPropagation();
+
+    if (!isDetail)
       navigate({
         to: '/profile/$username/post/$postId',
         params: {
@@ -38,7 +43,6 @@ const PostCard: React.FC<PostCardProps> = ({
           postId: post.uri.split('app.bsky.feed.post/')[1],
         },
       });
-    }
   };
 
   const handleLike = (e: React.MouseEvent) => {
@@ -124,8 +128,8 @@ const PostCard: React.FC<PostCardProps> = ({
       )
       : null }
 
-      {isDetail ? (
-        <div className="px-4 pb-4">
+      {isDetail || isEmbed ? (
+        <div className={cn("px-4 pb-4", isEmbed && "pt-4")}>
           <div className="flex items-center gap-x-4 mb-4">
             <UserAvatar
               username={post.author.username}
@@ -153,7 +157,8 @@ const PostCard: React.FC<PostCardProps> = ({
             embedImages={post.embedImages}
             embedVideo={post.embedVideo}
             embedExternal={post.embedExternal}
-            isDetail={isDetail}
+            embedPost={post.embedPost}
+            isDetail={isDetail || isEmbed}
           />
 
           <PostCardActions
@@ -194,6 +199,7 @@ const PostCard: React.FC<PostCardProps> = ({
               embedImages={post.embedImages}
               embedVideo={post.embedVideo}
               embedExternal={post.embedExternal}
+              embedPost={post.embedPost}
               isDetail={isDetail}
             />
 
