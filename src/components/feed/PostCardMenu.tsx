@@ -1,6 +1,7 @@
 import {
   Copy,
   Flag,
+  LinkIcon,
   MoreHorizontal,
   XCircle
 } from 'lucide-react';
@@ -13,12 +14,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export interface PostCardMenuProps {
+  onCopyLink: (e: React.MouseEvent) => void;
   onCopyText: (e: React.MouseEvent) => void;
   onNotInterested: (e: React.MouseEvent) => void;
   onReport: (e: React.MouseEvent) => void;
 }
 
 export const PostCardMenu: React.FC<PostCardMenuProps> = ({
+  onCopyLink,
   onCopyText,
   onNotInterested,
   onReport,
@@ -34,6 +37,10 @@ export const PostCardMenu: React.FC<PostCardMenuProps> = ({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
+          <LinkIcon className="mr-2" size={16} />
+          <span>Copy link</span>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={onCopyText} className="cursor-pointer">
           <Copy className="mr-2" size={16} />
           <span>Copy text</span>

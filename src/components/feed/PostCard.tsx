@@ -68,6 +68,17 @@ const PostCard: React.FC<PostCardProps> = ({
     });
   };
 
+  const handleCopyLink = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const postId = post.uri.split('app.bsky.feed.post/')[1];
+    const url = `https://bsky.app/profile/${post.author.username}/post/${postId}`;
+    navigator.clipboard.writeText(url);
+    toast("Link copied", {
+      description: "Post link copied to clipboard",
+      duration: 2000,
+    });
+  };
+
   const handleCopyText = (e: React.MouseEvent) => {
     e.stopPropagation();
     const text = fromATP
@@ -127,6 +138,7 @@ const PostCard: React.FC<PostCardProps> = ({
               <PostCardHeader
                 author={post.author}
                 timestamp={post.timestamp}
+                onCopyLink={handleCopyLink}
                 onCopyText={handleCopyText}
                 onNotInterested={handleNotInterested}
                 onReport={handleReport}
@@ -169,6 +181,7 @@ const PostCard: React.FC<PostCardProps> = ({
             <PostCardHeader
               author={post.author}
               timestamp={post.timestamp}
+              onCopyLink={handleCopyLink}
               onCopyText={handleCopyText}
               onNotInterested={handleNotInterested}
               onReport={handleReport}
