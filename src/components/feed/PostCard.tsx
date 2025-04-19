@@ -3,7 +3,7 @@ import { PinIcon } from 'lucide-react';
 import UserAvatar from '../shared/UserAvatar';
 import { toast } from "sonner";
 import { PostWithAuthor } from '@/types/ResponseSchema';
-import { convertRichTextToPlainText } from '@/lib/atproto-helpers';
+import { convertRichTextToPlainText } from '@/lib/atp/utils';
 import PostCardActions from './PostCardActions';
 import PostCardContent from './PostCardContent';
 import PostCardHeader from './PostCardHeader';
