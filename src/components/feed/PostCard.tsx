@@ -100,7 +100,7 @@ const PostCard: React.FC<PostCardProps> = ({
     <article
       className={cn(
         "transition-[background-color] rounded-lg",
-        !isDetail && "hover:bg-card active:bg-card/60"
+        !isDetail && "cursor-pointer hover:bg-card active:bg-card/60"
       )}
       onClick={handlePostClick}
     >
