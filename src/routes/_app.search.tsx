@@ -1,4 +1,4 @@
-import { Input } from '@/components/ui/input'
+import { Search } from '@/pages/Search'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/search')({
@@ -7,8 +7,6 @@ export const Route = createFileRoute('/_app/search')({
 
 function RouteComponent() {
   return (
-    <>
-      <Input placeholder="Search..." />
-    </>
+    <Search />
   )
 }
