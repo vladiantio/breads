@@ -1,4 +1,4 @@
-import { FC, Fragment, JSX, useEffect, useState } from 'react';
+import { FC, Fragment, JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { Facet, RichText, RichTextSegment } from '@atproto/api';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
@@ -92,24 +92,91 @@ const adjustFacetsForSegment = (facets: Facet[], startIndex: number, endIndex: n
     }));
 };
 
-const renderParagraph = (
-  text: string,
-  facets: Facet[],
-  paragraphIndex: number,
-  linkify: boolean,
-) => {
-  const lineRichText = new RichText({ text, facets });
+const ParagraphSegment: FC<{
+  text: string;
+  facets: Facet[];
+  paragraphIndex: number;
+  linkify: boolean;
+}> = ({
+  text,
+  facets,
+  paragraphIndex,
+  linkify,
+}) => {
+  const [tagsExpanded, setTagsExpanded] = useState(false);
+  const lineRichText = useMemo(() => new RichText({ text, facets }), [text, facets]);
+  const segments = useMemo(() => [...lineRichText.segments()], [lineRichText]);
 
-  const segments = lineRichText.segments();
+  const renderSegments = useCallback((segments: RichTextSegment[]) => (
+    segments.map((segment, i) => (
+      <TextSegment
+        key={`segment-${paragraphIndex}-${i}`}
+        segment={segment}
+        linkify={linkify}
+        index={i}
+      />
+    ))
+  ), [paragraphIndex, linkify]);
 
-  return [...segments].map((segment, i) => (
-    <TextSegment
-      key={`segment-${paragraphIndex}-${i}`}
-      segment={segment}
-      linkify={linkify}
-      index={i}
-    />
-  ));
+  // Early return if no tags
+  if (segments.every(segment => !segment.isTag())) {
+    return <>{renderSegments(segments)}</>;
+  }
+
+  const { segments: limitedSegments, tagsCount } = segments.reduce(
+    (acc: { segments: RichTextSegment[]; tagsCount: number }, segment) => {
+      if (segment.isTag()) {
+        acc.tagsCount++;
+        if (acc.tagsCount > 3) return acc;
+      }
+      acc.segments.push(segment);
+      return acc;
+    },
+    { segments: [], tagsCount: 0 }
+  );
+
+  if (tagsCount <= 4) {
+    return <>{renderSegments(segments)}</>;
+  }
+
+  if (tagsExpanded) {
+    return (
+      <>
+        {renderSegments(segments)}
+        {' '}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setTagsExpanded(false);
+          }}
+          className="text-warning hover:underline active:opacity-60"
+        >
+          Show less
+        </button>
+      </>
+    );
+  }
+
+  const trimmedSegments = limitedSegments
+    .toReversed()
+    .dropWhile(segment => segment.text.trim() === '')
+    .toReversed();
+
+  return (
+    <>
+      {renderSegments(trimmedSegments)}
+      {' '}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setTagsExpanded(true);
+        }}
+        className="text-warning hover:underline active:opacity-60"
+      >
+        ...and {tagsCount - 3}+
+      </button>
+    </>
+  );
 };
 
 /**
@@ -180,12 +247,16 @@ export const RichTextRenderer: FC<RichTextRendererProps> = ({
           endByteIndex
         );
 
-        // Render the paragraph
-        const paragraphSegments = renderParagraph(paragraphText, paragraphFacets, paragraphIndex, linkify);
-
         // Add the paragraph with all its lines
         renderedParagraphs.push(
-          <p key={`p-${paragraphIndex}`}>{paragraphSegments}</p>
+          <p key={`p-${paragraphIndex}`}>
+            <ParagraphSegment
+              text={paragraphText}
+              facets={paragraphFacets}
+              paragraphIndex={paragraphIndex}
+              linkify={linkify}
+            />
+          </p>
         );
       });
 
