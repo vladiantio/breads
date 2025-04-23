@@ -1,16 +1,27 @@
 import { Reason, PostWithAuthor, ThreadResponseSchema, User } from "@/types/ResponseSchema";
-import { $Typed, AppBskyActorDefs, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia, AppBskyEmbedVideo, AppBskyFeedDefs, Facet } from "@atproto/api";
+import {
+  $Typed,
+  AppBskyEmbedExternal,
+  AppBskyEmbedImages,
+  AppBskyEmbedRecord,
+  AppBskyEmbedRecordWithMedia,
+  AppBskyEmbedVideo,
+  AppBskyFeedDefs,
+  Facet,
+} from "@atproto/api";
+import { AnyProfileView } from "./types/AnyProfileView";
 
-export function mapAuthor(author: AppBskyActorDefs.ProfileViewDetailed): User {
+export function mapAuthor(author: AnyProfileView): User {
   return {
     id: author.did,
     username: author.handle,
     avatar: author.avatar,
-    banner: author.banner,
-    bio: author.description ?? '',
+    banner: 'banner' in author ? author.banner : undefined,
+    bio: 'description' in author ? author.description : undefined,
     displayName: author.displayName!,
-    followers: author.followersCount ?? 0,
-    following: author.followsCount ?? 0,
+    followers: 'followersCount' in author ? author.followersCount : undefined,
+    following: 'followsCount' in author ? author.followsCount : undefined,
+    verification: author.verification,
   };
 }
 
@@ -24,12 +35,7 @@ export function mapEmbedPostWithAuthor(post: AppBskyEmbedRecord.ViewRecord) {
   const postWithAuthor: PostWithAuthor =  {
     id: post.cid,
     uri: post.uri,
-    author: {
-      id: author.did,
-      displayName: author.displayName,
-      username: author.handle,
-      avatar: author.avatar,
-    },
+    author: mapAuthor(author),
     content: record.text as string ?? '',
     facets: record.facets as Facet[] | undefined,
     timestamp: record.createdAt as string,
@@ -85,12 +91,7 @@ export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reaso
   const postWithAuthor: PostWithAuthor = {
     id: post.cid,
     uri: post.uri,
-    author: {
-      id: author.did,
-      displayName: author.displayName,
-      username: author.handle,
-      avatar: author.avatar,
-    },
+    author: mapAuthor(author),
     content: record.text as string ?? '',
     facets: record.facets as Facet[] | undefined,
     timestamp: record.createdAt as string,

@@ -1,4 +1,13 @@
-import { $Typed, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedVideo, AppBskyFeedDefs, ComAtprotoRepoStrongRef, Facet } from "@atproto/api";
+import {
+  $Typed,
+  AppBskyActorDefs,
+  AppBskyEmbedExternal,
+  AppBskyEmbedImages,
+  AppBskyEmbedVideo,
+  AppBskyFeedDefs,
+  ComAtprotoRepoStrongRef,
+  Facet,  
+} from "@atproto/api";
 
 export interface ResponseSchema {
   posts: PostWithAuthor[];
@@ -32,7 +41,7 @@ export interface Post {
 }
 
 export interface PostWithAuthor extends Post {
-  author: Partial<User>;
+  author: User;
 }
 
 export interface User {
@@ -41,9 +50,10 @@ export interface User {
   displayName: string;
   avatar?: string;
   banner?: string;
-  bio: string;
-  following: number;
-  followers: number;
+  bio?: string;
+  following?: number;
+  followers?: number;
   isFollowing?: boolean;
   pinnedPost?: ComAtprotoRepoStrongRef.Main;
+  verification?: AppBskyActorDefs.VerificationState;
 }
