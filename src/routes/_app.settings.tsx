@@ -1,3 +1,4 @@
+import { Settings } from '@/pages/Settings'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/settings')({
@@ -5,5 +6,7 @@ export const Route = createFileRoute('/_app/settings')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/settings"!</div>
+  return (
+    <Settings />
+  )
 }
