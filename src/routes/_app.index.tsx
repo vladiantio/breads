@@ -1,4 +1,4 @@
-import { Timeline } from '@/components/feed/Timeline'
+import { Home } from '@/pages/Home'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/')({
@@ -6,5 +6,7 @@ export const Route = createFileRoute('/_app/')({
 })
 
 function Index() {
-  return <Timeline />
+  return (
+    <Home />
+  )
 }
