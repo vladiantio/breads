@@ -16,14 +16,14 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
     {...hoverProps}
   >
     <div
-      className="mt-4 max-h-[26rem] w-fit"
+      className="mt-4 min-h-0 h-[26rem]"
       style={{
         aspectRatio: view.aspectRatio ? view.aspectRatio.width / view.aspectRatio.height : undefined
       }}
     >
       <HLSPlayer
         autoPlay
-        className="max-h-full max-w-full rounded-lg border object-contain"
+        className="h-full max-w-full rounded-lg border object-contain"
         src={view.playlist}
         width={view.aspectRatio?.width}
         height={view.aspectRatio?.height}
