@@ -48,9 +48,9 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
         />
       )}
 
-      {embedVideo !== undefined ? (
+      {embedVideo && (
         <EmbedVideo view={embedVideo} />
-      ) : null}
+      )}
 
       {embedExternal && (
         <EmbedExternal view={embedExternal} />
