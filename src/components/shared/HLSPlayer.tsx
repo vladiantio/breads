@@ -20,8 +20,8 @@ interface HLSPlayerProps {
 const HLSPlayer: FC<HLSPlayerProps> = ({
   src,
   poster,
-  width = '100%',
-  height = 'auto',
+  width,
+  height,
   autoPlay,
   controls = true,
   muted = false,
