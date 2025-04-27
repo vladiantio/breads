@@ -5,7 +5,7 @@ import { InputGroup, InputGroupText } from "@/components/ui/input";
 import SearchIcon from '@/icons/search.svg?react';
 import { useActorsSearch } from "@/lib/atp/hooks/use-actors-search";
 import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification";
-import { isInvalidHandle } from "@/lib/atp/strings/handles";
+import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles";
 import { AppBskyActorDefs } from "@atproto/api";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -37,13 +37,14 @@ function AuthorItem({
         displayName={actor.displayName}
         src={actor.avatar}
       />
-      <div className="flex-1 min-w-0">
+      <div className="flex flex-col flex-1 min-w-0">
         <AuthorLink
           did={actor.did}
+          displayName={actor.displayName}
           username={actor.handle}
           showVerifiedBadge={showBadge}
         />
-        <p>{actor.displayName}</p>
+        <p className="text-muted-foreground truncate">{sanitizeHandle(actor.handle, '@')}</p>
       </div>
     </div>
   )
