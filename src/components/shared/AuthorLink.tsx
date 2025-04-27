@@ -7,6 +7,7 @@ import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles";
 interface AuthorLinkProps {
   did?: string
   username: string
+  displayName?: string
   className?: string
   showVerifiedBadge?: boolean
 }
@@ -14,13 +15,14 @@ interface AuthorLinkProps {
 function AuthorLink({
   did,
   username,
+  displayName,
   className,
   showVerifiedBadge,
 }: AuthorLinkProps) {
   const validHandle = isInvalidHandle(username) ? did ?? username : username;
 
   return (
-    <div className="inline-flex items-center">
+    <div className="inline-flex items-center overflow-hidden">
       <AuthorHoverCard handle={validHandle}>
         <Link
           to="/profile/$username"
@@ -28,7 +30,7 @@ function AuthorLink({
           className={cn("font-semibold text-foreground hover:underline active:opacity-60 truncate", className)}
           onClick={(e) => e.stopPropagation()}
         >
-          {sanitizeHandle(username)}
+          {displayName ?? sanitizeHandle(username)}
         </Link>
       </AuthorHoverCard>
       {showVerifiedBadge && <VerifiedAccountIcon className="ml-2 size-3" />}

@@ -34,7 +34,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   isDetail,
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-3">
       {content
         ? fromATP
           ? <RichTextRenderer text={content} facets={facets} />

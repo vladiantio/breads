@@ -3,6 +3,7 @@ import { formatTimestamp } from '@/utils/date';
 import { PostCardMenu, PostCardMenuProps } from './PostCardMenu';
 import { AuthorLink } from '../shared/AuthorLink';
 import { useSimpleVerificationState } from '@/lib/atp/hooks/use-verification';
+import { sanitizeHandle } from '@/lib/atp/strings/handles';
 
 interface PostCardHeaderProps extends PostCardMenuProps {
   author: User;
@@ -17,18 +18,22 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
   const { showBadge } = useSimpleVerificationState({ verification: author.verification });
 
   return (
-    <div className="flex items-center justify-between gap-x-2">
-      <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
+    <div className="h-12">
+      <div className="flex items-center justify-between gap-x-2">
         <AuthorLink
           did={author.id}
           username={author.username}
+          displayName={author.displayName}
           showVerifiedBadge={showBadge}
         />
+
+        <PostCardMenu {...menuProps} />
+      </div>
+      <div className="flex items-center gap-x-1 text-muted-foreground">
+        <p className="truncate">{sanitizeHandle(author.username, '@')}</p>
         <span>·</span>
         <time dateTime={timestamp} className="shrink-0">{formatTimestamp(timestamp)}</time>
       </div>
-
-      <PostCardMenu {...menuProps} />
     </div>
   );
 };
