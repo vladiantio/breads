@@ -20,6 +20,7 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
     <div className="flex items-center justify-between gap-x-2">
       <div className="flex items-center gap-x-2 overflow-hidden text-muted-foreground">
         <AuthorLink
+          did={author.id}
           username={author.username}
           showVerifiedBadge={showBadge}
         />

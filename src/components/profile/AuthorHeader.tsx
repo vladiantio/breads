@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import { User } from '@/types/ResponseSchema';
 import { Button } from '../ui/button';
+import { sanitizeHandle } from '@/lib/atp/strings/handles';
 
 interface AuthorHeaderProps {
   user: Partial<User>;
@@ -29,7 +30,7 @@ const AuthorHeader: FC<AuthorHeaderProps> = ({
           <p className="font-semibold">{user.displayName}</p>
         )}
         {user.username && (
-          <p className="text-muted-foreground">@{user.username}</p>
+          <p className="text-muted-foreground">{sanitizeHandle(user.username, '@')}</p>
         )}
       </div>
       <div className="flex items-center">

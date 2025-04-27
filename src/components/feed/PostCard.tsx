@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PinIcon } from 'lucide-react';
 import UserAvatar from '../shared/UserAvatar';
 import { toast } from "sonner";
@@ -9,6 +9,7 @@ import PostCardContent from './PostCardContent';
 import PostCardHeader from './PostCardHeader';
 import { useNavigate } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { isInvalidHandle } from '@/lib/atp/strings/handles';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -30,6 +31,7 @@ const PostCard: React.FC<PostCardProps> = ({
   // const isReposted = postRepostStatus[post.id];
   const [ isLiked, setIsLiked ] = useState(false);
   const [ isReposted, setIsReposted ] = useState(false);
+  const validHandle = useMemo(() => isInvalidHandle(post.author.username) ? post.author.id : post.author.username, [post.author])
 
   const handlePostClick = (e: React.MouseEvent) => {
     if (isEmbed)
@@ -39,7 +41,7 @@ const PostCard: React.FC<PostCardProps> = ({
       navigate({
         to: '/profile/$username/post/$postId',
         params: {
-          username: post.author.username!,
+          username: validHandle,
           postId: post.uri.split('app.bsky.feed.post/')[1],
         },
       });
@@ -75,7 +77,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const handleCopyLink = (e: React.MouseEvent) => {
     e.stopPropagation();
     const postId = post.uri.split('app.bsky.feed.post/')[1];
-    const url = `https://bsky.app/profile/${post.author.username}/post/${postId}`;
+    const url = `https://bsky.app/profile/${validHandle}/post/${postId}`;
     navigator.clipboard.writeText(url);
     toast("Link copied", {
       description: "Post link copied to clipboard",
@@ -132,7 +134,7 @@ const PostCard: React.FC<PostCardProps> = ({
         <div className={cn("px-4 pb-4", isEmbed && "pt-4")}>
           <div className="flex items-center gap-x-4 mb-4">
             <UserAvatar
-              username={post.author.username}
+              username={validHandle}
               displayName={post.author.displayName}
               src={post.author.avatar}
               clickable
@@ -176,7 +178,7 @@ const PostCard: React.FC<PostCardProps> = ({
       ) : (
         <div className="flex p-4 gap-x-4">
           <UserAvatar
-            username={post.author.username}
+            username={validHandle}
             displayName={post.author.displayName}
             src={post.author.avatar}
             clickable
