@@ -10,7 +10,7 @@ interface UseAuthorFeed {
 
 export function useAuthorFeed({
   handle,
-  filter = 'posts_and_author_threads',
+  filter = 'posts_no_replies',
 }: UseAuthorFeed) {
   const { agent } = useAtpStore();
 
