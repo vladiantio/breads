@@ -30,7 +30,7 @@ function AuthorLink({
           className={cn("font-semibold text-foreground hover:underline active:opacity-60 truncate", className)}
           onClick={(e) => e.stopPropagation()}
         >
-          {displayName ?? sanitizeHandle(username)}
+          {displayName || sanitizeHandle(username)}
         </Link>
       </AuthorHoverCard>
       {showVerifiedBadge && <VerifiedAccountIcon className="ml-2 size-3" />}
