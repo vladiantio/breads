@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { User } from '@/types/ResponseSchema';
 import { ProfileDisplay } from './ProfileDisplay';
-import { ProfileTabs } from './ProfileTabs';
 import AuthorHeader from './AuthorHeader';
 
 interface ProfileHeaderProps {
@@ -27,8 +26,6 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
 
         <ProfileDisplay user={user} />
       </div>
-
-      <ProfileTabs />
     </>
   );
 };
