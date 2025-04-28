@@ -10,6 +10,7 @@ interface HLSPlayerProps {
   autoPlay?: boolean;
   controls?: boolean;
   muted?: boolean;
+  playsInline?: boolean;
   className?: string;
   style?: CSSProperties;
   onError?: (error: ErrorEvent | ErrorData) => void;
@@ -25,6 +26,7 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
   autoPlay,
   controls = true,
   muted = false,
+  playsInline = true,
   className,
   style,
   onError,
@@ -134,6 +136,7 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
       className={className}
       style={style}
       onClick={onClick}
+      playsInline={playsInline}
     />
   );
 };
