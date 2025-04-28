@@ -23,7 +23,7 @@ function EmbedGif({
   if (tenorGif.success) {
     return (
       <div
-        className="mt-4 max-h-[26rem] w-fit"
+        className="max-h-[26rem] w-fit"
         style={{
           aspectRatio: tenorGif.dimensions.width / tenorGif.dimensions.height
         }}

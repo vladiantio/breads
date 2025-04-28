@@ -20,7 +20,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
       {views.length > 2 ? (
         <Carousel
           className={cn(
-            "mt-4 -mr-4",
+            "-mr-4",
             isDetail ? "-ml-4" : "-ml-18",
             "mask-x-from-[calc(100%_-_var(--spacing)_*_4)] mask-x-to-100%",
           )}
@@ -50,7 +50,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
           </CarouselContent>
         </Carousel>
       ) : (
-        <div className="mt-4 flex gap-x-2">
+        <div className="flex gap-x-2">
           {views.map(image => (
             <div
               key={image.thumb}

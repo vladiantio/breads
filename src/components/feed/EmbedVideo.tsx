@@ -16,20 +16,20 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
     {...hoverProps}
   >
     <div
-      className="mt-4 min-h-0 h-[26rem]"
+      className="grid grid-cols-1 grid-rows-1 max-h-[26rem]"
       style={{
-        aspectRatio: view.aspectRatio ? view.aspectRatio.width / view.aspectRatio.height : undefined
+        aspectRatio: view.aspectRatio ? view.aspectRatio.width / view.aspectRatio.height : 1
       }}
     >
-      <HLSPlayer
-        autoPlay
-        className="h-full max-w-full rounded-lg border object-contain"
-        src={view.playlist}
-        width={view.aspectRatio?.width}
-        height={view.aspectRatio?.height}
-        poster={view.thumbnail}
-        onClick={(e) => e.stopPropagation()}
-      />
+      <div className="bg-accent border overflow-hidden rounded-lg size-full select-none">
+        <HLSPlayer
+          autoPlay
+          className="size-full object-contain"
+          src={view.playlist}
+          poster={view.thumbnail}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
     </div>
   </EmbedToggle>
   );
