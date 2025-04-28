@@ -131,7 +131,7 @@ const PostCard: React.FC<PostCardProps> = ({
       : null }
 
       {isDetail || isEmbed ? (
-        <div className={cn("px-4 pb-4", isEmbed && "pt-4")}>
+        <div className="p-4">
           <div className="flex items-center gap-x-4">
             <UserAvatar
               username={validHandle}
