@@ -10,6 +10,7 @@ import {
   Facet,
 } from "@atproto/api";
 import { AnyProfileView } from "./types/AnyProfileView";
+import { ThreadNode } from "./mapping/threads";
 
 export function mapAuthor(author: AnyProfileView): User {
   return {
@@ -109,17 +110,12 @@ export function mapPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[]
   return feed.map(({ post, reason }) => mapPostWithAuthor(post, reason));
 }
 
-export function mapThreads(thread:
-  | $Typed<AppBskyFeedDefs.ThreadViewPost>
-  | $Typed<AppBskyFeedDefs.NotFoundPost>
-  | $Typed<AppBskyFeedDefs.BlockedPost>
-  | { $type: string }
-): ThreadResponseSchema {
-  if (thread.$type === 'app.bsky.feed.defs#threadViewPost') {
-    const { post, replies } = thread as $Typed<AppBskyFeedDefs.ThreadViewPost>;
+export function mapThreads(thread: ThreadNode): ThreadResponseSchema {
+  if (thread.type === 'post') {
+    const { post, replies } = thread;
     return {
       post: mapPostWithAuthor(post),
-      replies: replies?.filter(thread => thread.$type === 'app.bsky.feed.defs#threadViewPost')
+      replies: replies?.filter(thread => thread.type === 'post')
         .map(thread => mapThreads(thread)) ?? []
     }
   } else {
