@@ -13,6 +13,10 @@ interface RichTextRendererProps {
   linkify?: boolean;
 }
 
+const handleStopPropagation = (e: React.MouseEvent) => {
+  e.stopPropagation();
+};
+
 // Component for rendering a single segment (link, mention, tag, or plain text)
 const TextSegment: FC<{
   segment: RichTextSegment;
@@ -30,6 +34,7 @@ const TextSegment: FC<{
         href={segment.link!.uri}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={handleStopPropagation}
       >
         {segment.text}
       </a>
@@ -37,12 +42,14 @@ const TextSegment: FC<{
   }
 
   if (segment.isMention()) {
+    const handle = segment.text.replace('@', '');
     return (
-      <AuthorHoverCard handle={segment.mention!.did}>
+      <AuthorHoverCard handle={handle}>
         <Link
           key={`mention-${index}`}
           to="/profile/$username"
-          params={{ username: segment.mention!.did }}
+          params={{ username: handle }}
+          onClick={handleStopPropagation}
         >
           {segment.text}
         </Link>
@@ -56,6 +63,7 @@ const TextSegment: FC<{
         key={`tag-${index}`}
         to="/hashtag/$tag"
         params={{ tag: segment.tag!.tag }}
+        onClick={handleStopPropagation}
       >
         {segment.text}
       </Link>
