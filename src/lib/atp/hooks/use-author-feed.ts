@@ -2,12 +2,17 @@ import { InfiniteData, QueryKey, useInfiniteQuery } from '@tanstack/react-query'
 import { useAtpStore } from '../store';
 import { ResponseSchema } from '@/types/ResponseSchema';
 import { mapPosts } from '../map';
-import { TypeFilterKey, TypeFiltersByKey } from '../types/TypeFilterKey';
-import { AppBskyEmbedRecord, AppBskyFeedDefs } from '@atproto/api';
+import { TypeFilterKey } from '../types/TypeFilterKey';
+import {
+  AppBskyEmbedRecord,
+  AppBskyFeedDefs,
+  AppBskyFeedGetAuthorFeed,
+} from '@atproto/api';
 
 interface UseAuthorFeed {
   handle: string
   includePins?: boolean
+  filter?: AppBskyFeedGetAuthorFeed.QueryParams['filter']
   typeFilter?: TypeFilterKey
   enabled?: boolean
 }
@@ -15,13 +20,17 @@ interface UseAuthorFeed {
 export function useAuthorFeed({
   handle,
   includePins = true,
-  typeFilter = 'posts_no_replies',
+  filter = 'posts_and_author_threads',
+  typeFilter,
   enabled = true,
 }: UseAuthorFeed) {
   const { agent } = useAtpStore();
 
   return useInfiniteQuery<ResponseSchema, Error, InfiniteData<ResponseSchema>, QueryKey, string | undefined>({
-    queryKey: ['author-feed', { handle, includePins, typeFilter }],
+    queryKey: [
+      'author-feed',
+      { handle, includePins, filter, typeFilter }
+    ],
     queryFn: async ({ pageParam }) => {
       /* Include client side filters.
        * https://github.com/bluesky-social/ozone/blob/main/components/common/feeds/AuthorFeed.tsx
@@ -29,18 +38,6 @@ export function useAuthorFeed({
       const limit = 30
       let filteredFeed: AppBskyFeedDefs.FeedViewPost[] = []
       let cursor = pageParam
-      const isPostFilter = [
-        TypeFiltersByKey.posts_and_author_threads.key,
-        TypeFiltersByKey.posts_no_replies.key,
-        TypeFiltersByKey.posts_with_media.key,
-        TypeFiltersByKey.posts_with_video.key,
-      ].includes(typeFilter)
-      const isQuoteOrRepostFilter = [
-        TypeFiltersByKey.no_reposts.key,
-        TypeFiltersByKey.reposts.key,
-        TypeFiltersByKey.quotes.key,
-        TypeFiltersByKey.quotes_and_reposts.key,
-      ].includes(typeFilter)
 
       while (filteredFeed.length < limit) {
         const authorFeedParams = {
@@ -48,7 +45,7 @@ export function useAuthorFeed({
           actor: handle,
           includePins,
           cursor,
-          ...(isPostFilter ? { filter: typeFilter } : {}),
+          filter,
         }
 
         const { data } =
@@ -59,19 +56,19 @@ export function useAuthorFeed({
         }
 
         // Only repost/quote post filters are applied on the client side
-        if (!isQuoteOrRepostFilter) {
+        if (!typeFilter || typeFilter === 'no_filter') {
           const posts = mapPosts(data.feed)
           return { posts, cursor: data.cursor }
         }
 
         const newFilteredItems = data.feed.filter((item) => {
-          if (typeFilter === TypeFiltersByKey.reposts.key) {
+          if (typeFilter === 'reposts') {
             return AppBskyFeedDefs.isReasonRepost(item.reason)
           }
-          if (typeFilter === TypeFiltersByKey.no_reposts.key) {
+          if (typeFilter === 'no_reposts') {
             return !AppBskyFeedDefs.isReasonRepost(item.reason)
           }
-          if (typeFilter === TypeFiltersByKey.quotes.key) {
+          if (typeFilter === 'quotes') {
             // When a quoted post is reposted, we don't want to consider that a quote post
             return (
               AppBskyEmbedRecord.isView(item.post.embed) &&
