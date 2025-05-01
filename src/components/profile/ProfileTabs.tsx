@@ -8,11 +8,11 @@ import { Button } from "../ui/button";
 import { ArrowDown, Loader2 } from "lucide-react";
 
 interface ProfileProps {
-  handle: string,
+  actor: string,
   enabled?: boolean,
 }
 
-function Posts({ handle, enabled }: ProfileProps) {
+function Posts({ actor, enabled }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -20,7 +20,7 @@ function Posts({ handle, enabled }: ProfileProps) {
     isLoading,
     isFetchingNextPage
   } = useAuthorFeed({
-    handle,
+    actor,
     typeFilter: 'no_reposts',
     enabled,
   });
@@ -63,7 +63,7 @@ function Posts({ handle, enabled }: ProfileProps) {
   )
 }
 
-function Reposts({ handle, enabled }: ProfileProps) {
+function Reposts({ actor, enabled }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -71,7 +71,7 @@ function Reposts({ handle, enabled }: ProfileProps) {
     isLoading,
     isFetchingNextPage
   } = useAuthorFeed({
-    handle,
+    actor,
     typeFilter: 'reposts',
     enabled,
   });
@@ -119,7 +119,7 @@ const tabList = [
   { value: 'reposts', label: 'Reposts', component: Reposts },
 ];
 
-export function ProfileTabs({ handle }: { handle: string }) {
+export function ProfileTabs({ actor }: { actor: string }) {
   const [activeTab, setActiveTab] = useState('posts');
 
   return (
@@ -155,7 +155,7 @@ export function ProfileTabs({ handle }: { handle: string }) {
           hidden={tab.value !== activeTab}
         >
           <tab.component
-            handle={handle}
+            actor={actor}
             enabled={tab.value === activeTab}
           />
         </div>
