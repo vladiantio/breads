@@ -3,25 +3,25 @@ import { useAtpStore } from '../store';
 import { mapAuthor } from '../map';
 
 interface UseProfile {
-  handle?: string
+  actor?: string
   enabled?: boolean
 }
 
 export function useProfile({
-  handle,
+  actor,
   enabled = true,
 }: UseProfile) {
   const { agent } = useAtpStore();
 
   return useQuery({
-    queryKey: ['profile', handle],
+    queryKey: ['profile', actor],
     queryFn: async () => {
-      if (!handle) throw new Error('No handle provided');
+      if (!actor) throw new Error('No actor provided');
 
-      const { data } = await agent.getProfile({ actor: handle.toLowerCase() });
+      const { data } = await agent.getProfile({ actor });
 
       return mapAuthor(data);
     },
-    enabled: enabled && !!agent && !!handle,
+    enabled: enabled && !!agent && !!actor,
   });
 }
