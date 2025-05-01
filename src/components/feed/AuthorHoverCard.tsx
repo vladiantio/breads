@@ -4,6 +4,7 @@ import { useProfile } from "@/lib/atp/hooks/use-profile";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
 import { ProfileDisplay } from "../profile/ProfileDisplay";
 import { Button } from "../ui/button";
+import { useResolveHandle } from "@/lib/atp/hooks/use-resolve-handle";
 
 interface AuthorHoverCardProps extends PropsWithChildren {
   handle?: string;
@@ -14,10 +15,16 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
   children,
 }) => {
   const [enabled, setEnabled] = useState(false);
+
+  const {
+    data: actor,
+    isLoading: isLoadingActor,
+  } = useResolveHandle({ handle });
+
   const {
     data,
-    isLoading,
-  } = useProfile({ actor: handle, enabled });
+    isLoading: isLoadingProfile,
+  } = useProfile({ actor, enabled });
 
   return (
     <HoverCard
@@ -31,13 +38,14 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
         {children}
       </HoverCardTrigger>
       <HoverCardContent className="w-96 p-6 rounded-xl">
-        {isLoading && <Loader2 className="animate-spin" />}
-        {data && (
+        {(isLoadingActor || isLoadingProfile) ? (
+          <Loader2 className="animate-spin" />
+        ) : data ? (
           <>
             <ProfileDisplay user={data} />
             <Button className="w-full mt-3">Follow</Button>
           </>
-        )}
+        ) : null}
       </HoverCardContent>
     </HoverCard>
   );
