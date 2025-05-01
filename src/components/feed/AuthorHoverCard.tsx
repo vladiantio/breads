@@ -17,7 +17,7 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
   const {
     data,
     isLoading,
-  } = useProfile({ handle, enabled });
+  } = useProfile({ actor: handle, enabled });
 
   return (
     <HoverCard
