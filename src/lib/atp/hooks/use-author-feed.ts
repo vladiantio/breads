@@ -10,7 +10,7 @@ import {
 } from '@atproto/api';
 
 interface UseAuthorFeed {
-  handle: string
+  actor: string
   includePins?: boolean
   filter?: AppBskyFeedGetAuthorFeed.QueryParams['filter']
   typeFilter?: TypeFilterKey
@@ -18,7 +18,7 @@ interface UseAuthorFeed {
 }
 
 export function useAuthorFeed({
-  handle,
+  actor,
   includePins = true,
   filter = 'posts_and_author_threads',
   typeFilter,
@@ -29,7 +29,7 @@ export function useAuthorFeed({
   return useInfiniteQuery<ResponseSchema, Error, InfiniteData<ResponseSchema>, QueryKey, string | undefined>({
     queryKey: [
       'author-feed',
-      { handle, includePins, filter, typeFilter }
+      { actor, includePins, filter, typeFilter }
     ],
     queryFn: async ({ pageParam }) => {
       /* Include client side filters.
@@ -42,7 +42,7 @@ export function useAuthorFeed({
       while (filteredFeed.length < limit) {
         const authorFeedParams = {
           limit,
-          actor: handle,
+          actor,
           includePins,
           cursor,
           filter,
@@ -56,12 +56,20 @@ export function useAuthorFeed({
         }
 
         // Only repost/quote post filters are applied on the client side
-        if (!typeFilter || typeFilter === 'no_filter') {
+        if (!typeFilter || typeFilter === 'no_filter' || filter !== 'posts_and_author_threads') {
           const posts = mapPosts(data.feed)
           return { posts, cursor: data.cursor }
         }
 
         const newFilteredItems = data.feed.filter((item) => {
+          if (filter === 'posts_and_author_threads') {
+            const isReply = item.reply
+            const isRepost = AppBskyFeedDefs.isReasonRepost(item.reason)
+            const isPin = AppBskyFeedDefs.isReasonPin(item.reason)
+            if (!isReply) return true
+            if (isRepost || isPin) return true
+            return isReply && isAuthorReplyChain(actor, item, data.feed)
+          }
           if (typeFilter === 'reposts') {
             return AppBskyFeedDefs.isReasonRepost(item.reason)
           }
@@ -99,4 +107,37 @@ export function useAuthorFeed({
     initialPageParam: undefined,
     enabled: enabled && !!agent,
   })
+}
+
+// source: https://github.com/bluesky-social/social-app/blob/main/src/lib/api/feed/author.ts
+function isAuthorReplyChain(
+  actor: string,
+  post: AppBskyFeedDefs.FeedViewPost,
+  posts: AppBskyFeedDefs.FeedViewPost[],
+): boolean {
+  // current post is by a different user (shouldn't happen)
+  if (post.post.author.did !== actor) return false
+
+  const replyParent = post.reply?.parent
+
+  if (AppBskyFeedDefs.isPostView(replyParent)) {
+    // reply parent is by a different user
+    if (replyParent.author.did !== actor) return false
+
+    // A top-level post that matches the parent of the current post.
+    const parentPost = posts.find(p => p.post.uri === replyParent.uri)
+
+    /*
+     * Either we haven't fetched the parent at the top level, or the only
+     * record we have is on feedItem.reply.parent, which we've already checked
+     * above.
+     */
+    if (!parentPost) return true
+
+    // Walk up to parent
+    return isAuthorReplyChain(actor, parentPost, posts)
+  }
+
+  // Just default to showing it
+  return true
 }
