@@ -22,6 +22,8 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
 }) => {
   const { navigate } = useRouter();
 
+  const name = displayName || username;
+
   const sizeClasses = {
     sm: 'size-8',
     md: 'size-10',
@@ -48,12 +50,12 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
     >
       <AvatarImage
         src={src}
-        alt={displayName ?? username}
+        alt={name}
         loading="lazy"
         className={cn("object-cover", blurred && "blur-sm")}
       />
       <AvatarFallback>
-        {(displayName ?? username)?.charAt(0).toUpperCase()}
+        {name?.charAt(0).toUpperCase()}
       </AvatarFallback>
     </Avatar>
   );
