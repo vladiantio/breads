@@ -154,3 +154,76 @@ export function annotateSelfThread(thread: ThreadNode) {
     }
   }
 }
+
+export function sortThread(
+  node: ThreadNode,
+  currentDid: string | undefined,
+): ThreadNode {
+  if (node.type !== 'post') {
+    return node
+  }
+  if (node.replies) {
+    node.replies.sort((a: ThreadNode, b: ThreadNode) => {
+      if (a.type !== 'post') {
+        return 1
+      }
+      if (b.type !== 'post') {
+        return -1
+      }
+
+      if (node.ctx.isHighlightedPost) {
+        const aIsJustPosted =
+          a.post.author.did === currentDid
+        const bIsJustPosted =
+          b.post.author.did === currentDid
+        if (aIsJustPosted && bIsJustPosted) {
+          return a.post.indexedAt.localeCompare(b.post.indexedAt) // oldest
+        } else if (aIsJustPosted) {
+          return -1 // reply while onscreen
+        } else if (bIsJustPosted) {
+          return 1 // reply while onscreen
+        }
+      }
+
+      const aIsByOp = a.post.author.did === node.post?.author.did
+      const bIsByOp = b.post.author.did === node.post?.author.did
+      if (aIsByOp && bIsByOp) {
+        return a.post.indexedAt.localeCompare(b.post.indexedAt) // oldest
+      } else if (aIsByOp) {
+        return -1 // op's own reply
+      } else if (bIsByOp) {
+        return 1 // op's own reply
+      }
+
+      const aIsBySelf = a.post.author.did === currentDid
+      const bIsBySelf = b.post.author.did === currentDid
+      if (aIsBySelf && bIsBySelf) {
+        return a.post.indexedAt.localeCompare(b.post.indexedAt) // oldest
+      } else if (aIsBySelf) {
+        return -1 // current account's reply
+      } else if (bIsBySelf) {
+        return 1 // current account's reply
+      }
+
+      const aPin = Boolean(a.record.text.trim() === '📌')
+      const bPin = Boolean(b.record.text.trim() === '📌')
+      if (aPin !== bPin) {
+        if (aPin) {
+          return 1
+        }
+        if (bPin) {
+          return -1
+        }
+      }
+
+      return b.post.indexedAt.localeCompare(a.post.indexedAt)
+    })
+    node.replies.forEach(reply =>
+      sortThread(
+        reply,
+        currentDid,
+      ),
+    )
+  }
+  return node
+}
