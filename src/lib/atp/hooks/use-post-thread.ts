@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAtpStore } from '../store';
 import { mapThreads } from '../map';
-import { responseToThreadNodes } from '../mapping/threads';
+import { responseToThreadNodes, sortThread } from '../mapping/threads';
 import { REPLY_TREE_DEPTH } from '../constants/threads';
 import { annotateSelfThread } from '../mapping/threads';
 
@@ -10,7 +10,7 @@ interface UsePostThread {
 }
 
 export function usePostThread({ uri }: UsePostThread) {
-  const { agent } = useAtpStore();
+  const { agent, session } = useAtpStore();
 
   return useQuery({
     gcTime: 0,
@@ -26,7 +26,8 @@ export function usePostThread({ uri }: UsePostThread) {
       if (res.success) {
         const thread = responseToThreadNodes(res.data.thread);
         annotateSelfThread(thread);
-        return mapThreads(thread);
+        const sortedThread = sortThread(thread, session?.did);
+        return mapThreads(sortedThread);
       }
 
       return mapThreads({type: 'unknown', uri: uri!});
