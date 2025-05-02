@@ -19,7 +19,7 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
   const {
     data: actor,
     isLoading: isLoadingActor,
-  } = useResolveHandle({ handle });
+  } = useResolveHandle({ handle, enabled });
 
   const {
     data,

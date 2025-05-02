@@ -3,9 +3,13 @@ import { useAtpStore } from "../store";
 
 interface UseResolveHandle {
   handle?: string
+  enabled?: boolean
 }
 
-export function useResolveHandle({ handle }: UseResolveHandle) {
+export function useResolveHandle({
+  handle,
+  enabled = true,
+}: UseResolveHandle) {
   const { agent } = useAtpStore();
 
   return useQuery({
@@ -21,6 +25,6 @@ export function useResolveHandle({ handle }: UseResolveHandle) {
 
       return data.did;
     },
-    enabled: !!agent && !!handle,
+    enabled: enabled && !!agent && !!handle,
   })
 }
