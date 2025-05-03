@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { PinIcon } from 'lucide-react';
+import { PinIcon, RepeatIcon } from 'lucide-react';
 import UserAvatar from '../shared/UserAvatar';
 import { toast } from "sonner";
 import { PostWithAuthor } from '@/types/ResponseSchema';
@@ -10,6 +10,7 @@ import PostCardHeader from './PostCardHeader';
 import { useNavigate } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import { isInvalidHandle } from '@/lib/atp/strings/handles';
+import { AppBskyFeedDefs } from '@atproto/api';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -123,11 +124,20 @@ const PostCard: React.FC<PostCardProps> = ({
       )}
       onClick={handlePostClick}
     >
-      {post.reason?.$type === 'app.bsky.feed.defs#reasonPin'
+      {AppBskyFeedDefs.isReasonPin(post.reason)
       ? (
-        <div className="flex items-center gap-x-3 text-sm text-muted-foreground pt-3 px-4 -mb-1">
-          <PinIcon className="size-4 ml-5" />
+        <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
+          <PinIcon className="size-4 ml-6" />
           Pinned
+        </div>
+      )
+      : null }
+
+      {AppBskyFeedDefs.isReasonRepost(post.reason)
+      ? (
+        <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
+          <RepeatIcon className="size-4 ml-6" />
+          Reposted by {post.reason.by.displayName}
         </div>
       )
       : null }
