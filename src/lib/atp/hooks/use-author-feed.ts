@@ -62,28 +62,30 @@ export function useAuthorFeed({
         }
 
         const newFilteredItems = data.feed.filter((item) => {
+          let applyFilter = true
           if (filter === 'posts_and_author_threads') {
             const isReply = item.reply
             const isRepost = AppBskyFeedDefs.isReasonRepost(item.reason)
             const isPin = AppBskyFeedDefs.isReasonPin(item.reason)
-            if (!isReply) return true
-            if (isRepost || isPin) return true
-            return isReply && isAuthorReplyChain(actor, item, data.feed)
+            applyFilter = false
+            if (!isReply) applyFilter = true
+            else if (isRepost || isPin) applyFilter = true
+            else applyFilter = !!isReply && isAuthorReplyChain(actor, item, data.feed)
           }
           if (typeFilter === 'reposts') {
-            return AppBskyFeedDefs.isReasonRepost(item.reason)
+            return applyFilter && AppBskyFeedDefs.isReasonRepost(item.reason)
           }
           if (typeFilter === 'no_reposts') {
-            return !AppBskyFeedDefs.isReasonRepost(item.reason)
+            return applyFilter && !AppBskyFeedDefs.isReasonRepost(item.reason)
           }
           if (typeFilter === 'quotes') {
             // When a quoted post is reposted, we don't want to consider that a quote post
-            return (
+            return applyFilter && (
               AppBskyEmbedRecord.isView(item.post.embed) &&
               !AppBskyFeedDefs.isReasonRepost(item.reason)
             )
           }
-          return (
+          return applyFilter && (
             AppBskyFeedDefs.isReasonRepost(item.reason) ||
             AppBskyEmbedRecord.isView(item.post.embed)
           )
