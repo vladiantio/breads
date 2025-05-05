@@ -2,6 +2,31 @@ import PostCard from "@/components/feed/PostCard";
 import AuthorHeader from "@/components/profile/AuthorHeader";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { usePostThread } from "@/lib/atp/hooks/use-post-thread";
+import { ThreadResponseSchema } from "@/types/ResponseSchema";
+import { Fragment } from "react";
+
+function PostReplies({ replies }: { replies: ThreadResponseSchema[] }) {
+  return <>
+    {replies.map(reply => (
+      reply.post ? (
+        <Fragment key={reply.post.id}>
+          <PostCard
+            post={{
+              ...reply.post,
+              isThreadParent: reply.replies.length > 0
+            }}
+            fromATP
+          />
+          {reply.replies.length > 0 ? (
+            <PostReplies
+              replies={reply.replies}
+            />
+          ) : null}
+        </Fragment>
+      ) : null)
+    )}
+  </>
+}
 
 export function Post({ uri }: { uri: string }) {
   const {
@@ -30,13 +55,11 @@ export function Post({ uri }: { uri: string }) {
         />
       ) : null}
 
-      {data?.replies.map(reply => (reply.post ? (
-        <PostCard
-          key={reply.post.id}
-          fromATP
-          post={reply.post}
+      {data?.replies ? (
+        <PostReplies
+          replies={data.replies}
         />
-      ) : null))}
+      ) : null}
     </>
   )
 }
