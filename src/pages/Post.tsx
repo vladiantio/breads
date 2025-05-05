@@ -2,30 +2,19 @@ import PostCard from "@/components/feed/PostCard";
 import AuthorHeader from "@/components/profile/AuthorHeader";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { usePostThread } from "@/lib/atp/hooks/use-post-thread";
-import { ThreadResponseSchema } from "@/types/ResponseSchema";
-import { Fragment } from "react";
+import { PostWithAuthor, ThreadResponseSchema } from "@/types/ResponseSchema";
 
-function PostReplies({ replies }: { replies: ThreadResponseSchema[] }) {
-  return <>
-    {replies.map(reply => (
-      reply.post ? (
-        <Fragment key={reply.post.id}>
-          <PostCard
-            post={{
-              ...reply.post,
-              isThreadParent: reply.replies.length > 0
-            }}
-            fromATP
-          />
-          {reply.replies.length > 0 ? (
-            <PostReplies
-              replies={reply.replies}
-            />
-          ) : null}
-        </Fragment>
-      ) : null)
-    )}
-  </>
+function flatReplies(replies: ThreadResponseSchema[]): PostWithAuthor[] {
+  return replies.reduce((acc: PostWithAuthor[], reply) => {
+    if (reply.post) {
+      reply.post.isThreadParent = reply.replies.length > 0;
+      return [...acc, reply.post];
+    }
+    if (reply.replies.length > 0) {
+      return [...acc, ...flatReplies(reply.replies)];
+    }
+    return acc;
+  }, []);
 }
 
 export function Post({ uri }: { uri: string }) {
@@ -55,11 +44,13 @@ export function Post({ uri }: { uri: string }) {
         />
       ) : null}
 
-      {data?.replies ? (
-        <PostReplies
-          replies={data.replies}
+      {data?.replies ? flatReplies(data.replies).map(post => (
+        <PostCard
+          key={post.id}
+          post={post}
+          fromATP
         />
-      ) : null}
+      )) : null}
     </>
   )
 }
