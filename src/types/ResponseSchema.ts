@@ -15,6 +15,7 @@ export interface ResponseSchema {
 }
 
 export interface ThreadResponseSchema {
+  parent?: ThreadResponseSchema;
   post?: PostWithAuthor;
   replies: ThreadResponseSchema[];
 }
