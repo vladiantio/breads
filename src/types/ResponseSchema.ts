@@ -37,7 +37,8 @@ export interface Post {
   embedVideo?: AppBskyEmbedVideo.View;
   embedExternal?: AppBskyEmbedExternal.ViewExternal;
   embedPost?: PostWithAuthor;
-  reason?: Reason
+  reason?: Reason;
+  isThreadParent?: boolean;
 }
 
 export interface PostWithAuthor extends Post {

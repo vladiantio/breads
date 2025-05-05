@@ -17,7 +17,6 @@ interface PostCardProps {
   isDetail?: boolean;
   isEmbed?: boolean;
   fromATP?: boolean;
-  isThreadParent?: boolean;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -25,7 +24,6 @@ const PostCard: React.FC<PostCardProps> = ({
   isDetail = false,
   isEmbed = false,
   fromATP = false,
-  isThreadParent = false,
 }) => {
   const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
@@ -190,7 +188,7 @@ const PostCard: React.FC<PostCardProps> = ({
       ) : (
         <div className="flex p-4 gap-x-4">
           <div className="flex flex-col items-center relative">
-            {isThreadParent ? (
+            {post.isThreadParent ? (
               <div className="w-0.5 bg-border rounded-full absolute top-12 -bottom-8" />
             ) : null}
             <div className="h-12 content-center">
