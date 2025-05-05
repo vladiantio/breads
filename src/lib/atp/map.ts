@@ -84,7 +84,7 @@ export function mapEmbedViews(embed?:
   return postWithAuthor;
 }
 
-export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reason) {
+export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reason, isThreadParent?: boolean) {
   const { author, record, embed } = post;
 
   const embedMapped = mapEmbedViews(embed);
@@ -100,6 +100,7 @@ export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reaso
     replies: post.replyCount ?? 0,
     reposts: post.repostCount ?? 0,
     reason,
+    isThreadParent,
     ...embedMapped
   };
 
@@ -107,7 +108,31 @@ export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reaso
 }
 
 export function mapPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] {
-  return feed.map(({ post, reason }) => mapPostWithAuthor(post, reason));
+  return feed.reduce((acc: PostWithAuthor[], post) => {
+    const postExists = acc.find(o =>
+      o.id == post.post.cid
+      || (AppBskyFeedDefs.isPostView(post.reply?.root) && o.id == post.reply?.root.cid)
+      || (AppBskyFeedDefs.isPostView(post.reply?.parent) && o.id == post.reply?.parent.cid)
+    );
+  
+    if (postExists) {
+      return [...acc];
+    }
+  
+    if (!!post.reply && !post.reason) {
+      const posts = [];
+      if (post.reply.root && AppBskyFeedDefs.isPostView(post.reply.root)) {
+        posts.push(mapPostWithAuthor(post.reply.root, undefined, true));
+      }
+      if (post.reply.parent && AppBskyFeedDefs.isPostView(post.reply.parent) && (!AppBskyFeedDefs.isPostView(post.reply.root) || post.reply.parent.cid !== post.reply.root.cid)) {
+        posts.push(mapPostWithAuthor(post.reply.parent, undefined, true));
+      }
+      posts.push(mapPostWithAuthor(post.post));
+      return [...acc, ...posts];
+    }
+  
+    return [...acc, mapPostWithAuthor(post.post, post.reason)];
+  }, []);
 }
 
 export function mapThreads(thread: ThreadNode): ThreadResponseSchema {
