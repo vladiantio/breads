@@ -20,21 +20,22 @@ function flatParent(parent: ThreadResponseSchema): PostWithAuthor[] {
 }
 
 function flatReplies(replies: ThreadResponseSchema[], author: User, depth: number = 0): PostWithAuthor[] {
-  return replies
-    .slice(depth > 0 ? -8 : 0)
-    .reduce((acc: PostWithAuthor[], reply, index) => {
-      const limitReplyDepth = depth > 0 && author.id !== reply.post?.author.id;
-      if (reply.post) {
-        acc.push({
-          ...reply.post,
-          isThreadParent: reply.replies.length > 0 || (depth > 0 && index < replies.length - 1),
-        });
-        if (!limitReplyDepth && reply.replies.length > 0) {
-          acc.push(...flatReplies(reply.replies, author, depth + 1));
-        }
+  const slicedReplies = replies.slice(0, depth > 0 ? 2 : undefined);
+
+  return slicedReplies.reduce((acc: PostWithAuthor[], reply, index) => {
+    if (reply.post) {
+      const showReplies = reply.replies.length > 0 && (depth === 0 || author.id === reply.post?.author.id);
+      acc.push({
+        ...reply.post,
+        isThreadParent: showReplies || (depth > 0 && slicedReplies.length > 1 && index < slicedReplies.length - 1),
+      });
+      if (showReplies) {
+        const repliesAuthor = reply.replies.filter(r => r.post?.author.id === author.id);
+        acc.push(...flatReplies(repliesAuthor.length > 0 ? repliesAuthor : reply.replies, author, depth + 1));
       }
-      return acc;
-    }, []);
+    }
+    return acc;
+  }, []);
 }
 
 export function Post({ uri }: { uri: string }) {
