@@ -4,6 +4,21 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { usePostThread } from "@/lib/atp/hooks/use-post-thread";
 import { PostWithAuthor, ThreadResponseSchema, User } from "@/types/ResponseSchema";
 
+function flatParent(parent: ThreadResponseSchema): PostWithAuthor[] {
+  const posts: PostWithAuthor[] = [];
+
+  if (parent.parent)
+    posts.push(...flatParent(parent.parent));
+
+  if (parent.post)
+    posts.push({
+      ...parent.post,
+      isThreadParent: true
+    });
+
+  return posts;
+}
+
 function flatReplies(replies: ThreadResponseSchema[], author: User, depth: number = 0): PostWithAuthor[] {
   return replies
     .slice(depth > 0 ? -8 : 0)
@@ -44,15 +59,13 @@ export function Post({ uri }: { uri: string }) {
         user={data.post?.author ?? {}}
       />
 
-      {data.parent && data.parent.post ? (
+      {data.parent ? flatParent(data.parent).map(post => (
         <PostCard
-          post={{
-            ...data.parent.post,
-            isThreadParent: true
-          }}
+          key={post.id}
+          post={post}
           fromATP
         />
-      ) : null}
+      )) : null}
 
       {data.post ? (
         <PostCard
