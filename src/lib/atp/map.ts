@@ -139,12 +139,14 @@ export function mapThreads(thread: ThreadNode): ThreadResponseSchema {
   if (thread.type === 'post') {
     const { post, replies } = thread;
     return {
+      parent: thread.parent ? mapThreads(thread.parent) : undefined,
       post: mapPostWithAuthor(post),
       replies: replies?.filter(thread => thread.type === 'post')
         .map(thread => mapThreads(thread)) ?? []
     }
   } else {
     return {
+      parent: undefined,
       post: undefined,
       replies: []
     };
