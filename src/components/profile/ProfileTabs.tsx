@@ -3,9 +3,9 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useAuthorFeed } from "@/lib/atp/hooks/use-author-feed";
 import { useMemo, useState } from "react";
 import PostCardSkeleton from "../feed/PostCardSkeleton";
-import PostCard from "../feed/PostCard";
 import { Button } from "../ui/button";
 import { ArrowDown, Loader2 } from "lucide-react";
+import { PostFeed } from "../feed/PostFeed";
 
 interface ProfileProps {
   actor: string,
@@ -36,13 +36,10 @@ function Posts({ actor, enabled }: ProfileProps) {
 
   return (
     <>
-      {posts.map((post, postIndex) => (
-        <PostCard
-          key={postIndex}
-          post={post}
-          fromATP
-        />
-      ))}
+      <PostFeed
+        posts={posts}
+        fromATP
+      />
       {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
         <PostCardSkeleton key={i} />
       ))}
@@ -87,13 +84,10 @@ function Reposts({ actor, enabled }: ProfileProps) {
 
   return (
     <>
-      {posts.map((post, postIndex) => (
-        <PostCard
-          key={postIndex}
-          post={post}
-          fromATP
-        />
-      ))}
+      <PostFeed
+        posts={posts}
+        fromATP
+      />
       {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
         <PostCardSkeleton key={i} />
       ))}

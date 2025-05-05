@@ -1,12 +1,12 @@
 import CreatePost from "./CreatePost";
 import FeedTabs from "./FeedTabs";
-import PostCard from "./PostCard";
 import { Button } from "../ui/button";
 import { ArrowDownIcon, Loader2 } from "lucide-react";
 import { useFeed } from "@/lib/atp/hooks/use-feed";
 import { useMemo } from "react";
 import PostCardSkeleton from "./PostCardSkeleton";
 import { useAtpStore } from "@/lib/atp/store";
+import { PostFeed } from "./PostFeed";
 
 export function Timeline() {
   const {
@@ -34,13 +34,10 @@ export function Timeline() {
         <PostCardSkeleton key={i} />
       )) : (
         <>
-          {posts.map((post, postIndex) => (
-            <PostCard
-              key={postIndex}
-              post={post}
-              fromATP
-            />
-          ))}
+          <PostFeed
+            posts={posts}
+            fromATP
+          />
           {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
             <PostCardSkeleton key={i} />
           ))}
