@@ -2,19 +2,24 @@ import PostCard from "@/components/feed/PostCard";
 import AuthorHeader from "@/components/profile/AuthorHeader";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { usePostThread } from "@/lib/atp/hooks/use-post-thread";
-import { PostWithAuthor, ThreadResponseSchema } from "@/types/ResponseSchema";
+import { PostWithAuthor, ThreadResponseSchema, User } from "@/types/ResponseSchema";
 
-function flatReplies(replies: ThreadResponseSchema[]): PostWithAuthor[] {
-  return replies.reduce((acc: PostWithAuthor[], reply) => {
-    if (reply.post) {
-      reply.post.isThreadParent = reply.replies.length > 0;
-      return [...acc, reply.post];
-    }
-    if (reply.replies.length > 0) {
-      return [...acc, ...flatReplies(reply.replies)];
-    }
-    return acc;
-  }, []);
+function flatReplies(replies: ThreadResponseSchema[], author: User, depth: number = 0): PostWithAuthor[] {
+  return replies
+    .slice(depth > 0 ? -8 : 0)
+    .reduce((acc: PostWithAuthor[], reply, index) => {
+      const limitReplyDepth = depth > 0 && author.id === reply.post?.author.id;
+      if (reply.post) {
+        acc.push({
+          ...reply.post,
+          isThreadParent: reply.replies.length > 0 || (depth > 0 && index < replies.length - 1),
+        });
+        if (!limitReplyDepth && reply.replies.length > 0) {
+          acc.push(...flatReplies(reply.replies, author, depth + 1));
+        }
+      }
+      return acc;
+    }, []);
 }
 
 export function Post({ uri }: { uri: string }) {
@@ -30,13 +35,26 @@ export function Post({ uri }: { uri: string }) {
   if (isLoading)
     return "Loading...";
 
+  if (!data)
+    return "No data";
+
   return (
     <>
       <AuthorHeader
-        user={data?.post?.author ?? {}}
+        user={data.post?.author ?? {}}
       />
 
-      {data?.post ? (
+      {data.parent && data.parent.post ? (
+        <PostCard
+          post={{
+            ...data.parent.post,
+            isThreadParent: true
+          }}
+          fromATP
+        />
+      ) : null}
+
+      {data.post ? (
         <PostCard
           post={data.post}
           fromATP
@@ -44,7 +62,7 @@ export function Post({ uri }: { uri: string }) {
         />
       ) : null}
 
-      {data?.replies ? flatReplies(data.replies).map(post => (
+      {data.post && data.replies ? flatReplies(data.replies, data.post.author).map(post => (
         <PostCard
           key={post.id}
           post={post}
