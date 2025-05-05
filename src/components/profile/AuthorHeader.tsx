@@ -48,4 +48,4 @@ const AuthorHeader: FC<AuthorHeaderProps> = ({
   );
 };
 
-export default AuthorHeader;
+export { AuthorHeader };

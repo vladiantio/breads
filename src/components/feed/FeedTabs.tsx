@@ -59,4 +59,4 @@ const FeedTabs: FC = () => {
   )
 }
 
-export default FeedTabs;
+export { FeedTabs };

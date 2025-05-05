@@ -1,5 +1,4 @@
-import React from 'react';
-import UserAvatar from '../shared/UserAvatar';
+import { UserAvatar } from '../shared/UserAvatar';
 import { LogInIcon, SettingsIcon } from 'lucide-react';
 import { NavIconLink } from './NavIconLink';
 import { NavLinks } from './NavLinks';

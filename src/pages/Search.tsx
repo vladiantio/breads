@@ -1,5 +1,5 @@
 import { AuthorLink } from "@/components/shared/AuthorLink";
-import UserAvatar from "@/components/shared/UserAvatar";
+import { UserAvatar } from "@/components/shared/UserAvatar";
 import { DebouncedInput } from "@/components/ui/debounced-input";
 import { InputGroup, InputGroupText } from "@/components/ui/input";
 import SearchIcon from '@/icons/search.svg?react';

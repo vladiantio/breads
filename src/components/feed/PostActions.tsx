@@ -73,4 +73,4 @@ const PostActions: React.FC<PostActionsProps> = ({
   );
 };
 
-export default PostActions;
+export { PostActions };

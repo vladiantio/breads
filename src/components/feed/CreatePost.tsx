@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import UserAvatar from '../shared/UserAvatar';
+import { UserAvatar } from '../shared/UserAvatar';
 // import { useApp } from '@/context/AppContext';
-import PostEditor from './PostEditor';
-import PostActions from './PostActions';
-import MediaPreview from './MediaPreview';
+import { PostEditor } from './PostEditor';
+import { PostActions } from './PostActions';
+import { MediaPreview } from './MediaPreview';
 import { getCurrentUser } from '@/data/users';
 
 interface CreatePostProps {
@@ -127,4 +127,4 @@ const CreatePost: React.FC<CreatePostProps> = ({
   );
 };
 
-export default CreatePost;
+export { CreatePost };

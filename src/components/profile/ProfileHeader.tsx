@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { User } from '@/types/ResponseSchema';
 import { ProfileDisplay } from './ProfileDisplay';
-import AuthorHeader from './AuthorHeader';
+import { AuthorHeader } from './AuthorHeader';
 
 interface ProfileHeaderProps {
   user: User;
@@ -30,4 +30,4 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
   );
 };
 
-export default ProfileHeader;
+export { ProfileHeader };

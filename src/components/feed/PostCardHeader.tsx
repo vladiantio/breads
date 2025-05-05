@@ -38,4 +38,4 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
   );
 };
 
-export default PostCardHeader;
+export { PostCardHeader };

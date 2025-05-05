@@ -7,14 +7,14 @@ import {
   useState
 } from "react";
 
-export type imgResolution =
+type imgResolution =
   | "default"
   | "mqdefault"
   | "hqdefault"
   | "sddefault"
   | "maxresdefault";
 
-export interface YouTubeProps {
+interface YouTubeProps {
   id: string
   title: string
   adNetwork?: boolean
@@ -146,5 +146,7 @@ function YouTubeEmbedComponent({
   );
 }
 
-export default forwardRef<HTMLIFrameElement,
+const YouTubeEmbed = forwardRef<HTMLIFrameElement,
 YouTubeProps>(YouTubeEmbedComponent);
+
+export { YouTubeEmbed, type YouTubeProps };

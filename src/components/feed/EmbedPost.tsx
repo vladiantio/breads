@@ -1,5 +1,5 @@
 import { PostWithAuthor } from "@/types/ResponseSchema";
-import PostCard from "./PostCard";
+import { PostCard } from "./PostCard";
 
 interface EmbedPostProps {
   post: PostWithAuthor

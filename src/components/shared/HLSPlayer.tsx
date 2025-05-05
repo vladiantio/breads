@@ -141,4 +141,4 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
   );
 };
 
-export default HLSPlayer;
+export { HLSPlayer };

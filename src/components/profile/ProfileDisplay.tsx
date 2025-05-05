@@ -1,6 +1,6 @@
 import { User } from "@/types/ResponseSchema";
 import { FC } from "react";
-import UserAvatar from "../shared/UserAvatar";
+import { UserAvatar } from "../shared/UserAvatar";
 import { parseBio } from "@/utils/parseBio";
 import { formatNumber } from "@/utils/number";
 import VerifiedAccountIcon from '@/icons/verified-account.svg?react';

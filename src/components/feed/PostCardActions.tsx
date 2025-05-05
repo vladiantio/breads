@@ -81,4 +81,4 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
   );
 };
 
-export default PostCardActions;
+export { PostCardActions };

@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { PinIcon, RepeatIcon } from 'lucide-react';
-import UserAvatar from '../shared/UserAvatar';
+import { UserAvatar } from '../shared/UserAvatar';
 import { toast } from "sonner";
 import { PostWithAuthor } from '@/types/ResponseSchema';
 import { convertRichTextToPlainText } from '@/lib/atp/utils';
-import PostCardActions from './PostCardActions';
-import PostCardContent from './PostCardContent';
-import PostCardHeader from './PostCardHeader';
+import { PostCardActions } from './PostCardActions';
+import { PostCardContent } from './PostCardContent';
+import { PostCardHeader } from './PostCardHeader';
 import { useNavigate } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import { isInvalidHandle } from '@/lib/atp/strings/handles';
@@ -240,4 +240,4 @@ const PostCard: React.FC<PostCardProps> = ({
   );
 };
 
-export default PostCard;
+export { PostCard };

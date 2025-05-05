@@ -1,5 +1,5 @@
-import PostCard from "@/components/feed/PostCard";
-import AuthorHeader from "@/components/profile/AuthorHeader";
+import { PostCard } from "@/components/feed/PostCard";
+import { AuthorHeader } from "@/components/profile/AuthorHeader";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { usePostThread } from "@/lib/atp/hooks/use-post-thread";
 import { PostWithAuthor, ThreadResponseSchema, User } from "@/types/ResponseSchema";

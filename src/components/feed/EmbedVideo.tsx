@@ -1,6 +1,6 @@
 import { AppBskyEmbedVideo } from "@atproto/api";
 import { EmbedToggle } from "./EmbedToggle";
-import HLSPlayer from "../shared/HLSPlayer";
+import { HLSPlayer } from "../shared/HLSPlayer";
 import { useImagePreload } from "@/hooks/use-image-preload";
 
 interface EmbedVideoProps {

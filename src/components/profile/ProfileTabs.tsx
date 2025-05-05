@@ -2,7 +2,7 @@ import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useAuthorFeed } from "@/lib/atp/hooks/use-author-feed";
 import { useMemo, useState } from "react";
-import PostCardSkeleton from "../feed/PostCardSkeleton";
+import { PostCardSkeleton } from "../feed/PostCardSkeleton";
 import { Button } from "../ui/button";
 import { ArrowDown, Loader2 } from "lucide-react";
 import { PostFeed } from "../feed/PostFeed";

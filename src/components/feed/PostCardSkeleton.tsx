@@ -39,4 +39,4 @@ const PostCardSkeleton: React.FC<PostCardSkeletonProps> = ({
   );
 };
 
-export default PostCardSkeleton;
+export { PostCardSkeleton };

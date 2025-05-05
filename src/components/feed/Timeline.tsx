@@ -1,10 +1,10 @@
-import CreatePost from "./CreatePost";
-import FeedTabs from "./FeedTabs";
+import { CreatePost } from "./CreatePost";
+import { FeedTabs } from "./FeedTabs";
 import { Button } from "../ui/button";
 import { ArrowDownIcon, Loader2 } from "lucide-react";
 import { useFeed } from "@/lib/atp/hooks/use-feed";
 import { useMemo } from "react";
-import PostCardSkeleton from "./PostCardSkeleton";
+import { PostCardSkeleton } from "./PostCardSkeleton";
 import { useAtpStore } from "@/lib/atp/store";
 import { PostFeed } from "./PostFeed";
 

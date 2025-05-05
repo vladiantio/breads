@@ -36,4 +36,4 @@ const PostEditor: React.FC<PostEditorProps> = ({
   );
 };
 
-export default PostEditor;
+export { PostEditor };

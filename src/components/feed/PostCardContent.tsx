@@ -63,4 +63,4 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   );
 };
 
-export default PostCardContent;
+export { PostCardContent };

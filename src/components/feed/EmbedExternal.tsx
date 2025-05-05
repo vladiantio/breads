@@ -1,7 +1,7 @@
 import { AppBskyEmbedExternal } from "@atproto/api";
 import { EmbedToggle } from "./EmbedToggle";
 import { parseTenorGif } from "@/lib/embed-player";
-import YouTubeEmbed from "../shared/YouTubeEmbed";
+import { YouTubeEmbed } from "../shared/YouTubeEmbed";
 import { GlobeIcon } from "lucide-react";
 import { useImagePreload } from "@/hooks/use-image-preload";
 
