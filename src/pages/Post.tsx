@@ -23,7 +23,7 @@ function flatReplies(replies: ThreadResponseSchema[], author: User, depth: numbe
   return replies
     .slice(depth > 0 ? -8 : 0)
     .reduce((acc: PostWithAuthor[], reply, index) => {
-      const limitReplyDepth = depth > 0 && author.id === reply.post?.author.id;
+      const limitReplyDepth = depth > 0 && author.id !== reply.post?.author.id;
       if (reply.post) {
         acc.push({
           ...reply.post,
