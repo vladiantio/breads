@@ -108,9 +108,107 @@ function Reposts({ actor, enabled }: ProfileProps) {
   )
 }
 
+function Media({ actor, enabled }: ProfileProps) {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage
+  } = useAuthorFeed({
+    actor,
+    filter: 'posts_with_media',
+    enabled,
+  });
+
+  const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
+
+  if (isLoading)
+    return <>
+      {new Array(30).fill(0).map((_, i) => (
+        <PostCardSkeleton key={i} />
+      ))}
+    </>;
+
+  return (
+    <>
+      <PostFeed
+        posts={posts}
+        fromATP
+      />
+      {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
+        <PostCardSkeleton key={i} />
+      ))}
+      <div className="text-center p-4">
+        <Button
+          variant="outline"
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+        >
+          {isFetchingNextPage && <Loader2 className="animate-spin" />}
+          {hasNextPage
+            ? 'Load more'
+            : 'Nothing more to load'}
+          {hasNextPage && <ArrowDown />}
+        </Button>
+      </div>
+    </>
+  )
+}
+
+function Videos({ actor, enabled }: ProfileProps) {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage
+  } = useAuthorFeed({
+    actor,
+    filter: 'posts_with_video',
+    enabled,
+  });
+
+  const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
+
+  if (isLoading)
+    return <>
+      {new Array(30).fill(0).map((_, i) => (
+        <PostCardSkeleton key={i} />
+      ))}
+    </>;
+
+  return (
+    <>
+      <PostFeed
+        posts={posts}
+        fromATP
+      />
+      {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
+        <PostCardSkeleton key={i} />
+      ))}
+      <div className="text-center p-4">
+        <Button
+          variant="outline"
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+        >
+          {isFetchingNextPage && <Loader2 className="animate-spin" />}
+          {hasNextPage
+            ? 'Load more'
+            : 'Nothing more to load'}
+          {hasNextPage && <ArrowDown />}
+        </Button>
+      </div>
+    </>
+  )
+}
+
 const tabList = [
   { value: 'posts', label: 'Posts', component: Posts },
   { value: 'reposts', label: 'Reposts', component: Reposts },
+  { value: 'media', label: 'Media', component: Media },
+  { value: 'videos', label: 'Videos', component: Videos },
 ];
 
 export function ProfileTabs({ actor }: { actor: string }) {
