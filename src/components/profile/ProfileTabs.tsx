@@ -69,6 +69,7 @@ function Reposts({ actor, enabled }: ProfileProps) {
     isFetchingNextPage
   } = useAuthorFeed({
     actor,
+    filter: 'posts_no_replies',
     typeFilter: 'reposts',
     enabled,
   });

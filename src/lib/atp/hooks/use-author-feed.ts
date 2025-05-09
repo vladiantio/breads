@@ -56,7 +56,7 @@ export function useAuthorFeed({
         }
 
         // Only repost/quote post filters are applied on the client side
-        if (!typeFilter || typeFilter === 'no_filter' || filter !== 'posts_and_author_threads') {
+        if (!typeFilter || typeFilter === 'no_filter') {
           const posts = mapPosts(data.feed)
           return { posts, cursor: data.cursor }
         }
