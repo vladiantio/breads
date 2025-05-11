@@ -6,6 +6,7 @@ import { PostCardSkeleton } from "../feed/PostCardSkeleton";
 import { Button } from "../ui/button";
 import { ArrowDown, Loader2 } from "lucide-react";
 import { PostFeed } from "../feed/PostFeed";
+import { Gallery, GallerySkeleton } from "../gallery/Gallery";
 
 interface ProfileProps {
   actor: string,
@@ -125,21 +126,14 @@ function Media({ actor, enabled }: ProfileProps) {
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
 
   if (isLoading)
-    return <>
-      {new Array(30).fill(0).map((_, i) => (
-        <PostCardSkeleton key={i} />
-      ))}
-    </>;
+    return <GallerySkeleton length={30} />;
 
   return (
     <>
-      <PostFeed
+      <Gallery
         posts={posts}
-        fromATP
       />
-      {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
-        <PostCardSkeleton key={i} />
-      ))}
+      {isFetchingNextPage && <GallerySkeleton length={30} />}
       <div className="text-center p-4">
         <Button
           variant="outline"
@@ -173,21 +167,14 @@ function Videos({ actor, enabled }: ProfileProps) {
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
 
   if (isLoading)
-    return <>
-      {new Array(30).fill(0).map((_, i) => (
-        <PostCardSkeleton key={i} />
-      ))}
-    </>;
+    return <GallerySkeleton length={30} />;
 
   return (
     <>
-      <PostFeed
+      <Gallery
         posts={posts}
-        fromATP
       />
-      {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
-        <PostCardSkeleton key={i} />
-      ))}
+      {isFetchingNextPage && <GallerySkeleton length={30} />}
       <div className="text-center p-4">
         <Button
           variant="outline"
@@ -218,7 +205,7 @@ export function ProfileTabs({ actor }: { actor: string }) {
   return (
     <>
       <Tabs
-        className="sticky bg-background top-16 z-[1]"
+        className="sticky bg-background top-16 z-[2]"
         variant="underline"
         value={activeTab}
         onValueChange={setActiveTab}
