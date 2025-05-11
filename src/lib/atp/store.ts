@@ -2,6 +2,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AtpSessionData, Agent } from '@atproto/api';
+import {
+  AUTHENTICATED_ENDPOINT,
+  GUEST_ENDPOINT,
+} from './constants/endpoints';
 
 export type AtpCredentials = {
   handle: string;
@@ -29,9 +33,6 @@ type AtpState = {
   logout: () => void;
   restoreSession: () => Promise<void>;
 };
-
-const AUTHENTICATED_ENDPOINT = 'https://bsky.social';
-const GUEST_ENDPOINT = 'https://api.bsky.app';
 
 export const useAtpStore = create<AtpState>()(
   persist(
@@ -73,7 +74,7 @@ export const useAtpStore = create<AtpState>()(
 
       restoreSession: async () => {
         const { session, isAuthenticated } = get();
-        if (session && !isAuthenticated) {
+        if (session !== null && !isAuthenticated) {
           try {
             const agent = new Agent({ service: AUTHENTICATED_ENDPOINT });
             await agent.com.atproto.server.getSession(session);
