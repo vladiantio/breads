@@ -1,7 +1,11 @@
 // source: https://github.com/akari-blue/akari/blob/main/src/lib/bluesky/store.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { AtpSessionData, Agent } from '@atproto/api';
+import {
+  AtpSessionData,
+  Agent,
+  CredentialSession,
+} from '@atproto/api';
 import {
   AUTHENTICATED_ENDPOINT,
   GUEST_ENDPOINT,
@@ -26,33 +30,30 @@ type Session = AtpSessionData & {
 };
 
 type AtpState = {
+  credentialSession: CredentialSession;
   agent: Agent;
   isAuthenticated: boolean;
   session: Session | null;
   login: (credentials: AtpCredentials) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   restoreSession: () => Promise<void>;
 };
 
 export const useAtpStore = create<AtpState>()(
   persist(
     (set, get) => ({
-      agent: new Agent({ service: GUEST_ENDPOINT }),
+      credentialSession: createGuestSession(),
+      agent: new Agent(createGuestSession()),
       isAuthenticated: false,
 
       login: async (credentials: AtpCredentials) => {
-        const agent = new Agent({ service: AUTHENTICATED_ENDPOINT });
-        const response = await agent.com.atproto.server.createSession({
-          identifier: credentials.handle,
-          password: credentials.password,
-          authFactorToken: credentials.authFactorToken,
-          allowTakendown: true,
-        });
+        const { credentialSession, session } = await loginAndCreateAuthenticatedSession(credentials);
+        const agent = new Agent(credentialSession);
 
         // Store session data
-        const session = response.data;
         set({
           agent,
+          credentialSession,
           isAuthenticated: true,
           session: {
             ...session,
@@ -62,9 +63,14 @@ export const useAtpStore = create<AtpState>()(
         });
       },
 
-      logout: () => {
+      logout: async () => {
+        const { credentialSession } = get();
+        await credentialSession.logout();
+        const newCredentialSession = createGuestSession();
+        const agent = new Agent(newCredentialSession);
         set({
-          agent: new Agent({ service: GUEST_ENDPOINT }),
+          agent,
+          credentialSession: newCredentialSession,
           isAuthenticated: false,
           session: null
         });
@@ -76,12 +82,23 @@ export const useAtpStore = create<AtpState>()(
         const { session, isAuthenticated } = get();
         if (session !== null && !isAuthenticated) {
           try {
-            const agent = new Agent({ service: AUTHENTICATED_ENDPOINT });
-            await agent.com.atproto.server.getSession(session);
-            set({ agent, isAuthenticated: true });
+            const credentialSession = await resumeSession(session);
+            const agent = new Agent(credentialSession);
+            set({
+              agent,
+              credentialSession,
+              isAuthenticated: true
+            });
           } catch (error) {
+            const credentialSession = createGuestSession();
+            const agent = new Agent(credentialSession);
             console.error('Failed to restore session:', error);
-            set({ agent: new Agent({ service: GUEST_ENDPOINT }), isAuthenticated: false, session: null });
+            set({
+              agent,
+              credentialSession,
+              isAuthenticated: false,
+              session: null
+            });
           }
         }
       },
@@ -94,3 +111,24 @@ export const useAtpStore = create<AtpState>()(
     },
   ),
 );
+
+function createGuestSession() {
+  return new CredentialSession(new URL(GUEST_ENDPOINT));
+}
+
+async function loginAndCreateAuthenticatedSession(credentials: AtpCredentials) {
+  const credentialSession = new CredentialSession(new URL(AUTHENTICATED_ENDPOINT));
+  const { data: session } = await credentialSession.login({
+    identifier: credentials.handle,
+    password: credentials.password,
+    authFactorToken: credentials.authFactorToken,
+    allowTakendown: true,
+  });
+  return { credentialSession, session };
+}
+
+async function resumeSession(session: AtpSessionData) {
+  const credentialSession = new CredentialSession(new URL(AUTHENTICATED_ENDPOINT));
+  await credentialSession.resumeSession(session);
+  return credentialSession;
+}
