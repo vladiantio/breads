@@ -12,7 +12,7 @@ const FeedTabs: FC = () => {
   return (
     <div className="sticky bg-background top-0 z-10 w-full">
       <div className="h-16 relative flex items-center justify-center">
-        <div>🐝</div>
+        <svg width="24" height="24" viewBox="0 0 176 176" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="m56 128a24 24 0 0 0-24 24 24 24 0 0 0 24 24h64a24 24 0 0 0 24-24 24 24 0 0 0-24-24z"/><path d="m24 64a24 24 0 0 0-24 24 24 24 0 0 0 24 24h128a24 24 0 0 0 24-24 24 24 0 0 0-24-24z"/><path d="m56 0a24 24 0 0 0-24 24 24 24 0 0 0 24 24h64a24 24 0 0 0 24-24 24 24 0 0 0-24-24z"/></svg>
         {isMobile && (
           <>
             <div className="absolute inset-y-0 left-4 flex items-center">
