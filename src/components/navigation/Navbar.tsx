@@ -2,10 +2,14 @@ import { UserAvatar } from '../shared/UserAvatar';
 import { LogInIcon, SettingsIcon } from 'lucide-react';
 import { NavIconLink } from './NavIconLink';
 import { NavLinks } from './NavLinks';
-import { useAtpStore } from '@/lib/atp/store';
+import { useCurrentProfile } from '@/lib/atp/hooks/use-current-profile';
 
 export const Navbar: React.FC = () => {
-  const { isAuthenticated } = useAtpStore();
+  const {
+    data: profile,
+    isAuthenticated,
+  } = useCurrentProfile();
+
   return (
     <nav
       className="flex flex-col justify-between fixed -ml-22 inset-y-0 p-4"
@@ -14,7 +18,9 @@ export const Navbar: React.FC = () => {
         {isAuthenticated ? (
           <UserAvatar
             size="lg"
-            displayName="Guest"
+            displayName={profile?.displayName}
+            username={profile?.username}
+            src={profile?.avatar}
           />
         ) : (
           <NavIconLink
