@@ -74,7 +74,7 @@ function ThemeProvider({
   )
   const [themeSettings, setThemeSettings] = useState<ThemeSettings>(
     () => (typeof localStorage.getItem(storageSettingsKey) === 'string'
-      ? JSON.parse(localStorage.getItem(storageSettingsKey) as string) as ThemeSettings
+      ? JSON.parse(localStorage.getItem(storageSettingsKey) as string)
       : initialThemeSettings)
   )
 
@@ -115,6 +115,38 @@ function ThemeProvider({
       root.removeAttribute('style')
     }
   }, [themeSettings])
+
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      // Sync theme from storage
+      if (event.key === storageKey && event.newValue) {
+        const newTheme = event.newValue as Theme;
+        if (['light', 'dark', 'system'].includes(newTheme)) {
+          setTheme(newTheme);
+        } else {
+          console.warn(`Invalid theme value received from storage: ${event.newValue}`);
+          setTheme(defaultTheme); 
+          localStorage.setItem(storageKey, defaultTheme);
+        }
+      }
+      // Sync theme settings from storage
+      if (event.key === storageSettingsKey && event.newValue) {
+        if (typeof event.newValue === 'string') {
+          setThemeSettings(JSON.parse(event.newValue));
+        } else {
+          console.warn(`Invalid theme settings value received from storage: ${event.newValue}`);
+          setThemeSettings(initialThemeSettings); 
+          localStorage.setItem(storageSettingsKey, JSON.stringify(initialThemeSettings));
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [storageKey, storageSettingsKey, defaultTheme])
 
   const value = {
     theme,
