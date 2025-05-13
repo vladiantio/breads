@@ -5,6 +5,7 @@ import { mapPosts } from '../map';
 import { TypeFilterKey } from '../types/TypeFilterKey';
 import {
   AppBskyEmbedRecord,
+  AppBskyEmbedVideo,
   AppBskyFeedDefs,
   AppBskyFeedGetAuthorFeed,
 } from '@atproto/api';
@@ -38,6 +39,7 @@ export function useAuthorFeed({
       const limit = 30
       let filteredFeed: AppBskyFeedDefs.FeedViewPost[] = []
       let cursor = pageParam
+      const reduceReplies = filter !== 'posts_with_media' && filter !== 'posts_with_video'
 
       while (filteredFeed.length < limit) {
         const authorFeedParams = {
@@ -56,8 +58,8 @@ export function useAuthorFeed({
         }
 
         // Only repost/quote post filters are applied on the client side
-        if (!typeFilter || typeFilter === 'no_filter') {
-          const posts = mapPosts(data.feed)
+        if ((!typeFilter || typeFilter === 'no_filter') && filter !== 'posts_and_author_threads' && filter !== 'posts_with_video') {
+          const posts = mapPosts(data.feed, reduceReplies)
           return { posts, cursor: data.cursor }
         }
 
@@ -65,11 +67,18 @@ export function useAuthorFeed({
           const isReply = item.reply
           const isRepost = AppBskyFeedDefs.isReasonRepost(item.reason)
           const isPin = AppBskyFeedDefs.isReasonPin(item.reason)
-          const applyFilter = filter !== 'posts_and_author_threads' || !isReply || isRepost || isPin || isAuthorReplyChain(actor, item, data.feed)
-          if (typeFilter === 'reposts') return applyFilter && isRepost
-          if (typeFilter === 'no_reposts') return applyFilter && !isRepost
-          if (typeFilter === 'quotes') return applyFilter && AppBskyEmbedRecord.isView(item.post.embed) && !isRepost
-          return applyFilter && (isRepost || AppBskyEmbedRecord.isView(item.post.embed))
+          let filterApplied = true
+          if (filter === 'posts_and_author_threads') {
+            filterApplied = !isReply || isRepost || isPin || isAuthorReplyChain(actor, item, data.feed)
+          }
+          if (filter === 'posts_with_video') {
+            filterApplied = AppBskyEmbedVideo.isView(item.post.embed)
+          }
+          if (typeFilter === 'reposts') return filterApplied && isRepost
+          if (typeFilter === 'no_reposts') return filterApplied && !isRepost
+          if (typeFilter === 'quotes') return filterApplied && AppBskyEmbedRecord.isView(item.post.embed) && !isRepost
+          if (typeFilter === 'quotes_and_reposts') return filterApplied && (isRepost || AppBskyEmbedRecord.isView(item.post.embed))
+          return filterApplied
         })
 
         filteredFeed = [...filteredFeed, ...newFilteredItems]
@@ -83,7 +92,7 @@ export function useAuthorFeed({
         cursor = data.cursor
       }
 
-      const posts = mapPosts(filteredFeed)
+      const posts = mapPosts(filteredFeed, reduceReplies)
       return { posts, cursor }
     },
     getNextPageParam: (lastPage) => lastPage.cursor,

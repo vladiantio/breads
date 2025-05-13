@@ -107,7 +107,10 @@ export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reaso
   return postWithAuthor;
 }
 
-export function mapPosts(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] {
+export function mapPosts(feed: AppBskyFeedDefs.FeedViewPost[], reduceReplies = true): PostWithAuthor[] {
+  if (!reduceReplies) {
+    return feed.map(post => mapPostWithAuthor(post.post));
+  }
   return feed.reduce((acc: PostWithAuthor[], post) => {
     const postExists = acc.find(o =>
       o.id == post.post.cid
