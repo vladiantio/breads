@@ -8,7 +8,7 @@ import {
 } from '@atproto/api';
 import {
   AUTHENTICATED_ENDPOINT,
-  GUEST_ENDPOINT,
+  PUBLIC_ENDPOINT,
 } from './constants/endpoints';
 
 export type AtpCredentials = {
@@ -42,8 +42,8 @@ type AtpState = {
 export const useAtpStore = create<AtpState>()(
   persist(
     (set, get) => ({
-      credentialSession: createGuestSession(),
-      agent: new Agent(createGuestSession()),
+      credentialSession: createPublicSession(),
+      agent: new Agent(createPublicSession()),
       isAuthenticated: false,
 
       login: async (credentials: AtpCredentials) => {
@@ -66,7 +66,7 @@ export const useAtpStore = create<AtpState>()(
       logout: async () => {
         const { credentialSession } = get();
         await credentialSession.logout();
-        const newCredentialSession = createGuestSession();
+        const newCredentialSession = createPublicSession();
         const agent = new Agent(newCredentialSession);
         set({
           agent,
@@ -90,7 +90,7 @@ export const useAtpStore = create<AtpState>()(
               isAuthenticated: true
             });
           } catch (error) {
-            const credentialSession = createGuestSession();
+            const credentialSession = createPublicSession();
             const agent = new Agent(credentialSession);
             console.error('Failed to restore session:', error);
             set({
@@ -112,8 +112,8 @@ export const useAtpStore = create<AtpState>()(
   ),
 );
 
-function createGuestSession() {
-  return new CredentialSession(new URL(GUEST_ENDPOINT));
+function createPublicSession() {
+  return new CredentialSession(new URL(PUBLIC_ENDPOINT));
 }
 
 async function loginAndCreateAuthenticatedSession(credentials: AtpCredentials) {
