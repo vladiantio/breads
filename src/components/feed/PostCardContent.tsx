@@ -31,7 +31,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   isDetail,
 }) => {
   return (
-    <div className="space-y-4 mt-3">
+    <div className="space-y-4 mt-4">
       {content && content.trim().length > 0
         ? <RichTextRenderer text={content} facets={facets} />
         : null}

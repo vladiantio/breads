@@ -28,7 +28,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
   onReply
 }) => {
   return (
-    <div className="flex items-center gap-x-1 mt-3 -mx-3">
+    <div className="flex items-center gap-x-1 mt-4 -mx-3">
       <Button
         aria-label="Reply"
         variant="ghost"
