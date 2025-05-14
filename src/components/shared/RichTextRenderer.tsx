@@ -1,4 +1,4 @@
-import { FC, Fragment, useCallback, useMemo, useState } from 'react';
+import { FC, Fragment, useCallback, useMemo, useState, memo } from 'react';
 import { Facet, RichText, RichTextSegment } from '@atproto/api';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
@@ -22,7 +22,7 @@ const TextSegment: FC<{
   segment: RichTextSegment;
   linkify: boolean;
   index: number;
-}> = ({ segment, linkify, index }) => {
+}> = memo(({ segment, linkify, index }) => {
   if (!linkify) {
     return <Fragment key={`text-${index}`}>{segment.text}</Fragment>;
   }
@@ -71,7 +71,7 @@ const TextSegment: FC<{
   }
 
   return <Fragment key={`text-${index}`}>{segment.text}</Fragment>;
-};
+});
 
 /**
  * A component that renders rich text content with support for facets.
@@ -106,11 +106,42 @@ export const RichTextRenderer: FC<RichTextRendererProps> = ({
   linkify = true,
 }) => {
   const [tagsExpanded, setTagsExpanded] = useState(false);
+  
   const lineRichText = useMemo(() => new RichText({ text, facets }), [text, facets]);
   const segments = useMemo(() => [...lineRichText.segments()], [lineRichText]);
+  
+  const { hasOnlyTags, limitedSegments, tagsCount } = useMemo(() => {
+    const hasOnlyTags = segments.every(segment => !segment.isTag());
+    if (hasOnlyTags) {
+      return { hasOnlyTags: true, limitedSegments: segments, tagsCount: 0 };
+    }
 
-  const renderSegments = useCallback((segments: RichTextSegment[]) => (
-    segments.map((segment, i) => (
+    let count = 0;
+    const limited: RichTextSegment[] = [];
+    
+    for (const segment of segments) {
+      if (segment.isTag()) {
+        count++;
+        if (count > 3 && !tagsExpanded) continue;
+      }
+      limited.push(segment);
+    }
+
+    // Trim trailing empty segments
+    let lastNonEmptyIndex = limited.length - 1;
+    while (lastNonEmptyIndex >= 0 && limited[lastNonEmptyIndex].text.trim() === '') {
+      lastNonEmptyIndex--;
+    }
+    
+    return { 
+      hasOnlyTags: false, 
+      limitedSegments: limited.slice(0, lastNonEmptyIndex + 1),
+      tagsCount: count 
+    };
+  }, [segments, tagsExpanded]);
+
+  const renderSegments = useCallback((segs: RichTextSegment[]) => (
+    segs.map((segment, i) => (
       <TextSegment
         key={`segment-${i}`}
         segment={segment}
@@ -120,62 +151,22 @@ export const RichTextRenderer: FC<RichTextRendererProps> = ({
     ))
   ), [linkify]);
 
-  // Early return if no tags
-  if (segments.every(segment => !segment.isTag())) {
+  if (hasOnlyTags || tagsCount <= 4) {
     return <div className={cn("thread-content", className)}>{renderSegments(segments)}</div>;
   }
-
-  const { segments: limitedSegments, tagsCount } = segments.reduce(
-    (acc: { segments: RichTextSegment[]; tagsCount: number }, segment) => {
-      if (segment.isTag()) {
-        acc.tagsCount++;
-        if (acc.tagsCount > 3) return acc;
-      }
-      acc.segments.push(segment);
-      return acc;
-    },
-    { segments: [], tagsCount: 0 }
-  );
-
-  if (tagsCount <= 4) {
-    return <div className={cn("thread-content", className)}>{renderSegments(segments)}</div>;
-  }
-
-  if (tagsExpanded) {
-    return (
-      <div className={cn("thread-content", className)}>
-        {renderSegments(segments)}
-        {' '}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setTagsExpanded(false);
-          }}
-          className="text-warning hover:underline active:opacity-60"
-        >
-          Show less
-        </button>
-      </div>
-    );
-  }
-
-  const trimmedSegments = limitedSegments
-    .toReversed()
-    .dropWhile(segment => segment.text.trim() === '')
-    .toReversed();
 
   return (
     <div className={cn("thread-content", className)}>
-      {renderSegments(trimmedSegments)}
+      {renderSegments(limitedSegments)}
       {' '}
       <button
         onClick={(e) => {
           e.stopPropagation();
-          setTagsExpanded(true);
+          setTagsExpanded(!tagsExpanded);
         }}
         className="text-warning hover:underline active:opacity-60"
       >
-        ...and {tagsCount - 3}+
+        {tagsExpanded ? 'Show less' : `...and ${tagsCount - 3}+`}
       </button>
     </div>
   );
