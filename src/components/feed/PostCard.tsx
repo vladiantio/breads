@@ -16,14 +16,12 @@ interface PostCardProps {
   post: PostWithAuthor;
   isDetail?: boolean;
   isEmbed?: boolean;
-  fromATP?: boolean;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
   post,
   isDetail = false,
   isEmbed = false,
-  fromATP = false,
 }) => {
   const navigate = useNavigate();
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp();
@@ -88,9 +86,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const handleCopyText = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const text = fromATP
-      ? convertRichTextToPlainText(post.content, post.facets)
-      : post.content;
+    const text = convertRichTextToPlainText(post.content, post.facets);
     navigator.clipboard.writeText(text);
     toast("Text copied", {
       description: "Post text copied to clipboard",
@@ -163,7 +159,6 @@ const PostCard: React.FC<PostCardProps> = ({
           </div>
 
           <PostCardContent
-            fromATP={fromATP}
             content={post.content}
             facets={post.facets}
             embedImages={post.embedImages}
@@ -212,7 +207,6 @@ const PostCard: React.FC<PostCardProps> = ({
             />
 
             <PostCardContent
-              fromATP={fromATP}
               content={post.content}
               facets={post.facets}
               embedImages={post.embedImages}

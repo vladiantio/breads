@@ -39,7 +39,6 @@ function Posts({ actor, enabled }: ProfileProps) {
     <>
       <PostFeed
         posts={posts}
-        fromATP
       />
       {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
         <PostCardSkeleton key={i} />
@@ -88,7 +87,6 @@ function Reposts({ actor, enabled }: ProfileProps) {
     <>
       <PostFeed
         posts={posts}
-        fromATP
       />
       {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
         <PostCardSkeleton key={i} />

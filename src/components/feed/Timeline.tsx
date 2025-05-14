@@ -36,7 +36,6 @@ export function Timeline() {
         <>
           <PostFeed
             posts={posts}
-            fromATP
           />
           {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
             <PostCardSkeleton key={i} />

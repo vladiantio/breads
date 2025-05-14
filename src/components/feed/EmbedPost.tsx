@@ -9,7 +9,6 @@ export function EmbedPost({ post }: EmbedPostProps) {
   return (
     <div className="bg-background border rounded-lg">
       <PostCard
-        fromATP
         post={post}
         isEmbed
       />

@@ -64,14 +64,12 @@ export function Post({ uri }: { uri: string }) {
         <PostCard
           key={post.id}
           post={post}
-          fromATP
         />
       )) : null}
 
       {data.post ? (
         <PostCard
           post={data.post}
-          fromATP
           isDetail
         />
       ) : null}
@@ -80,7 +78,6 @@ export function Post({ uri }: { uri: string }) {
         <PostCard
           key={post.id}
           post={post}
-          fromATP
         />
       )) : null}
     </>

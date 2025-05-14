@@ -5,7 +5,6 @@ import {
   Facet
 } from '@atproto/api';
 import { RichTextRenderer } from '../shared/RichTextRenderer';
-import { ThreadContentRenderer } from '../shared/ThreadContentRenderer';
 import { EmbedExternal } from './EmbedExternal';
 import { EmbedImages } from './EmbedImages';
 import { EmbedVideo } from './EmbedVideo';
@@ -13,7 +12,6 @@ import { PostWithAuthor } from '@/types/ResponseSchema';
 import { EmbedPost } from './EmbedPost';
 
 interface PostCardContentProps {
-  fromATP: boolean;
   content: string;
   facets?: Facet[];
   embedImages?: AppBskyEmbedImages.ViewImage[];
@@ -24,7 +22,6 @@ interface PostCardContentProps {
 }
 
 const PostCardContent: React.FC<PostCardContentProps> = ({
-  fromATP,
   content,
   facets,
   embedImages,
@@ -36,9 +33,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   return (
     <div className="space-y-4 mt-3">
       {content
-        ? fromATP
-          ? <RichTextRenderer text={content} facets={facets} />
-          : <ThreadContentRenderer content={content} />
+        ? <RichTextRenderer text={content} facets={facets} />
         : null}
 
       {embedImages && embedImages.length > 0 && (
