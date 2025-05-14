@@ -1,12 +1,13 @@
 @utility thread-content {
-  @apply leading-normal break-words space-y-3;
+  @apply whitespace-pre-wrap;
+
+  & > :not(:last-child) {
+    margin-block: 1rem;
+    margin-block: 1lh;
+  }
 
   li + li {
     @apply mt-1;
-  }
-
-  li > p + p {
-    @apply mt-6;
   }
 
   strong {
@@ -24,10 +25,6 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply first:mt-4 font-semibold mt-6 mb-4 text-balance;
-  }
-
-  p {
-    @apply text-pretty whitespace-pre-wrap;
   }
 
   h1 {
