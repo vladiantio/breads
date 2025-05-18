@@ -1,13 +1,17 @@
+import { useState } from "react";
 import { PostWithAuthor } from "@/types/ResponseSchema";
 import { Link } from "@tanstack/react-router";
 import { Skeleton } from "../ui/skeleton";
-import { FilmIcon, ImageIcon, ImagesIcon } from "lucide-react";
+import { FilmIcon, ImageIcon, ImagesIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
+import { HLSPlayer } from "../shared/HLSPlayer";
 
 interface GalleryProps {
   posts: PostWithAuthor[];
 }
 
 function GalleryCard({ post }: { post: PostWithAuthor }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb;
   const alt = post.embedVideo ? post.embedVideo.alt : post.embedImages?.[0].alt;
   return (
@@ -18,7 +22,8 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
         postId: post.uri.split('app.bsky.feed.post/')[1]
       }}
       className="aspect-[9/16] bg-accent overflow-hidden relative"
-      title={post.content}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <img
         src={thumb}
@@ -33,6 +38,32 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
         className="object-contain absolute inset-0 size-full"
         loading="lazy"
       />
+      {(post.embedVideo && isHovered) && (
+        <>
+          <HLSPlayer
+            src={post.embedVideo.playlist}
+            poster={post.embedVideo.thumbnail}
+            autoPlay
+            disablePictureInPicture
+            loop
+            muted={isMuted}
+            className="object-contain absolute inset-0 size-full"
+          />
+          <button
+            className="absolute bottom-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsMuted(prev => !prev);
+            }}
+          >
+            {isMuted ? (
+              <VolumeOffIcon />
+            ) : (
+              <Volume2Icon />
+            )}
+          </button>
+        </>
+      )}
       {post.embedVideo && (
         <div className="absolute top-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4">
           <FilmIcon />
