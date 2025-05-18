@@ -1,37 +1,20 @@
-import { CSSProperties, FC, MouseEventHandler, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import Hls, { ErrorData } from 'hls.js';
 import { toast } from 'sonner';
 
-interface HLSPlayerProps {
+type HLSPlayerProps = {
   src: string;
-  poster?: string;
-  width?: string | number;
-  height?: string | number;
-  autoPlay?: boolean;
-  controls?: boolean;
-  muted?: boolean;
-  playsInline?: boolean;
-  className?: string;
-  style?: CSSProperties;
   onError?: (error: ErrorEvent | ErrorData) => void;
   onReady?: () => void;
-  onClick?: MouseEventHandler<HTMLVideoElement>;
-}
+} & Omit<React.ComponentPropsWithoutRef<'video'>, 'src' | 'onError'>;
 
 const HLSPlayer: FC<HLSPlayerProps> = ({
   src,
-  poster,
-  width,
-  height,
-  autoPlay,
-  controls = true,
-  muted = false,
+  autoPlay = false,
   playsInline = true,
-  className,
-  style,
   onError,
   onReady,
-  onClick,
+  ...props
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -123,20 +106,13 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
         hls.destroy();
       }
     };
-  }, [src, autoPlay, onError, onReady]);
+  }, [autoPlay, src, onError, onReady]);
 
   return (
     <video
       ref={videoRef}
-      poster={poster}
-      width={width}
-      height={height}
-      controls={controls}
-      muted={muted}
-      className={className}
-      style={style}
-      onClick={onClick}
       playsInline={playsInline}
+      {...props}
     />
   );
 };
