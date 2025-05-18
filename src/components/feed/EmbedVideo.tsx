@@ -24,6 +24,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
       <div className="bg-accent border overflow-hidden rounded-lg size-full select-none">
         <HLSPlayer
           autoPlay
+          controls
           className="size-full object-contain"
           src={view.playlist}
           poster={view.thumbnail}
