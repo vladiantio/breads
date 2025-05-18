@@ -25,6 +25,7 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
         alt={alt}
         className="object-cover absolute -inset-1/2 min-w-[200%] min-h-[200%] blur-3xl opacity-60"
         loading="lazy"
+        aria-hidden="true"
       />
       <img
         src={thumb}
