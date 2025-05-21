@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { hackModifyThumbnailPath } from '@/lib/atp/utils';
 
 interface UserAvatarProps {
   username?: string;
@@ -49,7 +50,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
       onClick={handleClick}
     >
       <AvatarImage
-        src={src}
+        src={hackModifyThumbnailPath(src, true)}
         alt={name}
         loading="lazy"
         className={cn("object-cover", blurred && "blur-sm")}

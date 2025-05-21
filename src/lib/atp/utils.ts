@@ -14,3 +14,8 @@ export const convertRichTextToPlainText = (text: string, facets?: Facet[]): stri
     return text;
   }
 };
+
+// source: https://github.com/bluesky-social/social-app/blob/main/src/view/com/util/UserAvatar.tsx
+export const hackModifyThumbnailPath = (uri?: string, isEnabled?: boolean): string | undefined => isEnabled
+  ? uri?.replace('/img/avatar/plain/', '/img/avatar_thumbnail/plain/')
+  : uri;
