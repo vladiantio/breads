@@ -3,6 +3,7 @@ import { Facet, RichText, RichTextSegment } from '@atproto/api';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import { AuthorHoverCard } from '../feed/AuthorHoverCard';
+import { Trans } from '@lingui/react/macro';
 
 interface RichTextRendererProps {
   text: string;
@@ -155,6 +156,8 @@ export const RichTextRenderer: FC<RichTextRendererProps> = ({
     return <div className={cn("thread-content", className)}>{renderSegments(segments)}</div>;
   }
 
+  const moreTagsCount = tagsCount - 3;
+
   return (
     <div className={cn("thread-content", className)}>
       {renderSegments(limitedSegments)}
@@ -166,7 +169,7 @@ export const RichTextRenderer: FC<RichTextRendererProps> = ({
         }}
         className="text-warning hover:underline active:opacity-60"
       >
-        {tagsExpanded ? 'Show less' : `...and ${tagsCount - 3}+`}
+        {tagsExpanded ? <Trans>Show less</Trans> : <Trans>...and {moreTagsCount}+</Trans>}
       </button>
     </div>
   );

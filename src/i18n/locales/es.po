@@ -1,0 +1,250 @@
+# Spanish translations
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Common UI Elements
+msgid "Home"
+msgstr "Inicio"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Notifications"
+msgstr "Notificaciones"
+
+msgid "Messages"
+msgstr "Mensajes"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Settings"
+msgstr "Configuración"
+
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+# Authentication
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+msgid "Sign Up"
+msgstr "Registrarse"
+
+# Buttons
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Reply"
+msgstr "Responder"
+
+msgid "Repost"
+msgstr "Repost"
+
+msgid "Share"
+msgstr "Compartir"
+
+msgid "Like"
+msgstr "Me gusta"
+
+msgid "New Post"
+msgstr "Nueva publicación"
+
+msgid "Post"
+msgstr "Publicar"
+
+# Post Actions
+msgid "Reply to post"
+msgstr "Responder a la publicación"
+
+msgid "Repost this post"
+msgstr "Repostear esta publicación"
+
+msgid "Like this post"
+msgstr "Dar me gusta a esta publicación"
+
+msgid "Share this post"
+msgstr "Compartir esta publicación"
+
+# Errors
+msgid "An error occurred"
+msgstr "Ocurrió un error"
+
+msgid "Please try again later"
+msgstr "Por favor, inténtalo de nuevo más tarde"
+
+# Placeholders
+msgid "What's happening?"
+msgstr "¿Qué está pasando?"
+
+# Post Menu
+msgid "Copy link"
+msgstr "Copiar enlace"
+
+msgid "Copy text"
+msgstr "Copiar texto"
+
+msgid "Not interested in this post"
+msgstr "No me interesa esta publicación"
+
+msgid "Report post"
+msgstr "Reportar publicación"
+
+# Toast Messages
+msgid "Share options"
+msgstr "Opciones para compartir"
+
+msgid "Copy link, share to other platforms..."
+msgstr "Copiar enlace, compartir en otras plataformas..."
+
+msgid "Link copied"
+msgstr "Enlace copiado"
+
+msgid "Post link copied to clipboard"
+msgstr "Enlace de la publicación copiado al portapapeles"
+
+msgid "Text copied"
+msgstr "Texto copiado"
+
+msgid "Post text copied to clipboard"
+msgstr "Texto de la publicación copiado al portapapeles"
+
+msgid "Report submitted"
+msgstr "Reporte enviado"
+
+msgid "Thank you for helping keep our community safe"
+msgstr "Gracias por ayudar a mantener nuestra comunidad segura"
+
+msgid "Preference saved"
+msgstr "Preferencia guardada"
+
+msgid "You'll see less content like this"
+msgstr "Verás menos contenido como este"
+
+# Post Metadata
+msgid "Pinned"
+msgstr "Fijado"
+
+msgid "Reposted by {username}"
+msgstr "Reposteado por {username}"
+
+# Login Page
+msgid "Sign in with your Bluesky account"
+msgstr "Inicia sesión con tu cuenta de Bluesky"
+
+msgid "Username or email address"
+msgstr "Nombre de usuario o correo electrónico"
+
+msgid "Username or email address is required"
+msgstr "Se requiere nombre de usuario o correo electrónico"
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Password is required"
+msgstr "Se requiere contraseña"
+
+msgid "A sign in code has been sent to your email address"
+msgstr "Se ha enviado un código de inicio de sesión a tu correo electrónico"
+
+msgid "Token is invalid"
+msgstr "El token no es válido"
+
+msgid "Two-factor confirmation"
+msgstr "Confirmación de dos factores"
+
+msgid "Two-factor token is required"
+msgstr "Se requiere el token de dos factores"
+
+msgid "Check your email for a sign in code and enter it here."
+msgstr "Revisa tu correo electrónico para obtener un código de inicio de sesión e ingrésalo aquí."
+
+msgid "Next"
+msgstr "Siguiente"
+
+# Profile Page
+msgid "followers"
+msgstr "seguidores"
+
+msgid "Follow"
+msgstr "Seguir"
+
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+msgid "Posts"
+msgstr "Posts"
+
+msgid "Reposts"
+msgstr "Reposts"
+
+msgid "Media"
+msgstr "Media"
+
+msgid "Videos"
+msgstr "Vídeos"
+
+# Hashtag Limiter
+msgid "Show less"
+msgstr "Mostrar menos"
+
+msgid "...and {moreTagsCount}+"
+msgstr "...y {moreTagsCount}+"
+
+# Hide embeds
+msgid "Show"
+msgstr "Mostrar"
+
+msgid "Hide"
+msgstr "Ocultar"
+
+msgid "image"
+msgstr "imagen"
+
+msgid "images"
+msgstr "imágenes"
+
+msgid "video"
+msgstr "vídeo"
+
+# Theme Options
+msgid "Color mode"
+msgstr "Modo de color"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "Light"
+msgstr "Claro"
+
+msgid "Dark"
+msgstr "Oscuro"
+
+msgid "Theme Preset"
+msgstr "Preset de tema"
+
+# Feed Page
+msgid "Discover"
+msgstr "Descubre"
+
+msgid "Following"
+msgstr "Siguiendo"
+
+# Search Page
+msgid "Search..."
+msgstr "Buscar..."
+
+# Pagination
+msgid "Load more"
+msgstr "Cargar más"
+
+msgid "Nothing more to load"
+msgstr "No hay más para cargar"

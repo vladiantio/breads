@@ -3,6 +3,7 @@ import { EmbedToggle } from "./EmbedToggle";
 import { useImagePreload } from "@/hooks/use-image-preload";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { cn } from "@/lib/utils";
+import { t } from "@lingui/core/macro";
 
 interface EmbedImagesProps {
   views: AppBskyEmbedImages.ViewImage[]
@@ -14,7 +15,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
 
   return (
     <EmbedToggle
-      label={views.length > 1 ? `${views.length} images` : 'image'}
+      label={views.length > 1 ? `${views.length} ${t`images`}` : t`image`}
       {...hoverProps}
     >
       {views.length > 2 ? (

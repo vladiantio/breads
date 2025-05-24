@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Image, Hash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Trans } from '@lingui/react/macro';
 
 interface PostActionsProps {
   onImageSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -57,7 +58,7 @@ const PostActions: React.FC<PostActionsProps> = ({
             variant="ghost"
             onClick={onCancel}
           >
-            Cancel
+            <Trans>Cancel</Trans>
           </Button>
         )}
 

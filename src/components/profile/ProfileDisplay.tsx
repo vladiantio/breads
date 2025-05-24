@@ -6,6 +6,7 @@ import { formatNumber } from "@/utils/number";
 import VerifiedAccountIcon from '@/icons/verified-account.svg?react';
 import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification";
 import { sanitizeHandle } from "@/lib/atp/strings/handles";
+import { Trans } from "@lingui/react/macro";
 
 interface ProfileDisplayProps {
   user: User;
@@ -51,7 +52,9 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
 
       <div className="mt-4">
         <span className="font-semibold">{formatNumber(user.followers ?? 0)}</span>
-        <span className="text-muted-foreground ml-1">followers</span>
+        <span className="text-muted-foreground ml-1">
+          <Trans>followers</Trans>
+        </span>
       </div>
     </>
   );

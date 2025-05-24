@@ -2,6 +2,7 @@ import { AppBskyEmbedVideo } from "@atproto/api";
 import { EmbedToggle } from "./EmbedToggle";
 import { HLSPlayer } from "../shared/HLSPlayer";
 import { useImagePreload } from "@/hooks/use-image-preload";
+import { t } from "@lingui/core/macro";
 
 interface EmbedVideoProps {
   view: AppBskyEmbedVideo.View
@@ -12,7 +13,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
 
   return (
   <EmbedToggle
-    label="video"
+    label={t`video`}
     {...hoverProps}
   >
     <div

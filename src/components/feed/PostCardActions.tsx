@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Repeat, Repeat1, Share2 } from 'lucide-react';
 import { formatNumber } from '@/utils/number';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { t } from "@lingui/core/macro";
 
 interface PostCardActionsProps {
   likes: number;
@@ -30,7 +31,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
   return (
     <div className="flex items-center gap-x-1 mt-4 -mx-3">
       <Button
-        aria-label="Reply"
+        title={t`Reply`}
         variant="ghost"
         onClick={onReply}
         className="rounded-full text-muted-foreground"
@@ -42,7 +43,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
       </Button>
 
       <Button
-        aria-label="Repost"
+        title={t`Repost`}
         variant="ghost"
         className={cn('rounded-full text-muted-foreground', isReposted && '!text-green-500')}
         onClick={onRepost}
@@ -56,7 +57,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
       </Button>
 
       <Button
-        aria-label="Like"
+        title={t`Like`}
         variant="ghost"
         className={cn('rounded-full text-muted-foreground', isLiked && '!text-red-500')}
         onClick={onLike}
@@ -70,7 +71,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
       </Button>
 
       <Button
-        aria-label="Share"
+        title={t`Share`}
         variant="ghost"
         className="rounded-full text-muted-foreground"
         onClick={onShare}

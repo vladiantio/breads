@@ -4,6 +4,7 @@ import { useRouter } from '@tanstack/react-router';
 import { User } from '@/types/ResponseSchema';
 import { Button } from '../ui/button';
 import { sanitizeHandle } from '@/lib/atp/strings/handles';
+import { Trans } from '@lingui/react/macro';
 
 interface AuthorHeaderProps {
   user: Partial<User>;
@@ -36,11 +37,11 @@ const AuthorHeader: FC<AuthorHeaderProps> = ({
       <div className="flex items-center">
         {!isCurrentUser ? (
           <Button size="sm">
-            Follow
+            <Trans>Follow</Trans>
           </Button>
         ) : (
           <Button size="sm" variant="outline">
-            Edit profile
+            <Trans>Edit profile</Trans>
           </Button>
         )}
       </div>

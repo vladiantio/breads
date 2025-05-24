@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { PostCardSkeleton } from "./PostCardSkeleton";
 import { useAtpStore } from "@/lib/atp/store";
 import { PostFeed } from "./PostFeed";
+import { t } from "@lingui/core/macro";
 
 export function Timeline() {
   const {
@@ -48,8 +49,8 @@ export function Timeline() {
             >
               {isFetchingNextPage && <Loader2 className="animate-spin" />}
               {hasNextPage
-                ? 'Load more'
-                : 'Nothing more to load'}
+                ? t`Load more`
+                : t`Nothing more to load`}
               {hasNextPage && <ArrowDownIcon />}
             </Button>
           </div>

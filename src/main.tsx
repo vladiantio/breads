@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from './theme/ThemeProvider'
+import { I18nProvider } from './i18n/i18n-provider'
+import { dynamicActivate } from './i18n/i18n'
+import { detectLocale } from './i18n/languages'
 import './styles/index.css'
 import './lib/polyfill'
 
@@ -29,12 +32,18 @@ const queryClient = new QueryClient({
   },
 })
 
+// Set the locale and activate it
+const locale = detectLocale()
+await dynamicActivate(locale)
+
 // Render the app
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <RouterProvider router={router} />
+        <I18nProvider>
+          <RouterProvider router={router} />
+        </I18nProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,

@@ -9,6 +9,7 @@ import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles";
 import { AppBskyActorDefs } from "@atproto/api";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { t } from "@lingui/core/macro";
 
 function AuthorItem({
   actor
@@ -66,7 +67,7 @@ export function Search() {
           <DebouncedInput
             autoFocus
             className="h-12 rounded-xl"
-            placeholder="Search..."
+            placeholder={t`Search...`}
             value={query}
             onChange={(value) => setQuery(String(value))}
           />

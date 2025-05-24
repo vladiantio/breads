@@ -3,6 +3,7 @@ import { LogInIcon, SettingsIcon } from 'lucide-react';
 import { NavIconLink } from './NavIconLink';
 import { NavLinks } from './NavLinks';
 import { useCurrentProfile } from '@/lib/atp/hooks/use-current-profile';
+import { t } from "@lingui/core/macro";
 
 export const Navbar: React.FC = () => {
   const {
@@ -25,7 +26,7 @@ export const Navbar: React.FC = () => {
         ) : (
           <NavIconLink
             icon={LogInIcon}
-            label="Log in"
+            label={t`Log in`}
             to="/login"
           />
         )}
@@ -36,7 +37,7 @@ export const Navbar: React.FC = () => {
       <div className="flex flex-col items-center gap-4">
         <NavIconLink 
           icon={SettingsIcon}
-          label="Settings"
+          label={t`Settings`}
           to="/settings"
         />
       </div>

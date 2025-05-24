@@ -6,6 +6,7 @@ import SquarePenIcon from '@/icons/square-pen.svg?react';
 import BellIcon from '@/icons/bell.svg?react';
 import UserIcon from '@/icons/person-rounded.svg?react';
 import { useAtpStore } from "@/lib/atp/store";
+import { t } from "@lingui/core/macro";
 
 export const NavLinks: React.FC = () => {
   const { isAuthenticated, session } = useAtpStore();
@@ -14,21 +15,21 @@ export const NavLinks: React.FC = () => {
     <>
       <NavIconLink 
         icon={HomeIcon}
-        label="Home"
+        label={t`Home`}
         to="/"
         fillOnHover
       />
 
       <NavIconLink 
         icon={SearchIcon}
-        label="Search"
+        label={t`Search`}
         to="/search"
       />
 
       {isAuthenticated && (
         <>
           <Button
-            title="New Post"
+            title={t`New Post`}
             size="icon"
             className="px-7 py-6"
           >
@@ -37,14 +38,14 @@ export const NavLinks: React.FC = () => {
 
           <NavIconLink 
             icon={BellIcon}
-            label="Notifications"
+            label={t`Notifications`}
             to="/notifications"
             fillOnHover
           />
 
           <NavIconLink 
             icon={UserIcon}
-            label="Profile"
+            label={t`Profile`}
             to="/profile/$username"
             params={{
               username: session?.handle,

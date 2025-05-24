@@ -3,14 +3,10 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTheme } from "@/theme/ThemeProvider";
 import { presets } from "@/utils/theme-presets";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useRouter } from "@tanstack/react-router";
 import { ArrowLeft, Moon, Sun, SunMoon } from "lucide-react";
-
-const themeOptions = [
-  { label: 'System', value: 'system', icon: SunMoon },
-  { label: 'Light', value: 'light', icon: Sun },
-  { label: 'Dark', value: 'dark', icon: Moon },
-]
 
 export function Settings() {
   const { history } = useRouter();
@@ -23,7 +19,13 @@ export function Settings() {
         styles: presets[preset],
       }
     })
-  }
+  };
+
+  const themeOptions = [
+    { label: t`System`, value: 'system', icon: SunMoon },
+    { label: t`Light`, value: 'light', icon: Sun },
+    { label: t`Dark`, value: 'dark', icon: Moon },
+  ];
 
   return (
     <>
@@ -36,12 +38,12 @@ export function Settings() {
           <ArrowLeft className="size-5" />
         </Button>
         <div className="font-bold flex-1">
-          Settings
+          <Trans>Settings</Trans>
         </div>
       </div>
       <div className="p-4 space-y-4">
         <div>
-          <p className="mb-1">Color mode</p>
+          <p className="mb-1"><Trans>Color mode</Trans></p>
           <RadioGroup
             className="grid grid-cols-3 gap-2"
             value={theme}
@@ -66,7 +68,7 @@ export function Settings() {
           </RadioGroup>
         </div>
         <div>
-          <p className="mb-1">Theme Preset</p>
+          <p className="mb-1"><Trans>Theme Preset</Trans></p>
           <ThemePresetSelect
             presets={presets}
             currentPreset={themeSettings?.theme?.preset}

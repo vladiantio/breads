@@ -4,6 +4,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { NavIconLink } from "../navigation/NavIconLink";
 import { LogInIcon, SettingsIcon } from "lucide-react";
+import { t } from "@lingui/core/macro";
 
 const FeedTabs: FC = () => {
   const [activeTab, setActiveTab] = useState('discover');
@@ -18,14 +19,14 @@ const FeedTabs: FC = () => {
             <div className="absolute inset-y-0 left-4 flex items-center">
               <NavIconLink
                 icon={SettingsIcon}
-                label="Settings"
+                label={t`Settings`}
                 to="/settings"
               />
             </div>
             <div className="absolute inset-y-0 right-4 flex items-center">
               <NavIconLink
                 icon={LogInIcon}
-                label="Log in"
+                label={t`Log in`}
                 to="/login"
               />
             </div>
@@ -43,13 +44,13 @@ const FeedTabs: FC = () => {
               value="discover"
               className="grow"
             >
-              Discover
+              {t`Discover`}
             </TabsTrigger>
             <TabsTrigger
               value="following"
               className="grow"
             >
-              Following
+              {t`Following`}
             </TabsTrigger>
           </TabsList>
           <ScrollBar orientation="horizontal" />

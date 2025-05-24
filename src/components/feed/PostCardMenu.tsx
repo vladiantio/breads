@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { Trans } from '@lingui/react/macro';
 
 export interface PostCardMenuProps {
   onCopyLink: (e: React.MouseEvent) => void;
@@ -39,20 +40,20 @@ export const PostCardMenu: React.FC<PostCardMenuProps> = ({
       <DropdownMenuContent align="end" className="w-fit">
         <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
           <LinkIcon />
-          <span>Copy link</span>
+          <span><Trans>Copy link</Trans></span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onCopyText} className="cursor-pointer">
           <Copy />
-          <span>Copy text</span>
+          <span><Trans>Copy text</Trans></span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onNotInterested} className="cursor-pointer">
           <XCircle />
-          <span>Not interested in this post</span>
+          <span><Trans>Not interested in this post</Trans></span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onReport} className="cursor-pointer" variant="destructive">
           <Flag />
-          <span>Report post</span>
+          <span><Trans>Report post</Trans></span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

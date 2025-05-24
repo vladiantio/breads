@@ -11,6 +11,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import { isInvalidHandle } from '@/lib/atp/strings/handles';
 import { AppBskyFeedDefs } from '@atproto/api';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -67,8 +69,8 @@ const PostCard: React.FC<PostCardProps> = ({
     e.stopPropagation();
     // Simulate share action
     navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
-    toast("Share options", {
-      description: "Copy link, share to other platforms...",
+    toast(t`Share options`, {
+      description: t`Copy link, share to other platforms...`,
       duration: 2000,
     });
   };
@@ -78,8 +80,8 @@ const PostCard: React.FC<PostCardProps> = ({
     const postId = post.uri.split('app.bsky.feed.post/')[1];
     const url = `https://bsky.app/profile/${validHandle}/post/${postId}`;
     navigator.clipboard.writeText(url);
-    toast("Link copied", {
-      description: "Post link copied to clipboard",
+    toast(t`Link copied`, {
+      description: t`Post link copied to clipboard`,
       duration: 2000,
     });
   };
@@ -88,27 +90,31 @@ const PostCard: React.FC<PostCardProps> = ({
     e.stopPropagation();
     const text = convertRichTextToPlainText(post.content, post.facets);
     navigator.clipboard.writeText(text);
-    toast("Text copied", {
-      description: "Post text copied to clipboard",
+    toast(t`Text copied`, {
+      description: t`Post text copied to clipboard`,
       duration: 2000,
     });
   };
 
   const handleReport = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toast("Report submitted", {
-      description: "Thank you for helping keep our community safe",
+    toast(t`Report submitted`, {
+      description: t`Thank you for helping keep our community safe`,
       duration: 2000,
     });
   };
 
   const handleNotInterested = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toast("Preference saved", {
-      description: "You'll see less content like this",
+    toast(t`Preference saved`, {
+      description: t`You'll see less content like this`,
       duration: 2000,
     });
   };
+
+  const repostedBy = AppBskyFeedDefs.isReasonRepost(post.reason) 
+    ? post.reason?.by?.displayName 
+    : null;
 
   return (
     <article
@@ -122,19 +128,17 @@ const PostCard: React.FC<PostCardProps> = ({
       ? (
         <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
           <PinIcon className="size-4 ml-6" />
-          Pinned
+          <Trans>Pinned</Trans>
         </div>
       )
       : null }
 
-      {AppBskyFeedDefs.isReasonRepost(post.reason)
-      ? (
+      {repostedBy ? (
         <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
           <RepeatIcon className="size-4 ml-6" />
-          Reposted by {post.reason.by.displayName}
+          <Trans>Reposted by {repostedBy}</Trans>
         </div>
-      )
-      : null }
+      ) : null}
 
       {isDetail || isEmbed ? (
         <div className="p-4">

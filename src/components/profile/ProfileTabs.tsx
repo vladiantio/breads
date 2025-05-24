@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { ArrowDown, Loader2 } from "lucide-react";
 import { PostFeed } from "../feed/PostFeed";
 import { Gallery, GallerySkeleton } from "../gallery/Gallery";
+import { t } from "@lingui/core/macro";
 
 interface ProfileProps {
   actor: string,
@@ -51,8 +52,8 @@ function Posts({ actor, enabled }: ProfileProps) {
         >
           {isFetchingNextPage && <Loader2 className="animate-spin" />}
           {hasNextPage
-            ? 'Load more'
-            : 'Nothing more to load'}
+            ? t`Load more`
+            : t`Nothing more to load`}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -99,8 +100,8 @@ function Reposts({ actor, enabled }: ProfileProps) {
         >
           {isFetchingNextPage && <Loader2 className="animate-spin" />}
           {hasNextPage
-            ? 'Load more'
-            : 'Nothing more to load'}
+            ? t`Load more`
+            : t`Nothing more to load`}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -140,8 +141,8 @@ function Media({ actor, enabled }: ProfileProps) {
         >
           {isFetchingNextPage && <Loader2 className="animate-spin" />}
           {hasNextPage
-            ? 'Load more'
-            : 'Nothing more to load'}
+            ? t`Load more`
+            : t`Nothing more to load`}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -181,8 +182,8 @@ function Videos({ actor, enabled }: ProfileProps) {
         >
           {isFetchingNextPage && <Loader2 className="animate-spin" />}
           {hasNextPage
-            ? 'Load more'
-            : 'Nothing more to load'}
+            ? t`Load more`
+            : t`Nothing more to load`}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -190,15 +191,15 @@ function Videos({ actor, enabled }: ProfileProps) {
   )
 }
 
-const tabList = [
-  { value: 'posts', label: 'Posts', component: Posts },
-  { value: 'reposts', label: 'Reposts', component: Reposts },
-  { value: 'media', label: 'Media', component: Media },
-  { value: 'videos', label: 'Videos', component: Videos },
-];
-
 export function ProfileTabs({ actor }: { actor: string }) {
   const [activeTab, setActiveTab] = useState('posts');
+
+  const tabList = [
+    { value: 'posts', label: t`Posts`, component: Posts },
+    { value: 'reposts', label: t`Reposts`, component: Reposts },
+    { value: 'media', label: t`Media`, component: Media },
+    { value: 'videos', label: t`Videos`, component: Videos },
+  ];
 
   return (
     <>

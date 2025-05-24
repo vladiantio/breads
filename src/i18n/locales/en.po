@@ -1,0 +1,250 @@
+# English translations
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Common UI Elements
+msgid "Home"
+msgstr "Home"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Messages"
+msgstr "Messages"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Logout"
+msgstr "Logout"
+
+# Authentication
+msgid "Log in"
+msgstr "Log in"
+
+msgid "Sign Up"
+msgstr "Sign Up"
+
+# Buttons
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Reply"
+msgstr "Reply"
+
+msgid "Repost"
+msgstr "Repost"
+
+msgid "Share"
+msgstr "Share"
+
+msgid "Like"
+msgstr "Like"
+
+msgid "New Post"
+msgstr "New Post"
+
+msgid "Post"
+msgstr "Post"
+
+# Post Actions
+msgid "Reply to post"
+msgstr "Reply to post"
+
+msgid "Repost this post"
+msgstr "Repost this post"
+
+msgid "Like this post"
+msgstr "Like this post"
+
+msgid "Share this post"
+msgstr "Share this post"
+
+# Errors
+msgid "An error occurred"
+msgstr "An error occurred"
+
+msgid "Please try again later"
+msgstr "Please try again later"
+
+# Placeholders
+msgid "What's happening?"
+msgstr "What's happening?"
+
+# Post Menu
+msgid "Copy link"
+msgstr "Copy link"
+
+msgid "Copy text"
+msgstr "Copy text"
+
+msgid "Not interested in this post"
+msgstr "Not interested in this post"
+
+msgid "Report post"
+msgstr "Report post"
+
+# Toast Messages
+msgid "Share options"
+msgstr "Share options"
+
+msgid "Copy link, share to other platforms..."
+msgstr "Copy link, share to other platforms..."
+
+msgid "Link copied"
+msgstr "Link copied"
+
+msgid "Post link copied to clipboard"
+msgstr "Post link copied to clipboard"
+
+msgid "Text copied"
+msgstr "Text copied"
+
+msgid "Post text copied to clipboard"
+msgstr "Post text copied to clipboard"
+
+msgid "Report submitted"
+msgstr "Report submitted"
+
+msgid "Thank you for helping keep our community safe"
+msgstr "Thank you for helping keep our community safe"
+
+msgid "Preference saved"
+msgstr "Preference saved"
+
+msgid "You'll see less content like this"
+msgstr "You'll see less content like this"
+
+# Post Metadata
+msgid "Pinned"
+msgstr "Pinned"
+
+msgid "Reposted by {username}"
+msgstr "Reposted by {username}"
+
+# Login Page
+msgid "Sign in with your Bluesky account"
+msgstr "Sign in with your Bluesky account"
+
+msgid "Username or email address"
+msgstr "Username or email address"
+
+msgid "Username or email address is required"
+msgstr "Username or email address is required"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Password is required"
+msgstr "Password is required"
+
+msgid "A sign in code has been sent to your email address"
+msgstr "A sign in code has been sent to your email address"
+
+msgid "Token is invalid"
+msgstr "Token is invalid"
+
+msgid "Two-factor confirmation"
+msgstr "Two-factor confirmation"
+
+msgid "Two-factor token is required"
+msgstr "Two-factor token is required"
+
+msgid "Check your email for a sign in code and enter it here."
+msgstr "Check your email for a sign in code and enter it here."
+
+msgid "Next"
+msgstr "Next"
+
+# Profile Page
+msgid "followers"
+msgstr "followers"
+
+msgid "Follow"
+msgstr "Follow"
+
+msgid "Edit profile"
+msgstr "Edit profile"
+
+msgid "Posts"
+msgstr "Posts"
+
+msgid "Reposts"
+msgstr "Reposts"
+
+msgid "Media"
+msgstr "Media"
+
+msgid "Videos"
+msgstr "Videos"
+
+# Hashtag Limiter
+msgid "Show less"
+msgstr "Show less"
+
+msgid "...and {moreTagsCount}+"
+msgstr "...and {moreTagsCount}+"
+
+# Hide embeds
+msgid "Show"
+msgstr "Show"
+
+msgid "Hide"
+msgstr "Hide"
+
+msgid "image"
+msgstr "image"
+
+msgid "images"
+msgstr "images"
+
+msgid "video"
+msgstr "video"
+
+# Theme Options
+msgid "Color mode"
+msgstr "Color mode"
+
+msgid "System"
+msgstr "System"
+
+msgid "Light"
+msgstr "Light"
+
+msgid "Dark"
+msgstr "Dark"
+
+msgid "Theme Preset"
+msgstr "Theme Preset"
+
+# Feed Page
+msgid "Discover"
+msgstr "Discover"
+
+msgid "Following"
+msgstr "Following"
+
+# Search Page
+msgid "Search..."
+msgstr "Search..."
+
+# Pagination
+msgid "Load more"
+msgstr "Load more"
+
+msgid "Nothing more to load"
+msgstr "Nothing more to load"
