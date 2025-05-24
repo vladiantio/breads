@@ -23,4 +23,7 @@ export default defineConfig({
   server: {
     port: 5790,
   },
+  build: {
+    target: 'es2023',
+  },
 })
