@@ -3,10 +3,10 @@ import { removeHttpAndWww, truncateString } from "./string";
 import { Fragment } from "react";
 import { AuthorHoverCard } from "@/components/feed/AuthorHoverCard";
 
-// Regular expressions for URLs and email addresses
-const mentionRegex = /^(@[\w\d.-]+)/;
-const urlRegex = /^(https?:\/\/[^\s]+)|((www\.)?[^\s]+\.[^\d\s]+\/?[^s]*)/;
-const emailRegex = /^([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/;
+// Regular expressions for mentions, URLs and email addresses
+const mentionRegex = /^(@[a-zA-Z0-9.-]+)/;
+const urlRegex = /^((https?:\/\/)?(www\.)?[^\s@]+\.\w+\/?\S*)/;
+const emailRegex = /^([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.\w+)/;
 
 const aClassName = "text-link hover:underline active:opacity-60";
 
@@ -17,9 +17,9 @@ const processLine = (line: string) => {
   return words.map((word, wordIndex) => {
     const space = wordIndex < words.length - 1 ? ' ' : '';
 
-    // Check if the word is a URL
+    // Check if the word is a mention
     if (mentionRegex.test(word)) {
-      const handle = word.slice(1);
+      const handle = word.match(mentionRegex)![1].slice(1);
       return (
         <Fragment key={`word-${wordIndex}`}>
           <AuthorHoverCard handle={handle}>
@@ -40,12 +40,12 @@ const processLine = (line: string) => {
 
     // Check if the word is a URL
     else if (urlRegex.test(word)) {
-      const href = word.startsWith('http') ? word.replace(/^http:/, 'https:') : `https://${word}`;
+      const url = word.match(urlRegex)![1].replace(/^https?:\/\//, '');
       return (
         <Fragment key={`word-${wordIndex}`}>
           <a
             className={aClassName}
-            href={href}
+            href={`https://${url}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -58,11 +58,12 @@ const processLine = (line: string) => {
     
     // Check if the word is an email
     else if (emailRegex.test(word)) {
+      const email = word.match(emailRegex)![1];
       return (
         <Fragment key={`word-${wordIndex}`}>
           <a
             className={aClassName}
-            href={`mailto:${word}`}
+            href={`mailto:${email}`}
           >
             {word}
           </a>
