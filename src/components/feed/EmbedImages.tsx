@@ -38,14 +38,22 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                 key={image.thumb}
                 className="pl-2 basis-auto"
               >
-                <img
-                  src={image.thumb}
-                  alt={image.alt}
-                  className="h-[16rem] w-auto rounded-lg border object-cover"
-                  loading="lazy"
-                  width={image.aspectRatio?.width}
-                  height={image.aspectRatio?.height}
-                />
+                <a
+                  href={image.fullsize}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="[&_img]:transition-all active:[&_img]:scale-[98%]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img
+                    src={image.thumb}
+                    alt={image.alt}
+                    className="h-[16rem] w-auto rounded-lg border object-cover"
+                    loading="lazy"
+                    width={image.aspectRatio?.width}
+                    height={image.aspectRatio?.height}
+                  />
+                </a>
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -60,14 +68,22 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                 flexBasis: image.aspectRatio ? `${image.aspectRatio.width * 100 / image.aspectRatio.height}%` : '100%',
               }}
             >
-              <img 
-                src={image.thumb} 
-                alt={image.alt}
-                className="h-full w-auto rounded-lg border object-cover"
-                loading="lazy"
-                width={image.aspectRatio?.width}
-                height={image.aspectRatio?.height}
-              />
+              <a
+                href={image.fullsize}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="[&_img]:transition-all active:[&_img]:scale-[98%]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img 
+                  src={image.thumb} 
+                  alt={image.alt}
+                  className="h-full w-auto rounded-lg border object-cover"
+                  loading="lazy"
+                  width={image.aspectRatio?.width}
+                  height={image.aspectRatio?.height}
+                />
+              </a>
             </div>
           ))}
         </div>
