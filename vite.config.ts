@@ -25,5 +25,12 @@ export default defineConfig({
   },
   build: {
     target: 'es2023',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          atp: ['@atproto/api'],
+        },
+      },
+    },
   },
 })
