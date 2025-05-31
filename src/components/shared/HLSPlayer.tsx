@@ -21,8 +21,10 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
   useEffect(() => {
     let hls: Hls | null = null;
     
-    const initializePlayer = () => {
+    const initializePlayer = async () => {
       if (!videoRef.current) return;
+
+      const Hls = (await import('hls.js')).default;
       
       if (Hls.isSupported()) {
         hls = new Hls({
