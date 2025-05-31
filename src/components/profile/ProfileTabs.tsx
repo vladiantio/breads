@@ -11,10 +11,9 @@ import { t } from "@lingui/core/macro";
 
 interface ProfileProps {
   actor: string,
-  enabled?: boolean,
 }
 
-function Posts({ actor, enabled }: ProfileProps) {
+function Posts({ actor }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -24,7 +23,6 @@ function Posts({ actor, enabled }: ProfileProps) {
   } = useAuthorFeed({
     actor,
     typeFilter: 'no_reposts',
-    enabled,
   });
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
@@ -61,7 +59,7 @@ function Posts({ actor, enabled }: ProfileProps) {
   )
 }
 
-function Reposts({ actor, enabled }: ProfileProps) {
+function Reposts({ actor }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -72,7 +70,6 @@ function Reposts({ actor, enabled }: ProfileProps) {
     actor,
     filter: 'posts_no_replies',
     typeFilter: 'reposts',
-    enabled,
   });
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
@@ -109,7 +106,7 @@ function Reposts({ actor, enabled }: ProfileProps) {
   )
 }
 
-function Media({ actor, enabled }: ProfileProps) {
+function Media({ actor }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -119,7 +116,6 @@ function Media({ actor, enabled }: ProfileProps) {
   } = useAuthorFeed({
     actor,
     filter: 'posts_with_media',
-    enabled,
   });
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
@@ -150,7 +146,7 @@ function Media({ actor, enabled }: ProfileProps) {
   )
 }
 
-function Videos({ actor, enabled }: ProfileProps) {
+function Videos({ actor }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -160,7 +156,6 @@ function Videos({ actor, enabled }: ProfileProps) {
   } = useAuthorFeed({
     actor,
     filter: 'posts_with_video',
-    enabled,
   });
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
@@ -226,19 +221,17 @@ export function ProfileTabs({ actor }: { actor: string }) {
         </ScrollArea>
       </Tabs>
 
-      {tabList.map((tab) => (
+      {tabList.map((tab) => tab.value === activeTab ? (
         <div
           key={`tab-content-${tab.value}`}
           aria-labelledby={`tab-${tab.value}`}
           role="tabpanel"
-          hidden={tab.value !== activeTab}
         >
           <tab.component
             actor={actor}
-            enabled={tab.value === activeTab}
           />
         </div>
-      ))}
+      ) : null)}
     </>
   )
 }
