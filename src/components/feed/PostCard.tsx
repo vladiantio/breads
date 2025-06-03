@@ -13,6 +13,7 @@ import { isInvalidHandle } from '@/lib/atp/strings/handles';
 import { AppBskyFeedDefs } from '@atproto/api';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
+import { copyToClipboard } from '@/utils/clipboard';
 
 interface PostCardProps {
   post: PostWithAuthor;
@@ -67,33 +68,37 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Simulate share action
-    navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
-    toast(t`Share options`, {
-      description: t`Copy link, share to other platforms...`,
-      duration: 2000,
+    const postId = post.uri.split('app.bsky.feed.post/')[1];
+    const url = `https://bsky.app/profile/${validHandle}/post/${postId}`;
+    navigator.share({
+      url,
+      title: post.content,
     });
   };
 
-  const handleCopyLink = (e: React.MouseEvent) => {
+  const handleCopyLink = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const postId = post.uri.split('app.bsky.feed.post/')[1];
     const url = `https://bsky.app/profile/${validHandle}/post/${postId}`;
-    navigator.clipboard.writeText(url);
-    toast(t`Link copied`, {
-      description: t`Post link copied to clipboard`,
-      duration: 2000,
-    });
+    const success = await copyToClipboard(url);
+    if (success) {
+      toast(t`Link copied`, {
+        description: t`Post link copied to clipboard`,
+        duration: 2000,
+      });
+    }
   };
 
-  const handleCopyText = (e: React.MouseEvent) => {
+  const handleCopyText = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const text = convertRichTextToPlainText(post.content, post.facets);
-    navigator.clipboard.writeText(text);
-    toast(t`Text copied`, {
-      description: t`Post text copied to clipboard`,
-      duration: 2000,
-    });
+    const success = await copyToClipboard(text);
+    if (success) {
+      toast(t`Text copied`, {
+        description: t`Post text copied to clipboard`,
+        duration: 2000,
+      });
+    }
   };
 
   const handleReport = (e: React.MouseEvent) => {
