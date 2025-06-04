@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { Skeleton } from "../ui/skeleton";
 import { FilmIcon, ImageIcon, ImagesIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
 import { HLSPlayer } from "../shared/HLSPlayer";
+import { isMobileDevice } from "@/lib/browser";
 
 interface GalleryProps {
   posts: PostWithAuthor[];
@@ -14,6 +15,10 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
   const [isMuted, setIsMuted] = useState(true);
   const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb;
   const alt = post.embedVideo ? post.embedVideo.alt : post.embedImages?.[0].alt;
+  const handleHovered = (hovered: boolean) => {
+    if (isMobileDevice()) return;
+    setIsHovered(hovered);
+  };
   return (
     <Link
       to="/profile/$username/post/$postId"
@@ -22,8 +27,8 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
         postId: post.uri.split('app.bsky.feed.post/')[1]
       }}
       className="aspect-[9/16] bg-accent overflow-hidden relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => handleHovered(true)}
+      onMouseLeave={() => handleHovered(false)}
     >
       <img
         src={thumb}

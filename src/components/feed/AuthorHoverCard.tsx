@@ -5,6 +5,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card"
 import { ProfileDisplay } from "../profile/ProfileDisplay";
 import { Button } from "../ui/button";
 import { useResolveHandle } from "@/lib/atp/hooks/use-resolve-handle";
+import { isMobileDevice } from "@/lib/browser";
 
 interface AuthorHoverCardProps extends PropsWithChildren {
   handle?: string;
@@ -25,6 +26,8 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
     data,
     isLoading: isLoadingProfile,
   } = useProfile({ actor, enabled });
+
+  if (isMobileDevice()) return children;
 
   return (
     <HoverCard
