@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/ui/button";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { t } from "@lingui/core/macro";
 

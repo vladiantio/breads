@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Image, Hash } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/button';
 import { Trans } from '@lingui/react/macro';
 
 interface PostActionsProps {

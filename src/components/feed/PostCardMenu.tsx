@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+} from '@/ui/dropdown-menu';
 import { Trans } from '@lingui/react/macro';
 
 export interface PostCardMenuProps {

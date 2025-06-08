@@ -1,5 +1,5 @@
 import { createRootRoute, Outlet, redirect } from '@tanstack/react-router'
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/ui/sonner"
 import { useAtpStore } from '@/lib/atp/store';
 // import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 

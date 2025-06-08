@@ -1,5 +1,5 @@
 import { NavIconLink } from "./NavIconLink";
-import { Button } from "../ui/button";
+import { Button } from "@/ui/button";
 import HomeIcon from '@/icons/home.svg?react';
 import SearchIcon from '@/icons/search.svg?react';
 import SquarePenIcon from '@/icons/square-pen.svg?react';

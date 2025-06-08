@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PostWithAuthor } from "@/types/ResponseSchema";
 import { Link } from "@tanstack/react-router";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "@/ui/skeleton";
 import { FilmIcon, ImageIcon, ImagesIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
 import { HLSPlayer } from "../shared/HLSPlayer";
 import { isMobileDevice } from "@/lib/browser";

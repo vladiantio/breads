@@ -1,6 +1,6 @@
 import { ThemePresetSelect } from "@/components/settings/ThemePresetSelect";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 import { useTheme } from "@/theme/ThemeProvider";
 import { presets } from "@/utils/theme-presets";
 import { t } from "@lingui/core/macro";

@@ -1,10 +1,10 @@
 import { Controller, useForm } from 'react-hook-form';
 import { AtpCredentials } from '@/lib/atp/store';
 import { useAuth } from '@/lib/atp/hooks/use-auth';
-import { Button } from '@/components/ui/button';
-import { Input, InputGroup, InputGroupText } from '@/components/ui/input';
+import { Button } from '@/ui/button';
+import { Input, InputGroup, InputGroupText } from '@/ui/input';
 import { AtSignIcon, LockKeyholeIcon } from 'lucide-react';
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/ui/input-otp';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import { Trans } from '@lingui/react/macro';
 import { t } from '@lingui/core/macro';

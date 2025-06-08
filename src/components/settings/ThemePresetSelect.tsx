@@ -13,8 +13,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue
-} from '../ui/select'
-import { Badge } from '../ui/badge'
+} from '@/ui/select'
+import { Badge } from '@/ui/badge'
 
 // Config Imports
 import { defaultThemeState } from '@/config/theme'

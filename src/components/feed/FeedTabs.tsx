@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { Tabs, TabsList, TabsTrigger } from "@/ui/tabs";
+import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { NavIconLink } from "../navigation/NavIconLink";
 import { LogInIcon, SettingsIcon } from "lucide-react";

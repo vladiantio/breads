@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { useRouter } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import { hackModifyThumbnailPath } from '@/lib/atp/utils';

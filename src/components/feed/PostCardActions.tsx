@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heart, MessageCircle, Repeat, Repeat1, Share2 } from 'lucide-react';
 import { formatNumber } from '@/utils/number';
-import { Button } from '../ui/button';
+import { Button } from '@/ui/button';
 import { cn } from '@/lib/utils';
 import { t } from "@lingui/core/macro";
 

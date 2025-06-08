@@ -1,7 +1,7 @@
 import { AppBskyEmbedImages } from "@atproto/api";
 import { EmbedToggle } from "./EmbedToggle";
 import { useImagePreload } from "@/hooks/use-image-preload";
-import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel";
 import { cn } from "@/lib/utils";
 import { t } from "@lingui/core/macro";
 

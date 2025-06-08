@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import { User } from '@/types/ResponseSchema';
-import { Button } from '../ui/button';
+import { Button } from '@/ui/button';
 import { sanitizeHandle } from '@/lib/atp/strings/handles';
 import { Trans } from '@lingui/react/macro';
 
