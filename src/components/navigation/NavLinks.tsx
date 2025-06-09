@@ -31,7 +31,7 @@ export const NavLinks: React.FC = () => {
           <Button
             title={t`New Post`}
             size="icon"
-            className="px-7 py-6"
+            className="p-6 rounded-full"
           >
             <SquarePenIcon className="size-6" />
           </Button>

@@ -4,7 +4,7 @@ export const MobileNav: React.FC = () => {
   return (
     <>
       <nav className="sticky bottom-0 inset-x-0 z-50 pb-8 px-4">
-        <div className="flex items-center justify-around p-2 bg-card/75 backdrop-blur-lg rounded-2xl mx-auto max-w-sm">
+        <div className="flex items-center justify-around p-1 bg-card/75 backdrop-blur-lg rounded-full mx-auto max-w-sm">
           <NavLinks />
         </div>
       </nav>
