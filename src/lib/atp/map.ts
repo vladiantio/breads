@@ -19,7 +19,7 @@ export function mapAuthor(author: AnyProfileView): User {
     avatar: author.avatar,
     banner: 'banner' in author ? author.banner : undefined,
     bio: 'description' in author ? author.description : undefined,
-    displayName: author.displayName!,
+    displayName: author.displayName?.replaceAll(/\u2800/g, '') ?? '',
     followers: 'followersCount' in author ? author.followersCount : undefined,
     following: 'followsCount' in author ? author.followsCount : undefined,
     verification: author.verification,
