@@ -31,14 +31,14 @@ export function Timeline() {
       {isAuthenticated && (
         <CreatePost />
       )}
-      {isLoading ? new Array(30).fill(0).map((_, i) => (
+      {isLoading ? Array.from({ length: 30 }).map((_, i) => (
         <PostCardSkeleton key={i} />
       )) : (
         <>
           <PostFeed
             posts={posts}
           />
-          {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
+          {isFetchingNextPage && Array.from({ length: 30 }).map((_, i) => (
             <PostCardSkeleton key={i} />
           ))}
           <div className="py-4 text-center">
