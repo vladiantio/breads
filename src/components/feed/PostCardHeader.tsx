@@ -29,9 +29,9 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
 
         <PostCardMenu {...menuProps} />
       </div>
-      <div className="flex items-center gap-x-1 text-muted-foreground">
-        <p className="truncate">{sanitizeHandle(author.username, '@')}</p>
-        <span>·</span>
+      <div className="flex items-center gap-x-2 text-muted-foreground">
+        <div className="truncate">{sanitizeHandle(author.username, '@')}</div>
+        <div aria-hidden="true" role="separator">·</div>
         <time dateTime={timestamp} className="shrink-0">{formatTimestamp(timestamp)}</time>
       </div>
     </div>
