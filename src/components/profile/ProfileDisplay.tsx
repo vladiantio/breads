@@ -38,15 +38,8 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
       </div>
 
       {user.bio && (
-        <div className="mt-4 space-y-3">
-          {user.bio.split('\n\n').map((para, i) => (
-            <p
-              key={`p-${i}`}
-              className="text-pretty whitespace-pre-wrap"
-            >
-              {parseBio(para)}
-            </p>
-          ))}
+        <div className="mt-4 text-pretty whitespace-pre-wrap">
+          {parseBio(user.bio)}
         </div>
       )}
     </>
