@@ -17,23 +17,23 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
 
   return (
     <>
-      <div className="flex gap-x-4 items-center justify-between">
+      <div className="flex gap-x-4 items-center">
+        <UserAvatar 
+          username={user.username}
+          displayName={user.displayName}
+          src={user.avatar}
+          size="xl"
+        />
         <div>
-          <h1 className="text-pretty text-xl font-bold">{user.displayName || user.username}</h1>
-          <p className="text-muted-foreground">{sanitizeHandle(user.username, '@')}</p>
-        </div>
-        <div className="relative">
-          <UserAvatar 
-            username={user.username}
-            displayName={user.displayName}
-            src={user.avatar}
-            size="xl"
-          />
-          {showBadge && (
-            <div className="absolute -left-0.5 -bottom-0.5">
-              <VerifiedAccountIcon />
-            </div>
-          )}
+          <div className="flex items-center gap-x-2">
+            <h1 className="text-pretty text-xl font-bold">{user.displayName || user.username}</h1>
+            {showBadge && <VerifiedAccountIcon className="size-4" />}
+          </div>
+          <div className="text-muted-foreground flex items-center gap-x-2">
+            <div>{sanitizeHandle(user.username, '@')}</div>
+            <div aria-hidden="true" role="separator">·</div>
+            <div><span className="text-foreground">{formatNumber(user.followers ?? 0)}</span> <Trans>followers</Trans></div>
+          </div>
         </div>
       </div>
 
@@ -49,13 +49,6 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
           ))}
         </div>
       )}
-
-      <div className="mt-4">
-        <span className="font-semibold">{formatNumber(user.followers ?? 0)}</span>
-        <span className="text-muted-foreground ml-1">
-          <Trans>followers</Trans>
-        </span>
-      </div>
     </>
   );
 };
