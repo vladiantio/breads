@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@atproto/api": "^0.15.6",
+    "@atproto/api": "^0.15.16",
     "@lingui/core": "^5.3.1",
     "@lingui/detect-locale": "^5.3.1",
     "@lingui/react": "^5.3.1",
