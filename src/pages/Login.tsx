@@ -2,7 +2,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { AtpCredentials } from '@/lib/atp/store';
 import { useAuth } from '@/lib/atp/hooks/use-auth';
 import { Button } from '@/ui/button';
-import { Input, InputGroup, InputGroupText } from '@/ui/input';
+import { Input } from '@/ui/input';
+import { InputAddOns, InputAddOnLabel } from '@/ui/input-add-ons';
 import { AtSignIcon, LockKeyholeIcon } from 'lucide-react';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/ui/input-otp';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
@@ -34,10 +35,10 @@ export function Login() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset disabled={isLoading} className="grid gap-3">
           <div>
-            <InputGroup>
-              <InputGroupText>
+            <InputAddOns>
+              <InputAddOnLabel>
                 <AtSignIcon size={16} aria-hidden="true" />
-              </InputGroupText>
+              </InputAddOnLabel>
               <Input
                 className="h-14"
                 placeholder={t`Username or email address`}
@@ -45,22 +46,22 @@ export function Login() {
                 spellCheck="false"
                 {...register('handle', { required: t`Username or email address is required` })}
               />
-            </InputGroup>
+            </InputAddOns>
             {errors.handle && <p className="mt-1 text-sm text-destructive">{errors.handle.message}</p>}
           </div>
 
           <div>
-            <InputGroup>
-              <InputGroupText>
+            <InputAddOns>
+              <InputAddOnLabel>
                 <LockKeyholeIcon size={16} aria-hidden="true" />
-              </InputGroupText>
+              </InputAddOnLabel>
               <Input
                 className="h-14"
                 placeholder={t`Password`}
                 type="password"
                 {...register('password', { required: t`Password is required` })}
               />
-            </InputGroup>
+            </InputAddOns>
             {errors.password && <p className="mt-1 text-sm text-destructive">{errors.password.message}</p>}
           </div>
 

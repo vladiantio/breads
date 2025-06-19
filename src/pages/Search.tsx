@@ -1,7 +1,7 @@
 import { AuthorLink } from "@/components/shared/AuthorLink";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { DebouncedInput } from "@/ui/debounced-input";
-import { InputGroup, InputGroupText } from "@/ui/input";
+import { InputAddOns, InputAddOnLabel } from "@/ui/input-add-ons";
 import SearchIcon from '@/icons/search.svg?react';
 import { useActorsSearch } from "@/lib/atp/hooks/use-actors-search";
 import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification";
@@ -60,10 +60,10 @@ export function Search() {
   return (
     <>
       <div className="p-4">
-        <InputGroup>
-          <InputGroupText>
+        <InputAddOns>
+          <InputAddOnLabel>
             <SearchIcon width={16} height={16} />
-          </InputGroupText>
+          </InputAddOnLabel>
           <DebouncedInput
             autoFocus
             className="h-12 rounded-xl"
@@ -71,7 +71,7 @@ export function Search() {
             value={query}
             onChange={(value) => setQuery(String(value))}
           />
-        </InputGroup>
+        </InputAddOns>
       </div>
 
       {data?.map((actor) => (
