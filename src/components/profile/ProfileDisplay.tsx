@@ -29,7 +29,7 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
             <h1 className="text-pretty text-xl font-bold">{user.displayName || user.username}</h1>
             {showBadge && <VerifiedAccountIcon className="size-4" />}
           </div>
-          <div className="text-muted-foreground flex items-center gap-x-2">
+          <div className="text-muted-foreground flex items-center gap-x-2 flex-wrap">
             <div>{sanitizeHandle(user.username, '@')}</div>
             <div aria-hidden="true" role="separator">·</div>
             <div><span className="text-foreground">{formatNumber(user.followers ?? 0)}</span> <Trans>followers</Trans></div>
