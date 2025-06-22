@@ -1,23 +1,24 @@
 import { Link } from "@tanstack/react-router";
 import { AuthorHoverCard } from "../feed/AuthorHoverCard";
 import { cn } from "@/lib/utils";
-import VerifiedAccountIcon from '@/icons/verified-account.svg?react';
 import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles";
+import type { AppBskyActorDefs } from "@atproto/api";
+import { VerifiedBadge } from "./VerifiedBadge";
 
 interface AuthorLinkProps {
   did?: string
   username: string
   displayName?: string
   className?: string
-  showVerifiedBadge?: boolean
+  verification?: AppBskyActorDefs.VerificationState
 }
 
-function AuthorLink({
+export function AuthorLink({
   did,
   username,
   displayName,
   className,
-  showVerifiedBadge,
+  verification,
 }: AuthorLinkProps) {
   const validHandle = isInvalidHandle(username) ? did ?? username : username;
 
@@ -33,9 +34,10 @@ function AuthorLink({
           {displayName || sanitizeHandle(username)}
         </Link>
       </AuthorHoverCard>
-      {showVerifiedBadge && <VerifiedAccountIcon className="ml-2 size-3" />}
+      <VerifiedBadge
+        className="ml-2 size-3"
+        verification={verification}
+      />
     </div>
   );
 }
-
-export { AuthorLink };

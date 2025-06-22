@@ -4,7 +4,6 @@ import { DebouncedInput } from "@/ui/debounced-input";
 import { InputAddOns, InputAddOnLabel } from "@/ui/input-add-ons";
 import SearchIcon from '@/icons/search.svg?react';
 import { useActorsSearch } from "@/lib/atp/hooks/use-actors-search";
-import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification";
 import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles";
 import { AppBskyActorDefs } from "@atproto/api";
 import { useNavigate } from "@tanstack/react-router";
@@ -17,7 +16,6 @@ function AuthorItem({
   actor: AppBskyActorDefs.ProfileViewBasic
 }) {
   const navigate = useNavigate();
-  const { showBadge } = useSimpleVerificationState({ verification: actor.verification });
 
   return (
     <div
@@ -43,7 +41,7 @@ function AuthorItem({
           did={actor.did}
           displayName={actor.displayName}
           username={actor.handle}
-          showVerifiedBadge={showBadge}
+          verification={actor.verification}
         />
         <p className="text-muted-foreground truncate">{sanitizeHandle(actor.handle, '@')}</p>
       </div>

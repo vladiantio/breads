@@ -1,10 +1,9 @@
 import { User } from "@/types/ResponseSchema";
 import { FC } from "react";
 import { UserAvatar } from "../shared/UserAvatar";
+import { VerifiedBadge } from "../shared/VerifiedBadge";
 import { parseBio } from "@/utils/parseBio";
 import { formatNumber } from "@/utils/number";
-import VerifiedAccountIcon from '@/icons/verified-account.svg?react';
-import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification";
 import { sanitizeHandle } from "@/lib/atp/strings/handles";
 import { Trans } from "@lingui/react/macro";
 
@@ -13,8 +12,6 @@ interface ProfileDisplayProps {
 }
 
 export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
-  const { showBadge } = useSimpleVerificationState({ verification: user.verification });
-
   return (
     <>
       <div className="flex gap-x-4 items-center">
@@ -27,7 +24,10 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
         <div>
           <div className="flex items-center gap-x-2">
             <h1 className="text-pretty text-xl font-bold">{user.displayName || user.username}</h1>
-            {showBadge && <VerifiedAccountIcon className="size-4" />}
+            <VerifiedBadge
+              className="size-4"
+              verification={user.verification}
+            />
           </div>
           <div className="text-muted-foreground flex items-center gap-x-2 flex-wrap">
             <div>{sanitizeHandle(user.username, '@')}</div>

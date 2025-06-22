@@ -2,7 +2,6 @@ import { User } from '@/types/ResponseSchema';
 import { formatTimestamp } from '@/utils/date';
 import { PostCardMenu, PostCardMenuProps } from './PostCardMenu';
 import { AuthorLink } from '../shared/AuthorLink';
-import { useSimpleVerificationState } from '@/lib/atp/hooks/use-verification';
 import { sanitizeHandle } from '@/lib/atp/strings/handles';
 
 interface PostCardHeaderProps extends PostCardMenuProps {
@@ -10,13 +9,11 @@ interface PostCardHeaderProps extends PostCardMenuProps {
   timestamp: string;
 }
 
-const PostCardHeader: React.FC<PostCardHeaderProps> = ({ 
+export function PostCardHeader({ 
   author, 
   timestamp,
   ...menuProps
-}) => {
-  const { showBadge } = useSimpleVerificationState({ verification: author.verification });
-
+}: PostCardHeaderProps) {
   return (
     <div className="h-12">
       <div className="flex items-center justify-between gap-x-2">
@@ -24,7 +21,7 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
           did={author.id}
           username={author.username}
           displayName={author.displayName}
-          showVerifiedBadge={showBadge}
+          verification={author.verification}
         />
 
         <PostCardMenu {...menuProps} />
@@ -36,6 +33,4 @@ const PostCardHeader: React.FC<PostCardHeaderProps> = ({
       </div>
     </div>
   );
-};
-
-export { PostCardHeader };
+}
