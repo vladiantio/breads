@@ -81,6 +81,9 @@ msgstr "Ocurrió un error"
 msgid "Please try again later"
 msgstr "Por favor, inténtalo de nuevo más tarde"
 
+msgid "Invalid Handle"
+msgstr "Identificador no válido"
+
 # Placeholders
 msgid "What's happening?"
 msgstr "¿Qué está pasando?"
