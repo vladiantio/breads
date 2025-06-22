@@ -26,34 +26,30 @@ export const NavLinks: React.FC = () => {
         to="/search"
       />
 
-      {isAuthenticated && (
-        <>
-          <Button
-            title={t`New Post`}
-            size="icon"
-            className="p-6 rounded-full"
-          >
-            <SquarePenIcon className="size-6" />
-          </Button>
+      <Button
+        title={t`New Post`}
+        size="icon"
+        className="p-6 rounded-full"
+      >
+        <SquarePenIcon className="size-6" />
+      </Button>
 
-          <NavIconLink 
-            icon={BellIcon}
-            label={t`Notifications`}
-            to="/notifications"
-            fillOnHover
-          />
+      <NavIconLink 
+        icon={BellIcon}
+        label={t`Notifications`}
+        to={isAuthenticated ? "/notifications" : "/login"}
+        fillOnHover
+      />
 
-          <NavIconLink 
-            icon={UserIcon}
-            label={t`Profile`}
-            to="/profile/$username"
-            params={{
-              username: session?.handle,
-            }}
-            fillOnHover
-          />
-        </>
-      )}
+      <NavIconLink 
+        icon={UserIcon}
+        label={t`Profile`}
+        to={isAuthenticated ? "/profile/$username" : "/login"}
+        params={{
+          username: session?.handle,
+        }}
+        fillOnHover
+      />
     </>
   );
 }
