@@ -2,7 +2,7 @@ import { FC, Fragment, useCallback, useMemo, useState, memo } from 'react';
 import { Facet, RichText, RichTextSegment } from '@atproto/api';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
-import { AuthorHoverCard } from '../feed/AuthorHoverCard';
+import { AuthorHoverCard } from '../profile/AuthorHoverCard';
 import { Trans } from '@lingui/react/macro';
 
 interface RichTextRendererProps {

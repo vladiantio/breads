@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { AuthorHoverCard } from "../feed/AuthorHoverCard";
+import { AuthorHoverCard } from "../profile/AuthorHoverCard";
 import { cn } from "@/lib/utils";
 import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles";
 import type { AppBskyActorDefs } from "@atproto/api";

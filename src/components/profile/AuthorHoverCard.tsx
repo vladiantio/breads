@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useProfile } from "@/lib/atp/hooks/use-profile";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/ui/hover-card";
-import { ProfileDisplay } from "../profile/ProfileDisplay";
+import { ProfileDisplay } from "./ProfileDisplay";
 import { Button } from "@/ui/button";
 import { useResolveHandle } from "@/lib/atp/hooks/use-resolve-handle";
 import { isMobileDevice } from "@/lib/browser";

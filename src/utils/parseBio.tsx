@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { removeHttpAndWww, truncateString } from "./string";
 import { Fragment } from "react";
-import { AuthorHoverCard } from "@/components/feed/AuthorHoverCard";
+import { AuthorHoverCard } from "@/components/profile/AuthorHoverCard";
 
 // Regular expressions for mentions, URLs and email addresses
 const mentionRegex = /^(@[a-zA-Z0-9.-]+)/;
