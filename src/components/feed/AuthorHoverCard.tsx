@@ -6,6 +6,7 @@ import { ProfileDisplay } from "../profile/ProfileDisplay";
 import { Button } from "@/ui/button";
 import { useResolveHandle } from "@/lib/atp/hooks/use-resolve-handle";
 import { isMobileDevice } from "@/lib/browser";
+import { Trans } from "@lingui/react/macro";
 
 interface AuthorHoverCardProps extends PropsWithChildren {
   handle?: string;
@@ -46,7 +47,7 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
         ) : data ? (
           <>
             <ProfileDisplay user={data} />
-            <Button className="w-full mt-3">Follow</Button>
+            <Button className="w-full mt-4"><Trans>Follow</Trans></Button>
           </>
         ) : null}
       </HoverCardContent>
