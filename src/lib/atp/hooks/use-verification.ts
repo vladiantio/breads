@@ -1,12 +1,11 @@
 import { useMemo } from "react"
-import { AppBskyActorDefs } from "@atproto/api"
+import type { AppBskyActorDefs } from "@atproto/api"
 
 // source: https://github.com/bluesky-social/social-app/blob/main/src/components/verification/index.ts
 
 export type SimpleVerificationState = {
   role: 'default' | 'verifier'
   isVerified: boolean
-  showBadge: boolean
 }
 
 export function useSimpleVerificationState({
@@ -19,7 +18,6 @@ export function useSimpleVerificationState({
       return {
         role: 'default',
         isVerified: false,
-        showBadge: false,
       }
     }
 
@@ -33,7 +31,6 @@ export function useSimpleVerificationState({
     return {
       role: isVerifierUser ? 'verifier' : 'default',
       isVerified,
-      showBadge: isVerified,
     }
   }, [verification])
 }
