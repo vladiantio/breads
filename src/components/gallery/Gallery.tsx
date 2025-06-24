@@ -90,9 +90,11 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
 export function Gallery({
   posts,
 }: GalleryProps) {
+  const filteredPosts = posts.filter((post) => post.embedImages?.length || post.embedVideo);
+
   return (
     <div className="grid grid-cols-3 gap-0.5">
-      {posts.filter((post: PostWithAuthor) => post.embedImages?.length || post.embedVideo).map((post: PostWithAuthor) => (
+      {filteredPosts.map((post) => (
         <GalleryCard
           key={post.id}
           post={post}
