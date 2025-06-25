@@ -968,7 +968,7 @@ function MediaPlayerLoading(props: MediaPlayerLoadingProps) {
         className
       )}
     >
-      <Loader2Icon className="size-20 animate-spin stroke-[.0938rem] text-primary" />
+      <Loader2Icon className="size-20 animate-spin stroke-[.0938rem] text-foreground" />
     </LoadingPrimitive>
   );
 }
