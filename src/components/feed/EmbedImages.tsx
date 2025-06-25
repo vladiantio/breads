@@ -63,7 +63,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
           {views.map(image => (
             <div
               key={image.thumb}
-              className="max-h-[26rem]"
+              className="max-h-[30rem]"
               style={{
                 flexBasis: image.aspectRatio ? `${image.aspectRatio.width * 100 / image.aspectRatio.height}%` : '100%',
               }}
