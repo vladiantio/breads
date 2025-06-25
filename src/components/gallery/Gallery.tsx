@@ -69,20 +69,15 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
           </button>
         </>
       )}
-      {post.embedVideo && (
-        <div className="absolute top-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4">
+      <div className="absolute top-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4">
+        {post.embedVideo ? (
           <FilmIcon />
-        </div>
-      )}
-      {post.embedImages?.length && (post.embedImages.length > 1 ? (
-        <div className="absolute top-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4">
+        ) : post.embedImages!.length > 1 ? (
           <ImagesIcon />
-        </div>
-      ) : (
-        <div className="absolute top-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4">
+        ) : (
           <ImageIcon />
-        </div>
-      ))}
+        )}
+      </div>
     </Link>
   );
 }
