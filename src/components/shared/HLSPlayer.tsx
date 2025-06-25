@@ -10,7 +10,6 @@ type HLSPlayerProps = {
 
 const HLSPlayer: FC<HLSPlayerProps> = ({
   src,
-  autoPlay = false,
   playsInline = true,
   onError,
   onReady,
@@ -36,11 +35,6 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
         hls.attachMedia(videoRef.current);
         
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          if (autoPlay && videoRef.current) {
-            videoRef.current.play().catch(err => {
-              console.warn('Auto-play was prevented by the browser:', err);
-            });
-          }
           onReady?.();
         });
         
@@ -76,11 +70,6 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
         // For browsers that support HLS natively (Safari)
         videoRef.current.src = src;
         videoRef.current.addEventListener('loadedmetadata', () => {
-          if (autoPlay && videoRef.current) {
-            videoRef.current.play().catch(err => {
-              console.warn('Auto-play was prevented by the browser:', err);
-            });
-          }
           onReady?.();
         });
         
@@ -108,7 +97,7 @@ const HLSPlayer: FC<HLSPlayerProps> = ({
         hls.destroy();
       }
     };
-  }, [autoPlay, src, onError, onReady]);
+  }, [src, onError, onReady]);
 
   return (
     <video
