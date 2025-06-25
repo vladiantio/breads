@@ -1985,7 +1985,7 @@ function MediaPlayerSeek(props: MediaPlayerSeekProps) {
           role="presentation"
           aria-hidden="true"
           data-slot="media-player-seek-chapter-separator"
-          className="absolute top-0 h-full bg-zinc-50 dark:bg-zinc-950"
+          className="absolute top-0 h-full bg-neutral-50 dark:bg-neutral-950"
           style={{
             width: ".1563rem",
             left: `${position}%`,
@@ -2047,19 +2047,19 @@ function MediaPlayerSeek(props: MediaPlayerSeekProps) {
         onPointerLeave={onPointerLeave}
         onPointerMove={onPointerMove}
       >
-        <SliderPrimitive.Track className="relative h-1 w-full grow overflow-hidden rounded-full bg-primary/40">
+        <SliderPrimitive.Track className="relative h-1 w-full grow overflow-hidden rounded-full bg-foreground/40">
           <div
             data-slot="media-player-seek-buffered"
-            className="absolute h-full bg-primary/70 will-change-[width]"
+            className="absolute h-full bg-foreground/70 will-change-[width]"
             style={{
               width: `${bufferedProgress * 100}%`,
             }}
           />
-          <SliderPrimitive.Range className="absolute h-full bg-primary will-change-[width]" />
+          <SliderPrimitive.Range className="absolute h-full bg-foreground will-change-[width]" />
           {seekState.isHovering && seekableEnd > 0 && (
             <div
               data-slot="media-player-seek-hover-range"
-              className="absolute h-full bg-primary/70 will-change-[width,opacity]"
+              className="absolute h-full bg-foreground/70 will-change-[width,opacity]"
               style={{
                 width: `var(${SEEK_HOVER_PERCENT}, 0%)`,
                 transition: "opacity 150ms ease-out",
@@ -2068,7 +2068,7 @@ function MediaPlayerSeek(props: MediaPlayerSeekProps) {
           )}
           {chapterSeparators}
         </SliderPrimitive.Track>
-        <SliderPrimitive.Thumb className="relative z-10 block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 transition-[color,box-shadow] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50" />
+        <SliderPrimitive.Thumb className="relative z-10 block size-2.5 shrink-0 rounded-full bg-foreground shadow-sm ring-ring/50 transition-[color,box-shadow] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50" />
       </SliderPrimitive.Root>
       {!withoutTooltip &&
         !context.withoutTooltip &&
@@ -2089,7 +2089,7 @@ function MediaPlayerSeek(props: MediaPlayerSeekProps) {
             >
               <div
                 className={cn(
-                  "flex flex-col items-center gap-1.5 rounded-md border bg-background text-foreground shadow-sm dark:bg-zinc-900",
+                  "flex flex-col items-center gap-1.5 rounded-md border bg-background text-foreground shadow-sm",
                   thumbnail && "min-h-10",
                   !thumbnail && currentChapterCue && "px-3 py-1.5"
                 )}
@@ -2219,7 +2219,7 @@ function MediaPlayerVolume(props: MediaPlayerVolumeProps) {
     <HoverCardPrimitive.Root
       data-disabled={isDisabled ? "" : undefined}
       openDelay={0}
-      closeDelay={50}
+      closeDelay={100}
       data-slot="media-player-volume-container"
     >
       <HoverCardPrimitive.Trigger>
@@ -2248,14 +2248,14 @@ function MediaPlayerVolume(props: MediaPlayerVolumeProps) {
           </Button>
         </MediaPlayerTooltip>
       </HoverCardPrimitive.Trigger>
-      <HoverCardPrimitive.Portal data-slot="hover-card-portal">
+      <HoverCardPrimitive.Portal data-slot="media-player-volume-portal">
         <HoverCardPrimitive.Content
-          data-slot="hover-card-content"
+          data-slot="media-player-volume-content"
           align="center"
           side="top"
           sideOffset={0}
           className={cn(
-            "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--radix-hover-card-content-transform-origin) rounded-md border p-4 shadow-md outline-hidden",
+            "bg-popover data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--radix-hover-card-content-transform-origin) rounded-md border p-4 shadow-md outline-hidden",
             className
           )}
         >
@@ -2279,7 +2279,7 @@ function MediaPlayerVolume(props: MediaPlayerVolumeProps) {
             onValueCommit={onVolumeCommit}
             orientation="vertical"
           >
-            <SliderPrimitive.Track className="relative h-full w-1 grow overflow-hidden rounded-full bg-zinc-500">
+            <SliderPrimitive.Track className="relative h-full w-1 grow overflow-hidden rounded-full bg-accent">
               <SliderPrimitive.Range className="absolute w-full bg-primary will-change-[width]" />
             </SliderPrimitive.Track>
             <SliderPrimitive.Thumb className="block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 transition-[color,box-shadow] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50" />
@@ -3064,7 +3064,7 @@ function MediaPlayerTooltip(props: MediaPlayerTooltipProps) {
         <TooltipContent
           side="bottom"
           sideOffset={tooltipSideOffset}
-          className="flex items-center gap-2 border bg-accent px-2 py-1 font-medium text-foreground data-[side=top]:mb-3.5 dark:bg-zinc-900 [&>span]:hidden"
+          className="flex items-center gap-2 border bg-popover px-2 py-1 font-medium text-popover-foreground data-[side=top]:mb-3.5 [&>span]:hidden"
         >
           <p>{tooltip}</p>
           {Array.isArray(shortcut) ? (
