@@ -50,20 +50,22 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
             <MediaPlayerLoading />
             <MediaPlayerError />
             <MediaPlayerVolumeIndicator />
-            <MediaPlayerControls className="flex-col items-start gap-2.5">
+            <MediaPlayerControls placement="middle">
+              <MediaPlayerPlay className="bg-background/30 rounded-full size-16 [&_svg:not([class*='size-'])]:size-8" />
+            </MediaPlayerControls>
+            <MediaPlayerControls placement="bottom" className="flex-col items-start">
               <MediaPlayerControlsOverlay />
-              <MediaPlayerSeek />
               <div className="flex w-full items-center gap-2">
                 <div className="flex flex-1 items-center gap-2">
-                  <MediaPlayerPlay />
+                  <MediaPlayerTime />
                 </div>
                 <div className="flex items-center gap-2">
-                  <MediaPlayerTime />
                   <MediaPlayerVolume />
                   <MediaPlayerSettings />
                   <MediaPlayerFullscreen />
                 </div>
               </div>
+              <MediaPlayerSeek />
             </MediaPlayerControls>
           </MediaPlayer>
         </div>
