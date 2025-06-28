@@ -2338,6 +2338,7 @@ function MediaPlayerTime(props: MediaPlayerTimeProps) {
         dir={context.dir}
         {...timeProps}
         className={cn("font-medium text-foreground/80 text-sm tabular-nums py-1 px-3 rounded-full bg-background/60", className)}
+        aria-label={variant === "remaining" ? "Remaining time" : "Duration"}
       >
         {times[variant]}
       </TimePrimitive>
@@ -2355,11 +2356,11 @@ function MediaPlayerTime(props: MediaPlayerTimeProps) {
         className
       )}
     >
-      <span className="tabular-nums text-foreground">{times.current}</span>
+      <span className="tabular-nums text-foreground" aria-label="Current time">{times.current}</span>
       <span role="separator" aria-hidden="true" tabIndex={-1}>
         /
       </span>
-      <span className="tabular-nums">{times.duration}</span>
+      <span className="tabular-nums" aria-label="Duration">{times.duration}</span>
     </TimePrimitive>
   );
 }
