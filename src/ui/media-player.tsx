@@ -2337,7 +2337,7 @@ function MediaPlayerTime(props: MediaPlayerTimeProps) {
         data-variant={variant}
         dir={context.dir}
         {...timeProps}
-        className={cn("text-foreground/80 text-sm tabular-nums", className)}
+        className={cn("font-medium text-foreground/80 text-sm tabular-nums py-1 px-3 rounded-full bg-background/60", className)}
       >
         {times[variant]}
       </TimePrimitive>
@@ -2351,11 +2351,11 @@ function MediaPlayerTime(props: MediaPlayerTimeProps) {
       dir={context.dir}
       {...timeProps}
       className={cn(
-        "flex items-center gap-1 text-foreground/80 text-sm",
+        "flex items-center gap-1 font-medium text-foreground/80 text-sm py-1 px-3 rounded-full bg-background/60",
         className
       )}
     >
-      <span className="tabular-nums">{times.current}</span>
+      <span className="tabular-nums text-foreground">{times.current}</span>
       <span role="separator" aria-hidden="true" tabIndex={-1}>
         /
       </span>
