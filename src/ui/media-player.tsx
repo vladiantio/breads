@@ -872,11 +872,15 @@ function MediaPlayerAudio(props: MediaPlayerAudioProps) {
 
 interface MediaPlayerControlsProps extends React.ComponentProps<"div"> {
   asChild?: boolean;
+  placement?: "top" | "middle" | "bottom";
 }
 
-function MediaPlayerControls(props: MediaPlayerControlsProps) {
-  const { asChild, className, ...controlsProps } = props;
-
+function MediaPlayerControls({
+  asChild,
+  placement = "bottom",
+  className,
+  ...props
+}: MediaPlayerControlsProps) {
   const context = useMediaPlayerContext("MediaPlayerControls");
   const isFullscreen = useMediaSelector(
     (state) => state.mediaIsFullscreen ?? false
@@ -893,10 +897,13 @@ function MediaPlayerControls(props: MediaPlayerControlsProps) {
       data-visible={controlsVisible ? "" : undefined}
       dir={context.dir}
       className={cn(
-        "dark pointer-events-none absolute right-0 bottom-0 left-0 z-50 flex items-center gap-2 px-4 py-3 opacity-0 transition-opacity duration-200 data-[visible]:pointer-events-auto data-[visible]:opacity-100 [:fullscreen_&]:px-6 [:fullscreen_&]:py-4",
+        "dark pointer-events-none absolute z-50 flex items-center gap-2 px-6 py-4 opacity-0 transition-opacity duration-200 data-[visible]:pointer-events-auto data-[visible]:opacity-100 [:fullscreen_&]:px-8 [:fullscreen_&]:py-6",
+        placement === "top" && "top-0 inset-x-0",
+        placement === "middle" && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+        placement === "bottom" && "bottom-0 inset-x-0",
         className
       )}
-      {...controlsProps}
+      {...props}
     />
   );
 }
