@@ -897,7 +897,7 @@ function MediaPlayerControls({
       data-visible={controlsVisible ? "" : undefined}
       dir={context.dir}
       className={cn(
-        "dark pointer-events-none absolute z-50 flex items-center gap-2 px-6 py-4 opacity-0 transition-opacity duration-200 data-[visible]:pointer-events-auto data-[visible]:opacity-100 [:fullscreen_&]:px-8 [:fullscreen_&]:py-6",
+        "dark pointer-events-none absolute z-50 flex items-center gap-2.5 px-6 py-4 opacity-0 transition-opacity duration-200 data-[visible]:pointer-events-auto data-[visible]:opacity-100 [:fullscreen_&]:px-8 [:fullscreen_&]:py-6 [:fullscreen_&]:gap-5",
         placement === "top" && "top-0 inset-x-0",
         placement === "middle" && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
         placement === "bottom" && "bottom-0 inset-x-0",
