@@ -795,6 +795,7 @@ function MediaPlayerVideo({
   asChild,
   ref,
   onClick,
+  className,
   ...props
 }: MediaPlayerVideoProps) {
   const context = useMediaPlayerContext("MediaPlayerVideo");
@@ -831,6 +832,7 @@ function MediaPlayerVideo({
       id={context.mediaId}
       ref={composedRef}
       onClick={onPlayToggle}
+      className={cn("cursor-pointer", className)}
     />
   );
 }
