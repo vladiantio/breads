@@ -52,7 +52,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
             <MediaPlayerControls placement="middle">
               <MediaPlayerPlay className="bg-background/30 rounded-full size-16 [&_svg:not([class*='size-'])]:size-8" />
             </MediaPlayerControls>
-            <MediaPlayerControls placement="bottom" className="flex-col items-start">
+            <MediaPlayerControls placement="bottom" className="flex-col items-start gap-1 [:fullscreen_&]:gap-3">
               <MediaPlayerControlsOverlay />
               <div className="flex w-full items-center gap-2">
                 <div className="flex flex-1 items-center gap-2">
