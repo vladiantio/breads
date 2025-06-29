@@ -13,7 +13,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className="flex flex-col justify-between fixed left-0 inset-y-0 p-4">
-      <div className="flex flex-col items-center gap-1 p-1 bg-popover rounded-full">
+      <div className="flex flex-col items-center gap-1">
         {isAuthenticated ? (
           <UserAvatar
             size="lg"
@@ -29,10 +29,10 @@ export const Navbar: React.FC = () => {
           />
         )}
       </div>
-      <div className="flex flex-col items-center gap-1 p-1 bg-popover rounded-full">
+      <div className="flex flex-col items-center gap-1">
         <NavLinks />
       </div>
-      <div className="flex flex-col items-center gap-1 p-1 bg-popover rounded-full">
+      <div className="flex flex-col items-center gap-1">
         <NavIconLink 
           icon={SettingsIcon}
           label={t`Settings`}
