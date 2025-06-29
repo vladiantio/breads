@@ -47,7 +47,6 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
                 type="application/vnd.apple.mpegurl"
               />
             </MediaPlayerVideo>
-            <MediaPlayerLoading />
             <MediaPlayerError />
             <MediaPlayerVolumeIndicator />
             <MediaPlayerControls placement="middle">
@@ -67,6 +66,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
               </div>
               <MediaPlayerSeek />
             </MediaPlayerControls>
+            <MediaPlayerLoading />
           </MediaPlayer>
         </div>
       </div>
