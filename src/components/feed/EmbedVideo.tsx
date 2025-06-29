@@ -64,7 +64,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
                   <MediaPlayerFullscreen />
                 </div>
               </div>
-              <MediaPlayerSeek />
+              <MediaPlayerSeek withoutTooltip />
             </MediaPlayerControls>
             <MediaPlayerLoading />
           </MediaPlayer>
