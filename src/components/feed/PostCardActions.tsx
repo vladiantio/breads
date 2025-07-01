@@ -36,7 +36,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
         title={t`Reply`}
         variant="ghost"
         onClick={onReply}
-        className="rounded-full text-muted-foreground"
+        className="rounded-full"
       >
         <MessageCircle className='size-5' />
         {replies > 0 && (
@@ -47,7 +47,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
       <Button
         title={t`Repost`}
         variant="ghost"
-        className={cn('rounded-full text-muted-foreground', isReposted && '!text-green-500')}
+        className={cn('rounded-full', isReposted && '!text-green-500')}
         onClick={onRepost}
       >
         {isReposted
@@ -61,7 +61,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
       <Button
         title={t`Like`}
         variant="ghost"
-        className={cn('rounded-full text-muted-foreground', isLiked && '!text-red-500')}
+        className={cn('rounded-full', isLiked && '!text-red-500')}
         onClick={onLike}
       >
         <Heart
@@ -76,7 +76,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
         title={t`Share`}
         variant="ghost"
         size="icon"
-        className="rounded-full text-muted-foreground"
+        className="rounded-full"
         onClick={onShare}
       >
         <Share2 className='size-5' />
