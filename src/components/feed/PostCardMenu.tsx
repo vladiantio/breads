@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger
 } from '@/ui/dropdown-menu';
 import { Trans } from '@lingui/react/macro';
+import { Button } from '@/ui/button';
 
 export interface PostCardMenuProps {
   onCopyLink: (e: React.MouseEvent) => void;
@@ -30,12 +31,14 @@ export const PostCardMenu: React.FC<PostCardMenuProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button 
-          className="text-muted-foreground hover:text-foreground hover:bg-accent rounded-full focus:bg-accent focus:outline-none transition-all -m-3 p-3"
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
           onClick={(e) => e.stopPropagation()}
         >
-          <MoreHorizontal size={20} />
-        </button>
+          <MoreHorizontal className="size-5" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-fit">
         <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
