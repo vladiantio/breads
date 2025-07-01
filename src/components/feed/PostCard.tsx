@@ -159,10 +159,6 @@ const PostCard: React.FC<PostCardProps> = ({
               <PostCardHeader
                 author={post.author}
                 timestamp={post.timestamp}
-                onCopyLink={handleCopyLink}
-                onCopyText={handleCopyText}
-                onNotInterested={handleNotInterested}
-                onReport={handleReport}
               />
             </div>
           </div>
@@ -187,6 +183,10 @@ const PostCard: React.FC<PostCardProps> = ({
             onRepost={handleRepost}
             onShare={handleShare}
             onReply={handleReply}
+            onCopyLink={handleCopyLink}
+            onCopyText={handleCopyText}
+            onNotInterested={handleNotInterested}
+            onReport={handleReport}
           />
         </div>
       ) : (
@@ -209,10 +209,6 @@ const PostCard: React.FC<PostCardProps> = ({
             <PostCardHeader
               author={post.author}
               timestamp={post.timestamp}
-              onCopyLink={handleCopyLink}
-              onCopyText={handleCopyText}
-              onNotInterested={handleNotInterested}
-              onReport={handleReport}
             />
 
             <PostCardContent
@@ -235,6 +231,10 @@ const PostCard: React.FC<PostCardProps> = ({
               onRepost={handleRepost}
               onShare={handleShare}
               onReply={handleReply}
+              onCopyLink={handleCopyLink}
+              onCopyText={handleCopyText}
+              onNotInterested={handleNotInterested}
+              onReport={handleReport}
             />
           </div>
         </div>

@@ -4,8 +4,9 @@ import { formatNumber } from '@/utils/number';
 import { Button } from '@/ui/button';
 import { cn } from '@/lib/utils';
 import { t } from "@lingui/core/macro";
+import { PostCardMenu, PostCardMenuProps } from './PostCardMenu';
 
-interface PostCardActionsProps {
+interface PostCardActionsProps extends PostCardMenuProps {
   likes: number;
   replies: number;
   reposts: number;
@@ -26,10 +27,11 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
   onLike,
   onRepost,
   onShare,
-  onReply
+  onReply,
+  ...menuProps
 }) => {
   return (
-    <div className="flex items-center gap-x-1 mt-4 -mx-3">
+    <div className="flex items-center justify-between gap-x-1 mt-4 -mx-3">
       <Button
         title={t`Reply`}
         variant="ghost"
@@ -73,11 +75,14 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
       <Button
         title={t`Share`}
         variant="ghost"
+        size="icon"
         className="rounded-full text-muted-foreground"
         onClick={onShare}
       >
         <Share2 className='size-5' />
       </Button>
+      
+      <PostCardMenu {...menuProps} />
     </div>
   );
 };

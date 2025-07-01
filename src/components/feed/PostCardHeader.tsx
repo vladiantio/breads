@@ -1,10 +1,9 @@
 import { User } from '@/types/ResponseSchema';
 import { formatTimestamp } from '@/utils/date';
-import { PostCardMenu, PostCardMenuProps } from './PostCardMenu';
 import { AuthorLink } from '../shared/AuthorLink';
 import { sanitizeHandle } from '@/lib/atp/strings/handles';
 
-interface PostCardHeaderProps extends PostCardMenuProps {
+interface PostCardHeaderProps {
   author: User;
   timestamp: string;
 }
@@ -12,19 +11,16 @@ interface PostCardHeaderProps extends PostCardMenuProps {
 export function PostCardHeader({ 
   author, 
   timestamp,
-  ...menuProps
 }: PostCardHeaderProps) {
   return (
     <div className="h-12">
-      <div className="flex items-center justify-between gap-x-2">
+      <div className="flex items-center">
         <AuthorLink
           did={author.id}
           username={author.username}
           displayName={author.displayName}
           verification={author.verification}
         />
-
-        <PostCardMenu {...menuProps} />
       </div>
       <div className="flex items-center gap-x-2 text-muted-foreground">
         <div className="truncate">{sanitizeHandle(author.username, '@')}</div>
