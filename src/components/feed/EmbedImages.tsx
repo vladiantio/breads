@@ -4,6 +4,7 @@ import { useImagePreload } from "@/hooks/use-image-preload";
 import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel";
 import { cn } from "@/lib/utils";
 import { t } from "@lingui/core/macro";
+import { AltReader } from "./AltReader";
 
 interface EmbedImagesProps {
   views: AppBskyEmbedImages.ViewImage[]
@@ -54,6 +55,13 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                     height={image.aspectRatio?.height}
                   />
                 </a>
+                {image.alt && (
+                  <div className="relative">
+                    <div className="absolute left-2 bottom-2">
+                      <AltReader alt={image.alt} />
+                    </div>
+                  </div>
+                )}
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -84,6 +92,13 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                   height={image.aspectRatio?.height}
                 />
               </a>
+              {image.alt && (
+                <div className="relative">
+                  <div className="absolute left-4 bottom-4">
+                    <AltReader alt={image.alt} />
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
