@@ -76,7 +76,7 @@ function Reposts({ actor }: ProfileProps) {
 
   if (isLoading)
     return <>
-      {new Array(30).fill(0).map((_, i) => (
+      {Array.from({ length: 30 }).map((_, i) => (
         <PostCardSkeleton key={i} />
       ))}
     </>;
@@ -86,7 +86,7 @@ function Reposts({ actor }: ProfileProps) {
       <PostFeed
         posts={posts}
       />
-      {isFetchingNextPage && new Array(30).fill(0).map((_, i) => (
+      {isFetchingNextPage && Array.from({ length: 30 }).map((_, i) => (
         <PostCardSkeleton key={i} />
       ))}
       <div className="text-center p-4">
