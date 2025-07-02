@@ -19,7 +19,6 @@ function AuthorItem({
 
   return (
     <div
-      key={actor.did}
       className="flex gap-x-4 items-center p-4 transition-[background-color] rounded-lg hover:bg-card active:bg-card/60"
       role="button"
       onClick={() => {
@@ -73,7 +72,10 @@ export function Search() {
       </div>
 
       {data?.map((actor) => (
-        <AuthorItem actor={actor} />
+        <AuthorItem
+          key={actor.did}
+          actor={actor}
+        />
       ))}
     </>
   )
