@@ -55,7 +55,7 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
             className="object-contain absolute inset-0 size-full"
           />
           <button
-            className="absolute bottom-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4"
+            className="absolute bottom-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
             onClick={(e) => {
               e.preventDefault();
               setIsMuted(prev => !prev);
@@ -69,7 +69,7 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
           </button>
         </>
       )}
-      <div className="absolute top-2 right-2 bg-background/50 backdrop-blur p-2 rounded-full [&>svg]:size-4">
+      <div className="absolute top-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4">
         {post.embedVideo ? (
           <FilmIcon />
         ) : post.embedImages!.length > 1 ? (
