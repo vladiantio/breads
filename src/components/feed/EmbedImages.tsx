@@ -42,13 +42,13 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                   href={image.fullsize}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="[&_img]:transition-all active:[&_img]:scale-[98%]"
+                  className="block bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img
                     src={image.thumb}
                     alt={image.alt}
-                    className="h-[16rem] w-auto rounded-lg border object-cover"
+                    className="h-[16rem] w-auto object-cover"
                     loading="lazy"
                     width={image.aspectRatio?.width}
                     height={image.aspectRatio?.height}
@@ -72,13 +72,13 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                 href={image.fullsize}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="[&_img]:transition-all active:[&_img]:scale-[98%]"
+                className="block h-full w-fit bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
                 onClick={(e) => e.stopPropagation()}
               >
                 <img 
                   src={image.thumb} 
                   alt={image.alt}
-                  className="h-full w-auto rounded-lg border object-cover"
+                  className="h-full w-auto object-cover"
                   loading="lazy"
                   width={image.aspectRatio?.width}
                   height={image.aspectRatio?.height}
