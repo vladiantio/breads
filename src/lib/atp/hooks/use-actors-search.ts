@@ -13,7 +13,7 @@ export function useActorsSearch({
   const { agent } = useAtpStore();
 
   return useQuery({
-    queryKey: ['search', { q, limit }],
+    queryKey: ['actors-search', { q, limit }],
     queryFn: async () => {
       const { data } = await agent.app.bsky.actor.searchActorsTypeahead({ q, limit });
       return data.actors;
