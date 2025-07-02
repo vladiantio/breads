@@ -80,6 +80,7 @@ export function Login() {
                       inputMode="text"
                       pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
                       pasteTransformer={otpPasteTransformer}
+                      spellCheck="false"
                       {...field}
                     >
                       <InputOTPGroup className="basis-full [&>*]:h-14 [&>*]:w-auto [&>*]:basis-full">
