@@ -66,8 +66,8 @@ export function Login() {
           </div>
 
           {error &&
-            (error?.message === t`A sign in code has been sent to your email address` ||
-            error?.message === t`Token is invalid` ? (
+            (error.message === `A sign in code has been sent to your email address` ||
+            error.message === `Token is invalid` ? (
               <div>
                 <label className="mb-1 font-semibold block" htmlFor="authFactorToken"><Trans>Two-factor confirmation</Trans></label>
                 <Controller
