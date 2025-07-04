@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PostWithAuthor } from "@/types/ResponseSchema";
 import { Link } from "@tanstack/react-router";
 import { Skeleton } from "@/ui/skeleton";
-import { FilmIcon, ImageIcon, ImagesIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
+import { AlertCircleIcon, FilmIcon, ImageIcon, ImagesIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
 import { HLSPlayer } from "../shared/HLSPlayer";
 import { isMobileDevice } from "@/lib/browser";
 
@@ -30,54 +30,63 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
       onMouseEnter={() => handleHovered(true)}
       onMouseLeave={() => handleHovered(false)}
     >
-      <img
-        src={thumb}
-        alt={alt}
-        className="object-cover absolute -inset-1/2 min-w-[200%] min-h-[200%] blur-3xl opacity-60"
-        loading="lazy"
-        aria-hidden="true"
-      />
-      <img
-        src={thumb}
-        alt={alt}
-        className="object-contain absolute inset-0 size-full"
-        loading="lazy"
-      />
-      {(post.embedVideo && isHovered) && (
+      {post.labelInfo ? (
+        <div className="size-full flex flex-col items-center justify-center gap-4">
+          <AlertCircleIcon className="size-12" />
+          <p className="text-xs text-muted-foreground">{post.labelInfo}</p>
+        </div>
+      ) : (
         <>
-          <HLSPlayer
-            src={post.embedVideo.playlist}
-            poster={post.embedVideo.thumbnail}
-            autoPlay
-            disablePictureInPicture
-            loop
-            muted={isMuted}
-            className="object-contain absolute inset-0 size-full"
+          <img
+            src={thumb}
+            alt={alt}
+            className="object-cover absolute -inset-1/2 min-w-[200%] min-h-[200%] blur-3xl opacity-60"
+            loading="lazy"
+            aria-hidden="true"
           />
-          <button
-            className="absolute bottom-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsMuted(prev => !prev);
-            }}
-          >
-            {isMuted ? (
-              <VolumeOffIcon />
+          <img
+            src={thumb}
+            alt={alt}
+            className="object-contain absolute inset-0 size-full"
+            loading="lazy"
+          />
+          {(post.embedVideo && isHovered) && (
+            <>
+              <HLSPlayer
+                src={post.embedVideo.playlist}
+                poster={post.embedVideo.thumbnail}
+                autoPlay
+                disablePictureInPicture
+                loop
+                muted={isMuted}
+                className="object-contain absolute inset-0 size-full"
+              />
+              <button
+                className="absolute bottom-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMuted(prev => !prev);
+                }}
+              >
+                {isMuted ? (
+                  <VolumeOffIcon />
+                ) : (
+                  <Volume2Icon />
+                )}
+              </button>
+            </>
+          )}
+          <div className="absolute top-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4">
+            {post.embedVideo ? (
+              <FilmIcon />
+            ) : post.embedImages!.length > 1 ? (
+              <ImagesIcon />
             ) : (
-              <Volume2Icon />
+              <ImageIcon />
             )}
-          </button>
+          </div>
         </>
       )}
-      <div className="absolute top-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4">
-        {post.embedVideo ? (
-          <FilmIcon />
-        ) : post.embedImages!.length > 1 ? (
-          <ImagesIcon />
-        ) : (
-          <ImageIcon />
-        )}
-      </div>
     </Link>
   );
 }

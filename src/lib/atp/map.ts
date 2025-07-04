@@ -11,6 +11,7 @@ import {
 } from "@atproto/api";
 import { AnyProfileView } from "./types/AnyProfileView";
 import { ThreadNode } from "./mapping/threads";
+import { labelsToInfo } from "./strings/labels";
 
 export function mapAuthor(author: AnyProfileView): User {
   return {
@@ -43,6 +44,7 @@ export function mapEmbedPostWithAuthor(post: AppBskyEmbedRecord.ViewRecord) {
     likes: post.likeCount ?? 0,
     replies: post.replyCount ?? 0,
     reposts: post.repostCount ?? 0,
+    labelInfo: labelsToInfo(post.labels),
     ...embedMapped
   };
 
@@ -101,6 +103,7 @@ export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reaso
     reposts: post.repostCount ?? 0,
     reason,
     isThreadParent,
+    labelInfo: labelsToInfo(post.labels),
     ...embedMapped
   };
 

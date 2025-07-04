@@ -40,6 +40,7 @@ export interface Post {
   embedPost?: PostWithAuthor;
   reason?: Reason;
   isThreadParent?: boolean;
+  labelInfo?: string;
 }
 
 export interface PostWithAuthor extends Post {

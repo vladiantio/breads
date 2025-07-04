@@ -10,6 +10,8 @@ import { EmbedImages } from './EmbedImages';
 import { EmbedVideo } from './EmbedVideo';
 import { PostWithAuthor } from '@/types/ResponseSchema';
 import { EmbedPost } from './EmbedPost';
+import { Alert, AlertTitle } from '@/ui/alert';
+import { AlertCircleIcon } from 'lucide-react';
 
 interface PostCardContentProps {
   content: string;
@@ -19,6 +21,7 @@ interface PostCardContentProps {
   embedExternal?: AppBskyEmbedExternal.ViewExternal;
   embedPost?: PostWithAuthor;
   isDetail: boolean;
+  labelInfo?: string;
 }
 
 const PostCardContent: React.FC<PostCardContentProps> = ({
@@ -29,6 +32,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
   embedExternal,
   embedPost,
   isDetail,
+  labelInfo,
 }) => {
   return (
     <div className="space-y-4 mt-4">
@@ -36,14 +40,21 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
         ? <RichTextRenderer text={content} facets={facets} />
         : null}
 
-      {embedImages && embedImages.length > 0 && (
+      {labelInfo && (
+        <Alert>
+          <AlertCircleIcon />
+          <AlertTitle>{labelInfo}</AlertTitle>
+        </Alert>
+      )}
+
+      {!labelInfo && embedImages && embedImages.length > 0 && (
         <EmbedImages
           views={embedImages}
           isDetail={isDetail}
         />
       )}
 
-      {embedVideo && (
+      {!labelInfo && embedVideo && (
         <EmbedVideo view={embedVideo} />
       )}
 

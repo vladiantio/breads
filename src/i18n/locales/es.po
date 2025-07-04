@@ -251,3 +251,13 @@ msgstr "Cargar más"
 
 msgid "Nothing more to load"
 msgstr "No hay más para cargar"
+
+# Labels
+msgid "Adult Content"
+msgstr "Contenido para adultos"
+
+msgid "Non-sexual Nudity"
+msgstr "Desnudez no sexual"
+
+msgid "Graphic Media"
+msgstr "Contenido gráfico"
