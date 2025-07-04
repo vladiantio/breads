@@ -81,6 +81,8 @@ const SEEK_TOOLTIP_Y = "--seek-tooltip-y";
 const SPRITE_CONTAINER_WIDTH = 224;
 const SPRITE_CONTAINER_HEIGHT = 128;
 
+const CONTROLS_VISIBLE_TIMEOUT_MS = 3000;
+
 type Direction = "ltr" | "rtl";
 
 const DirectionContext = React.createContext<Direction | undefined>(undefined);
@@ -323,7 +325,7 @@ function MediaPlayerRootImpl({
     if (autoHide && !mediaPaused && !menuOpen && !dragging) {
       hideControlsTimeoutRef.current = setTimeout(() => {
         store.setState("controlsVisible", false);
-      }, 3000);
+      }, CONTROLS_VISIBLE_TIMEOUT_MS);
     }
   }, [store, autoHide, mediaPaused, menuOpen, dragging]);
 
