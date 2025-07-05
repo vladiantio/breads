@@ -4,7 +4,7 @@ import { Button } from "@/ui/button";
 import { AlertCircleIcon, ArrowDownIcon, Loader2 } from "lucide-react";
 import { useFeed } from "@/lib/atp/hooks/use-feed";
 import { useMemo } from "react";
-import { PostCardSkeleton } from "./PostCardSkeleton";
+import { PostCardSkeleton } from "../post/PostCardSkeleton";
 import { useAtpStore } from "@/lib/atp/store";
 import { PostFeed } from "./PostFeed";
 import { t } from "@lingui/core/macro";

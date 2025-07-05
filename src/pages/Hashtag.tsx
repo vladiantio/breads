@@ -4,7 +4,7 @@ import { Button } from "@/ui/button";
 import { AlertCircleIcon, ArrowDownIcon, ArrowLeft, Loader2 } from "lucide-react";
 import { useMemo } from "react";
 import { usePostsSearch } from "@/lib/atp/hooks/use-posts-search";
-import { PostCardSkeleton } from "@/components/feed/PostCardSkeleton";
+import { PostCardSkeleton } from "@/components/post/PostCardSkeleton";
 import { PostFeed } from "@/components/feed/PostFeed";
 import { Alert, AlertDescription, AlertTitle } from "@/ui/alert";
 

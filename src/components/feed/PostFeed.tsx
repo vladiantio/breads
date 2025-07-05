@@ -1,4 +1,4 @@
-import { PostCard } from "./PostCard";
+import { PostCard } from "../post/PostCard";
 import { PostWithAuthor } from "@/types/ResponseSchema";
 
 interface PostFeedProps {
