@@ -60,6 +60,7 @@
     "@lingui/vite-plugin": "^5.3.1",
     "@tanstack/react-router-devtools": "^1.114.25",
     "@tanstack/router-plugin": "^1.114.25",
+    "@tauri-apps/cli": "^2.6.2",
     "@types/chroma-js": "^3.1.1",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
