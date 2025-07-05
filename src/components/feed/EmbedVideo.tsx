@@ -38,10 +38,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
         }}
       >
         <div className="bg-accent border overflow-hidden rounded-lg size-full select-none">
-          <MediaPlayer
-            autoHide
-            defaultControlsVisible={false}
-          >
+          <MediaPlayer autoHide>
             <MediaPlayerVideo asChild>
               <MuxVideo
                 autoPlay
