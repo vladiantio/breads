@@ -1,3 +1,3 @@
-package com.tauri.dev
+package app.breads
 
 class MainActivity : TauriActivity()
