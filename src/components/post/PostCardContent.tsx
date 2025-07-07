@@ -1,39 +1,27 @@
-import {
-  AppBskyEmbedExternal,
-  AppBskyEmbedImages,
-  AppBskyEmbedVideo,
-  Facet
-} from '@atproto/api';
-import { RichTextRenderer } from '../shared/RichTextRenderer';
-import { EmbedExternal } from './EmbedExternal';
-import { EmbedImages } from './EmbedImages';
-import { EmbedVideo } from './EmbedVideo';
-import { PostWithAuthor } from '@/types/ResponseSchema';
-import { EmbedPost } from './EmbedPost';
-import { Alert, AlertTitle } from '@/ui/alert';
-import { AlertCircleIcon } from 'lucide-react';
+import { RichTextRenderer } from '../shared/RichTextRenderer'
+import { EmbedExternal } from './EmbedExternal'
+import { EmbedImages } from './EmbedImages'
+import { EmbedVideo } from './EmbedVideo'
+import { EmbedPost } from './EmbedPost'
+import { Alert, AlertTitle } from '@/ui/alert'
+import { AlertCircleIcon } from 'lucide-react'
+import { usePostCard } from './PostCardContext'
 
-interface PostCardContentProps {
-  content: string;
-  facets?: Facet[];
-  embedImages?: AppBskyEmbedImages.ViewImage[];
-  embedVideo?: AppBskyEmbedVideo.View;
-  embedExternal?: AppBskyEmbedExternal.ViewExternal;
-  embedPost?: PostWithAuthor;
-  isDetail: boolean;
-  labelInfo?: string;
-}
+export function PostCardContent() {
+  const {
+    post: {
+      content,
+      facets,
+      embedImages,
+      embedVideo,
+      embedExternal,
+      embedPost,
+      labelInfo,
+    },
+    isDetail,
+    isEmbed,
+  } = usePostCard()
 
-const PostCardContent: React.FC<PostCardContentProps> = ({
-  content,
-  facets,
-  embedImages,
-  embedVideo,
-  embedExternal,
-  embedPost,
-  isDetail,
-  labelInfo,
-}) => {
   return (
     <div className="space-y-4 mt-4">
       {content && content.trim().length > 0
@@ -50,7 +38,7 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
       {!labelInfo && embedImages && embedImages.length > 0 && (
         <EmbedImages
           views={embedImages}
-          isDetail={isDetail}
+          isDetail={isDetail || isEmbed}
         />
       )}
 
@@ -66,7 +54,5 @@ const PostCardContent: React.FC<PostCardContentProps> = ({
         <EmbedPost post={embedPost} />
       )}
     </div>
-  );
-};
-
-export { PostCardContent };
+  )
+}

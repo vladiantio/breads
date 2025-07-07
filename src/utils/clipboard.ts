@@ -1,5 +1,4 @@
 export async function copyToClipboard(text: string) {
-  let success = true
   try {
     await navigator.clipboard.writeText(text)
   } catch {
@@ -8,12 +7,7 @@ export async function copyToClipboard(text: string) {
     document.body.appendChild(textArea)
     textArea.focus()
     textArea.select()
-    try {
-      document.execCommand("copy")
-    } catch {
-      success = false
-    }
+    document.execCommand("copy")
     document.body.removeChild(textArea)
   }
-  return success
 }

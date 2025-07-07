@@ -1,17 +1,16 @@
-import { User } from '@/types/ResponseSchema';
-import { formatTimestamp } from '@/utils/date';
-import { AuthorLink } from '../shared/AuthorLink';
-import { sanitizeHandle } from '@/lib/atp/strings/handles';
+import { formatTimestamp } from '@/utils/date'
+import { AuthorLink } from '../shared/AuthorLink'
+import { sanitizeHandle } from '@/lib/atp/strings/handles'
+import { usePostCard } from './PostCardContext'
 
-interface PostCardHeaderProps {
-  author: User;
-  timestamp: string;
-}
+export function PostCardHeader() {
+  const {
+    post: { 
+      author, 
+      timestamp,
+    },
+  } = usePostCard()
 
-export function PostCardHeader({ 
-  author, 
-  timestamp,
-}: PostCardHeaderProps) {
   return (
     <div className="h-12">
       <div className="flex items-center">
@@ -28,5 +27,5 @@ export function PostCardHeader({
         <time dateTime={timestamp} className="shrink-0">{formatTimestamp(timestamp)}</time>
       </div>
     </div>
-  );
+  )
 }

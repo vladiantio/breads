@@ -4,30 +4,26 @@ import {
   LinkIcon,
   MoreHorizontal,
   XCircle
-} from 'lucide-react';
+} from 'lucide-react'
 import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/ui/dropdown-menu';
-import { Trans } from '@lingui/react/macro';
-import { Button } from '@/ui/button';
+} from '@/ui/dropdown-menu'
+import { Trans } from '@lingui/react/macro'
+import { Button } from '@/ui/button'
+import { usePostCard } from './PostCardContext'
 
-export interface PostCardMenuProps {
-  onCopyLink: (e: React.MouseEvent) => void;
-  onCopyText: (e: React.MouseEvent) => void;
-  onNotInterested: (e: React.MouseEvent) => void;
-  onReport: (e: React.MouseEvent) => void;
-}
+export function PostCardMenu() {
+  const {
+    onCopyLink,
+    onCopyText,
+    onNotInterested,
+    onReport,
+  } = usePostCard()
 
-export const PostCardMenu: React.FC<PostCardMenuProps> = ({
-  onCopyLink,
-  onCopyText,
-  onNotInterested,
-  onReport,
-}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -60,5 +56,5 @@ export const PostCardMenu: React.FC<PostCardMenuProps> = ({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}

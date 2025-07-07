@@ -1,35 +1,26 @@
-import React from 'react';
-import { Heart, MessageCircle, Repeat, Repeat1, Share2 } from 'lucide-react';
-import { formatNumber } from '@/utils/number';
-import { Button } from '@/ui/button';
-import { cn } from '@/lib/utils';
-import { t } from "@lingui/core/macro";
-import { PostCardMenu, PostCardMenuProps } from './PostCardMenu';
+import { Heart, MessageCircle, Repeat, Repeat1, Share2 } from 'lucide-react'
+import { formatNumber } from '@/utils/number'
+import { Button } from '@/ui/button'
+import { cn } from '@/lib/utils'
+import { t } from "@lingui/core/macro"
+import { PostCardMenu } from './PostCardMenu'
+import { usePostCard } from './PostCardContext'
 
-interface PostCardActionsProps extends PostCardMenuProps {
-  likes: number;
-  replies: number;
-  reposts: number;
-  isLiked: boolean;
-  isReposted: boolean;
-  onLike: (e: React.MouseEvent) => void;
-  onRepost: (e: React.MouseEvent) => void;
-  onShare: (e: React.MouseEvent) => void;
-  onReply: (e: React.MouseEvent) => void;
-}
+export function PostCardActions() {
+  const {
+    post: {
+      likes,
+      replies,
+      reposts,
+    },
+    isLiked,
+    isReposted,
+    onLike,
+    onRepost,
+    onShare,
+    onReply,
+  } = usePostCard()
 
-const PostCardActions: React.FC<PostCardActionsProps> = ({
-  likes,
-  replies,
-  reposts,
-  isLiked,
-  isReposted,
-  onLike,
-  onRepost,
-  onShare,
-  onReply,
-  ...menuProps
-}) => {
   return (
     <div className="flex items-center justify-between gap-x-1 mt-4 -mx-3">
       <Button
@@ -82,9 +73,7 @@ const PostCardActions: React.FC<PostCardActionsProps> = ({
         <Share2 className='size-5' />
       </Button>
       
-      <PostCardMenu {...menuProps} />
+      <PostCardMenu />
     </div>
-  );
-};
-
-export { PostCardActions };
+  )
+}

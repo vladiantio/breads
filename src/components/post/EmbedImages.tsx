@@ -1,18 +1,18 @@
-import { AppBskyEmbedImages } from "@atproto/api";
-import { EmbedToggle } from "./EmbedToggle";
-import { useImagePreload } from "@/hooks/use-image-preload";
-import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel";
-import { cn } from "@/lib/utils";
-import { t } from "@lingui/core/macro";
-import { AltReader } from "./AltReader";
+import { AppBskyEmbedImages } from "@atproto/api"
+import { EmbedToggle } from "./EmbedToggle"
+import { useImagePreload } from "@/hooks/use-image-preload"
+import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel"
+import { cn } from "@/lib/utils"
+import { t } from "@lingui/core/macro"
+import { AltReader } from "./AltReader"
 
 interface EmbedImagesProps {
   views: AppBskyEmbedImages.ViewImage[]
-  isDetail: boolean
+  isDetail?: boolean
 }
 
 export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
-  const { hoverProps } = useImagePreload(views.map(o => o.thumb));
+  const { hoverProps } = useImagePreload(views.map(o => o.thumb))
 
   return (
     <EmbedToggle
@@ -104,5 +104,5 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
         </div>
       )}
     </EmbedToggle>
-  );
+  )
 }
