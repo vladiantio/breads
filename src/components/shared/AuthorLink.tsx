@@ -11,6 +11,7 @@ interface AuthorLinkProps {
   displayName?: string
   className?: string
   verification?: AppBskyActorDefs.VerificationState
+  onlyText?: boolean
 }
 
 export function AuthorLink({
@@ -19,21 +20,26 @@ export function AuthorLink({
   displayName,
   className,
   verification,
+  onlyText,
 }: AuthorLinkProps) {
   const validHandle = isInvalidHandle(username) ? did ?? username : username;
 
   return (
     <div className="inline-flex items-center overflow-hidden">
-      <AuthorHoverCard handle={validHandle}>
-        <Link
-          to="/profile/$username"
-          params={{ username: validHandle }}
-          className={cn("font-semibold text-foreground hover:underline active:opacity-60 truncate", className)}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {displayName || sanitizeHandle(username)}
-        </Link>
-      </AuthorHoverCard>
+      {onlyText ? (
+        <span className="font-semibold text-foreground truncate">{displayName || sanitizeHandle(username)}</span>
+      ) : (
+        <AuthorHoverCard handle={validHandle}>
+          <Link
+            to="/profile/$username"
+            params={{ username: validHandle }}
+            className={cn("font-semibold text-foreground hover:underline active:opacity-60 truncate", className)}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {displayName || sanitizeHandle(username)}
+          </Link>
+        </AuthorHoverCard>
+      )}
       <VerifiedBadge
         className="ml-2 size-3"
         verification={verification}
