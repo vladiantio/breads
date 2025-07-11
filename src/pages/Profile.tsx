@@ -11,12 +11,12 @@ export function Profile({ handle }: { handle?: string }) {
   } = useResolveHandle({ handle });
 
   const {
-    data,
+    data: user,
     isLoading: isLoadingProfile,
   } = useProfile({ actor });
 
-  useDocumentTitle(data && (
-    data.displayName ? `${data.displayName} (@${data.username})` : `@${data.username}`
+  useDocumentTitle(user && (
+    user.displayName ? `${user.displayName} (@${user.username})` : `@${user.username}`
   ));
 
   const isCurrentUser = false;
@@ -30,12 +30,12 @@ export function Profile({ handle }: { handle?: string }) {
   if (!actor)
     return "No actor";
 
-  if (!data)
+  if (!user)
     return "Nothing to show!";
 
   return <>
-    <ProfileHeader user={data} isCurrentUser={isCurrentUser} />
+    <ProfileHeader user={user} isCurrentUser={isCurrentUser} />
 
-    <ProfileTabs actor={actor} />
+    <ProfileTabs actor={actor} user={user} />
   </>
 }

@@ -8,12 +8,14 @@ import { ArrowDown, Loader2 } from "lucide-react";
 import { PostFeed } from "../feed/PostFeed";
 import { Gallery, GallerySkeleton } from "../gallery/Gallery";
 import { t } from "@lingui/core/macro";
+import { User } from "@/types/ResponseSchema";
 
 interface ProfileProps {
-  actor: string,
+  actor: string
+  user: User
 }
 
-function Posts({ actor }: ProfileProps) {
+function Posts({ actor, user }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -38,6 +40,7 @@ function Posts({ actor }: ProfileProps) {
     <>
       <PostFeed
         posts={posts}
+        authorFeed={user}
       />
       {isFetchingNextPage && Array.from({ length: 30 }).map((_, i) => (
         <PostCardSkeleton key={i} />
@@ -59,7 +62,7 @@ function Posts({ actor }: ProfileProps) {
   )
 }
 
-function Reposts({ actor }: ProfileProps) {
+function Reposts({ actor, user }: ProfileProps) {
   const {
     data,
     fetchNextPage,
@@ -85,6 +88,7 @@ function Reposts({ actor }: ProfileProps) {
     <>
       <PostFeed
         posts={posts}
+        authorFeed={user}
       />
       {isFetchingNextPage && Array.from({ length: 30 }).map((_, i) => (
         <PostCardSkeleton key={i} />
@@ -186,7 +190,13 @@ function Videos({ actor }: ProfileProps) {
   )
 }
 
-export function ProfileTabs({ actor }: { actor: string }) {
+export function ProfileTabs({
+  actor,
+  user,
+}: {
+  actor: string
+  user: User
+}) {
   const [activeTab, setActiveTab] = useState('posts');
 
   const tabList = [
@@ -229,6 +239,7 @@ export function ProfileTabs({ actor }: { actor: string }) {
         >
           <tab.component
             actor={actor}
+            user={user}
           />
         </div>
       ) : null)}

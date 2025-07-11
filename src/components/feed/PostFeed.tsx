@@ -1,12 +1,14 @@
 import { PostCard } from "../post/PostCard";
-import { PostWithAuthor } from "@/types/ResponseSchema";
+import { PostWithAuthor, User } from "@/types/ResponseSchema";
 
 interface PostFeedProps {
-  posts: PostWithAuthor[];
+  posts: PostWithAuthor[]
+  authorFeed?: User
 }
 
 export function PostFeed({
   posts,
+  authorFeed,
 }: PostFeedProps) {
   return (
     <>
@@ -14,6 +16,7 @@ export function PostFeed({
         <PostCard
           key={post.id}
           post={post}
+          authorFeed={authorFeed}
         />
       ))}
     </>
