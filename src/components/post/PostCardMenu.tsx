@@ -15,6 +15,30 @@ import {
 import { Trans } from '@lingui/react/macro'
 import { Button } from '@/ui/button'
 import { usePostCard } from './PostCardContext'
+import { isMobileDevice } from '@/lib/browser'
+import { Drawer, DrawerContent, DrawerTrigger } from '@/ui/drawer'
+import { useState } from 'react'
+import { cn } from '@/lib/utils'
+import { Separator } from '@/ui/separator'
+
+type AltReaderButtonProps = React.ComponentProps<"button">;
+
+function PostCardMenuButton({
+  className,
+  ...props
+}: AltReaderButtonProps) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={cn("rounded-full", className)}
+      onClick={(e) => e.stopPropagation()}
+      {...props}
+    >
+      <MoreHorizontal className="size-5" />
+    </Button>
+  )
+}
 
 export function PostCardMenu() {
   const {
@@ -23,18 +47,42 @@ export function PostCardMenu() {
     onNotInterested,
     onReport,
   } = usePostCard()
+  const [open, setOpen] = useState(false)
+  const isMobile = isMobileDevice()
+
+  if (isMobile)
+    return (
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <PostCardMenuButton />
+        </DrawerTrigger>
+        <DrawerContent>
+          <Button onClick={onCopyLink} className="justify-start h-12" size="lg" variant="ghost">
+            <LinkIcon />
+            <span><Trans>Copy link</Trans></span>
+          </Button>
+          <Button onClick={onCopyText} className="justify-start h-12" size="lg" variant="ghost">
+            <Copy />
+            <span><Trans>Copy text</Trans></span>
+          </Button>
+          <Separator />
+          <Button onClick={onNotInterested} className="justify-start h-12" size="lg" variant="ghost">
+            <XCircle />
+            <span><Trans>Not interested in this post</Trans></span>
+          </Button>
+          <Button onClick={onReport} className="justify-start h-12" size="lg" variant="ghost-destructive">
+            <Flag />
+            <span><Trans>Report post</Trans></span>
+          </Button>
+        </DrawerContent>
+      </Drawer>
+    );
+
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-full"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <MoreHorizontal className="size-5" />
-        </Button>
+        <PostCardMenuButton />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-fit">
         <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
