@@ -25,14 +25,20 @@ type AltReaderButtonProps = React.ComponentProps<"button">;
 
 function PostCardMenuButton({
   className,
+  onClick: onClickProp,
   ...props
 }: AltReaderButtonProps) {
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    onClickProp?.(e)
+  }
+
   return (
     <Button
       variant="ghost"
       size="icon"
       className={cn("rounded-full", className)}
-      onClick={(e) => e.stopPropagation()}
+      onClick={onClick}
       {...props}
     >
       <MoreHorizontal className="size-5" />
@@ -76,8 +82,7 @@ export function PostCardMenu() {
           </Button>
         </DrawerContent>
       </Drawer>
-    );
-
+    )
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
