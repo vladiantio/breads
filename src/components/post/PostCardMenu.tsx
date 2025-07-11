@@ -63,23 +63,25 @@ export function PostCardMenu() {
           <PostCardMenuButton />
         </DrawerTrigger>
         <DrawerContent>
-          <Button onClick={onCopyLink} className="justify-start h-12" size="lg" variant="ghost">
-            <LinkIcon />
-            <span><Trans>Copy link</Trans></span>
-          </Button>
-          <Button onClick={onCopyText} className="justify-start h-12" size="lg" variant="ghost">
-            <Copy />
-            <span><Trans>Copy text</Trans></span>
-          </Button>
-          <Separator />
-          <Button onClick={onNotInterested} className="justify-start h-12" size="lg" variant="ghost">
-            <XCircle />
-            <span><Trans>Not interested in this post</Trans></span>
-          </Button>
-          <Button onClick={onReport} className="justify-start h-12" size="lg" variant="ghost-destructive">
-            <Flag />
-            <span><Trans>Report post</Trans></span>
-          </Button>
+          <div className="flex flex-col pb-6">
+            <Button onClick={onCopyLink} className="justify-start h-12" size="lg" variant="ghost">
+              <LinkIcon />
+              <span><Trans>Copy link</Trans></span>
+            </Button>
+            <Button onClick={onCopyText} className="justify-start h-12" size="lg" variant="ghost">
+              <Copy />
+              <span><Trans>Copy text</Trans></span>
+            </Button>
+            <Separator />
+            <Button onClick={onNotInterested} className="justify-start h-12" size="lg" variant="ghost">
+              <XCircle />
+              <span><Trans>Not interested in this post</Trans></span>
+            </Button>
+            <Button onClick={onReport} className="justify-start h-12" size="lg" variant="ghost-destructive">
+              <Flag />
+              <span><Trans>Report post</Trans></span>
+            </Button>
+          </div>
         </DrawerContent>
       </Drawer>
     )
