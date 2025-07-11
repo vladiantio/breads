@@ -9,6 +9,7 @@ export function PostCardHeader() {
       author, 
       timestamp,
     },
+    isSameAuthorFeed,
   } = usePostCard()
 
   return (
@@ -19,6 +20,7 @@ export function PostCardHeader() {
           username={author.username}
           displayName={author.displayName}
           verification={author.verification}
+          onlyText={isSameAuthorFeed}
         />
       </div>
       <div className="flex items-center gap-x-2 text-muted-foreground">

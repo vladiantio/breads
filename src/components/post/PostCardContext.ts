@@ -3,6 +3,7 @@ import { createContext, useContext } from "react"
 
 export type PostCardContextProps = {
   post: PostWithAuthor
+  isSameAuthorFeed: boolean
   isLiked: boolean
   isReposted: boolean
   onLike: (e: React.MouseEvent) => void

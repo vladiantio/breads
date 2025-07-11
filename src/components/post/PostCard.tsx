@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { PinIcon, RepeatIcon } from 'lucide-react'
 import { UserAvatar } from '../shared/UserAvatar'
 import { toast } from "sonner"
-import { PostWithAuthor } from '@/types/ResponseSchema'
+import { PostWithAuthor, User } from '@/types/ResponseSchema'
 import { convertRichTextToPlainText } from '@/lib/atp/utils'
 import { PostCardActions } from './PostCardActions'
 import { PostCardContent } from './PostCardContent'
@@ -20,12 +20,14 @@ interface PostCardProps {
   post: PostWithAuthor
   isDetail?: boolean
   isEmbed?: boolean
+  authorFeed?: User
 }
 
 export function PostCard({
   post,
   isDetail = false,
   isEmbed = false,
+  authorFeed,
 }: PostCardProps) {
   const navigate = useNavigate()
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp()
@@ -35,6 +37,7 @@ export function PostCard({
   const [ isLiked, setIsLiked ] = useState(false)
   const [ isReposted, setIsReposted ] = useState(false)
   const validHandle = useMemo(() => isInvalidHandle(post.author.username) ? post.author.id : post.author.username, [post.author])
+  const isSameAuthorFeed = useMemo(() => authorFeed ? post.author.id == authorFeed.id : false, [authorFeed, post.author.id])
 
   const handlePostClick = (e: React.MouseEvent) => {
     if (isEmbed)
@@ -123,6 +126,7 @@ export function PostCard({
   const contextValue = useMemo<PostCardContextProps>(
     () => ({
       post,
+      isSameAuthorFeed,
       isLiked,
       isReposted,
       onLike: handleLike,
@@ -136,7 +140,17 @@ export function PostCard({
       isDetail,
       isEmbed,
     }),
-    [handleCopyLink, handleCopyText, handleShare, isDetail, isEmbed, isLiked, isReposted, post]
+    [
+      handleCopyLink,
+      handleCopyText,
+      handleShare,
+      isDetail,
+      isEmbed,
+      isLiked,
+      isReposted,
+      isSameAuthorFeed,
+      post,
+    ]
   )
 
   return (
@@ -171,7 +185,7 @@ export function PostCard({
                 username={validHandle}
                 displayName={post.author.displayName}
                 src={post.author.avatar}
-                clickable
+                clickable={!isSameAuthorFeed}
               />
               <div className="flex-1 min-w-0">
                 <PostCardHeader />
