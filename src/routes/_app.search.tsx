@@ -1,4 +1,4 @@
-import { Search } from '@/pages/Search'
+import { Search } from '@/pages/search'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/search')({

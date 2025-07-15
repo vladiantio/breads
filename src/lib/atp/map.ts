@@ -1,4 +1,4 @@
-import { Reason, PostWithAuthor, ThreadResponseSchema, User } from "@/types/ResponseSchema";
+import { Reason, PostWithAuthor, ThreadResponseSchema, User } from "@/types/response-schema";
 import {
   $Typed,
   AppBskyEmbedExternal,
@@ -9,7 +9,7 @@ import {
   AppBskyFeedDefs,
   Facet,
 } from "@atproto/api";
-import { AnyProfileView } from "./types/AnyProfileView";
+import { AnyProfileView } from "./types/any-profile-view";
 import { ThreadNode } from "./mapping/threads";
 import { labelsToInfo } from "./strings/labels";
 

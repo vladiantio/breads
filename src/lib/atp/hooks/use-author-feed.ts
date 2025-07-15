@@ -1,8 +1,8 @@
 import { InfiniteData, QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 import { useAtpStore } from '../store';
-import { ResponseSchema } from '@/types/ResponseSchema';
+import { ResponseSchema } from '@/types/response-schema';
 import { mapPosts } from '../map';
-import { TypeFilterKey } from '../types/TypeFilterKey';
+import { TypeFilterKey } from '../types/type-filter-key';
 import {
   AppBskyEmbedRecord,
   AppBskyEmbedVideo,
