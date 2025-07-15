@@ -5,7 +5,7 @@ import { UserAvatar } from '../shared/UserAvatar';
 import { PostEditor } from './PostEditor';
 import { PostActions } from './PostActions';
 import { MediaPreview } from './MediaPreview';
-import { getCurrentUser } from '@/data/users';
+import { useCurrentProfile } from '@/lib/atp/hooks/use-current-profile';
 
 interface CreatePostProps {
   autoFocus?: boolean;
@@ -18,8 +18,10 @@ const CreatePost: React.FC<CreatePostProps> = ({
   showCancel = false,
   onCancel
 }) => {
-  // const { currentUser, createPost } = useApp();
-  const currentUser = getCurrentUser();
+  const {
+    data: currentUser,
+  } = useCurrentProfile();
+
   const [content, setContent] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -93,9 +95,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
     <article>
       <div className="flex space-x-4 p-4">
         <UserAvatar 
-          username={currentUser.username}
-          displayName={currentUser.displayName}
-          src={currentUser.avatar}
+          username={currentUser?.username}
+          displayName={currentUser?.displayName}
+          src={currentUser?.avatar}
         />
         
         <div className="flex-1">
