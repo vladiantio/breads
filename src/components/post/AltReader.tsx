@@ -38,7 +38,7 @@ export function AltReader({
           <AltReaderButton />
         </DrawerTrigger>
         <DrawerContent>
-          <div className="p-6 text-pretty whitespace-pre-wrap">{alt}</div>
+          <div className="p-6 pb-12 text-pretty whitespace-pre-wrap">{alt}</div>
         </DrawerContent>
       </Drawer>
     );
