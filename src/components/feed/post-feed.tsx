@@ -1,5 +1,6 @@
-import { PostCard } from "../post/post-card";
-import { PostWithAuthor, User } from "@/types/response-schema";
+import { RowVirtualizerDynamic } from "@/ui/virtualizer"
+import { PostCard } from "../post/post-card"
+import { PostWithAuthor, User } from "@/types/response-schema"
 
 interface PostFeedProps {
   posts: PostWithAuthor[]
@@ -11,14 +12,14 @@ export function PostFeed({
   authorFeed,
 }: PostFeedProps) {
   return (
-    <>
-      {posts.map((post) => (
+    <RowVirtualizerDynamic
+      items={posts}
+      render={(post) => (
         <PostCard
-          key={post.id}
           post={post}
           authorFeed={authorFeed}
         />
-      ))}
-    </>
-  );
+      )}
+    />
+  )
 }
