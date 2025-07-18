@@ -1,3 +1,4 @@
+import { PostFeed } from "@/components/feed/post-feed";
 import { PostCard } from "@/components/post/post-card";
 import { AuthorHeader } from "@/components/profile/author-header";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -74,12 +75,11 @@ export function Post({ uri }: { uri: string }) {
         />
       ) : null}
 
-      {data.post && data.replies ? flatReplies(data.replies, data.post.author).map(post => (
-        <PostCard
-          key={post.id}
-          post={post}
+      {data.post && data.replies ? (
+        <PostFeed
+          posts={flatReplies(data.replies, data.post.author)}
         />
-      )) : null}
+      ) : null}
     </>
   )
 }
