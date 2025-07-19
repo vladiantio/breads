@@ -6,7 +6,7 @@ import { PostCardSkeleton } from "../post/post-card-skeleton";
 import { Button } from "@/ui/button";
 import { ArrowDown, Loader2 } from "lucide-react";
 import { PostFeed } from "../feed/post-feed";
-import { Gallery, GallerySkeleton } from "../gallery/gallery";
+import { Gallery } from "../gallery/gallery";
 import { t } from "@lingui/core/macro";
 import { User } from "@/types/response-schema";
 
