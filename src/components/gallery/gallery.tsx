@@ -56,6 +56,8 @@ function GalleryCard({ post }: { post: PostWithAuthor }) {
                   className="object-contain absolute inset-0 size-full"
                 />
                 <button
+                  aria-label={isMuted ? "Unmute" : "Mute"}
+                  aria-pressed={isMuted}
                   className="absolute z-[1] bottom-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
                   onClick={() => setIsMuted(prev => !prev)}
                 >
