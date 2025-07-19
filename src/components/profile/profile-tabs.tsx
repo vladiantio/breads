@@ -125,14 +125,17 @@ function Media({ actor }: ProfileProps) {
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
 
   if (isLoading)
-    return <GallerySkeleton length={30} />;
+    return (
+      <div className="flex items-center justify-center p-4">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
 
   return (
     <>
       <Gallery
         posts={posts}
       />
-      {isFetchingNextPage && <GallerySkeleton length={30} />}
       <div className="text-center p-4">
         <Button
           variant="outline"
@@ -165,14 +168,17 @@ function Videos({ actor }: ProfileProps) {
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data]);
 
   if (isLoading)
-    return <GallerySkeleton length={30} />;
+    return (
+      <div className="flex items-center justify-center p-4">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
 
   return (
     <>
       <Gallery
         posts={posts}
       />
-      {isFetchingNextPage && <GallerySkeleton length={30} />}
       <div className="text-center p-4">
         <Button
           variant="outline"
