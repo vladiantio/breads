@@ -110,18 +110,3 @@ export function Gallery({
     />
   );
 }
-
-export function GallerySkeleton({length}: {length: number}) {
-  return (
-    <div className="grid grid-cols-3 gap-0.5">
-      {Array.from({ length }).map((_, index) => (
-        <div
-          key={index}
-          className="aspect-[9/16] overflow-hidden relative"
-        >
-          <Skeleton className="size-full rounded-none" />
-        </div>
-      ))}
-    </div>
-  );
-}
