@@ -29,6 +29,9 @@ msgstr "Configuración"
 msgid "Logout"
 msgstr "Cerrar sesión"
 
+msgid "Thread"
+msgstr "Hilo"
+
 # Authentication
 msgid "Log in"
 msgstr "Iniciar sesión"

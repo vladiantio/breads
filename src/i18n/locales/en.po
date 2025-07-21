@@ -29,6 +29,9 @@ msgstr "Settings"
 msgid "Logout"
 msgstr "Logout"
 
+msgid "Thread"
+msgstr "Thread"
+
 # Authentication
 msgid "Log in"
 msgstr "Log in"
