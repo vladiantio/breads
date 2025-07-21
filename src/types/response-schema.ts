@@ -41,6 +41,7 @@ export interface Post {
   reason?: Reason;
   isThreadParent?: boolean;
   labelInfo?: string;
+  viewer?: AppBskyFeedDefs.ViewerState;
 }
 
 export interface PostWithAuthor extends Post {

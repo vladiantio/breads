@@ -104,6 +104,7 @@ export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reaso
     reason,
     isThreadParent,
     labelInfo: labelsToInfo(post.labels),
+    viewer: post.viewer,
     ...embedMapped
   };
 
