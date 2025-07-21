@@ -1,14 +1,37 @@
-import { FC, useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/ui/tabs";
-import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { NavIconLink } from "../navigation/nav-icon-link";
-import { LogInIcon, SettingsIcon } from "lucide-react";
-import { t } from "@lingui/core/macro";
+import { useCallback, useState } from "react"
+import { Tabs, TabsList, TabsTrigger } from "@/ui/tabs"
+import { ScrollArea, ScrollBar } from "@/ui/scroll-area"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { NavIconLink } from "../navigation/nav-icon-link"
+import { LogInIcon, SettingsIcon } from "lucide-react"
+import { t } from "@lingui/core/macro"
 
-const FeedTabs: FC = () => {
-  const [activeTab, setActiveTab] = useState('discover');
-  const isMobile = useIsMobile();
+interface FeedTabsProps {
+  activeTab?: string
+  defaultActiveTab?: string
+  onActiveTabChange?: (value: string) => void
+}
+
+export function FeedTabs({
+  activeTab: activeTabProp,
+  defaultActiveTab = "discover",
+  onActiveTabChange: setActiveTabProp,
+}: FeedTabsProps) {
+  const isMobile = useIsMobile()
+
+  const [_activeTab, _setActiveTab] = useState(defaultActiveTab)
+  const activeTab = activeTabProp ?? _activeTab
+  const setActiveTab = useCallback(
+    (value: string | ((value: string) => string)) => {
+      const activeTabState = typeof value === "function" ? value(activeTab) : value
+      if (setActiveTabProp) {
+        setActiveTabProp(activeTabState)
+      } else {
+        _setActiveTab(activeTabState)
+      }
+    },
+    [setActiveTabProp, activeTab]
+  )
 
   return (
     <div className="sticky bg-background top-0 z-10 w-full">
@@ -41,12 +64,14 @@ const FeedTabs: FC = () => {
         <ScrollArea>
           <TabsList className="p-2 min-w-full">
             <TabsTrigger
+              id="tab-discover"
               value="discover"
               className="grow"
             >
               {t`Discover`}
             </TabsTrigger>
             <TabsTrigger
+              id="tab-following"
               value="following"
               className="grow"
             >
@@ -59,5 +84,3 @@ const FeedTabs: FC = () => {
     </div>
   )
 }
-
-export { FeedTabs };
