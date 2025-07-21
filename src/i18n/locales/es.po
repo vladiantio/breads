@@ -155,12 +155,6 @@ msgstr "Contraseña"
 msgid "Password is required"
 msgstr "Se requiere contraseña"
 
-msgid "A sign in code has been sent to your email address"
-msgstr "Se ha enviado un código de inicio de sesión a tu correo electrónico"
-
-msgid "Token is invalid"
-msgstr "El token no es válido"
-
 msgid "Two-factor confirmation"
 msgstr "Confirmación de dos factores"
 
