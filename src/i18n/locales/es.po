@@ -43,6 +43,9 @@ msgstr "Enviar"
 msgid "Cancel"
 msgstr "Cancelar"
 
+msgid "Go back"
+msgstr "Volver"
+
 msgid "Reply"
 msgstr "Responder"
 

@@ -43,6 +43,9 @@ msgstr "Submit"
 msgid "Cancel"
 msgstr "Cancel"
 
+msgid "Go back"
+msgstr "Go back"
+
 msgid "Reply"
 msgstr "Reply"
 
