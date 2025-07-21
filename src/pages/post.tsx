@@ -57,7 +57,7 @@ export function Post({ uri }: { uri: string }) {
 
   return (
     <>
-      <PostThreadHeader />
+      <PostThreadHeader post={data.post} />
 
       {data.parent ? flatParent(data.parent).map(post => (
         <PostCard
