@@ -1,6 +1,6 @@
 import { PostFeed } from "@/components/feed/post-feed";
 import { PostCard } from "@/components/post/post-card";
-import { AuthorHeader } from "@/components/profile/author-header";
+import { PostThreadHeader } from "@/components/post/post-thread-header";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { usePostThread } from "@/lib/atp/hooks/use-post-thread";
 import { PostWithAuthor, ThreadResponseSchema, User } from "@/types/response-schema";
@@ -57,9 +57,7 @@ export function Post({ uri }: { uri: string }) {
 
   return (
     <>
-      <AuthorHeader
-        user={data.post?.author ?? {}}
-      />
+      <PostThreadHeader />
 
       {data.parent ? flatParent(data.parent).map(post => (
         <PostCard
