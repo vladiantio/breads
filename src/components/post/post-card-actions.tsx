@@ -12,6 +12,7 @@ export function PostCardActions() {
       likes,
       replies,
       reposts,
+      viewer,
     },
     isLiked,
     isReposted,
@@ -28,6 +29,7 @@ export function PostCardActions() {
         variant="ghost"
         onClick={onReply}
         className="rounded-full"
+        disabled={viewer?.replyDisabled}
       >
         <MessageCircle className='size-5' />
         {replies > 0 && (
