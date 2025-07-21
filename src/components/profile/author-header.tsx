@@ -1,31 +1,21 @@
-import { FC } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { useRouter } from '@tanstack/react-router';
-import { User } from '@/types/response-schema';
-import { Button } from '@/ui/button';
-import { sanitizeHandle } from '@/lib/atp/strings/handles';
-import { Trans } from '@lingui/react/macro';
+import { User } from '@/types/response-schema'
+import { Button } from '@/ui/button'
+import { sanitizeHandle } from '@/lib/atp/strings/handles'
+import { Trans } from '@lingui/react/macro'
+import { GoBackButton } from '../shared/go-back-button'
 
 interface AuthorHeaderProps {
-  user: Partial<User>;
-  isCurrentUser?: boolean;
+  user: Partial<User>
+  isCurrentUser?: boolean
 }
 
-const AuthorHeader: FC<AuthorHeaderProps> = ({
+export function AuthorHeader({
   user,
   isCurrentUser = false,
-}) => {
-  const { history } = useRouter();
-
+}: AuthorHeaderProps) {
   return (
     <div className="sticky top-0 z-[2] bg-background px-4 h-16 flex items-center justify-between gap-x-4">
-      <Button
-        variant="ghost"
-        className="rounded-full !p-2 -ml-1"
-        onClick={() => history.go(-1)}
-      >
-        <ArrowLeft className="size-5" />
-      </Button>
+      <GoBackButton className="-ml-1" />
       <div className="text-center text-sm overflow-hidden [&>*]:truncate">
         {user.displayName && (
           <p className="font-semibold">{user.displayName}</p>
@@ -46,7 +36,5 @@ const AuthorHeader: FC<AuthorHeaderProps> = ({
         )}
       </div>
     </div>
-  );
-};
-
-export { AuthorHeader };
+  )
+}

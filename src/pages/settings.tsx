@@ -1,16 +1,14 @@
-import { ThemePresetSelect } from "@/components/settings/theme-preset-select";
-import { Button } from "@/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
-import { useTheme } from "@/theme/theme-provider";
-import { presets } from "@/utils/theme-presets";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
-import { useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Moon, Sun, SunMoon } from "lucide-react";
+import { ThemePresetSelect } from "@/components/settings/theme-preset-select"
+import { RadioGroup, RadioGroupItem } from "@/ui/radio-group"
+import { useTheme } from "@/theme/theme-provider"
+import { presets } from "@/utils/theme-presets"
+import { t } from "@lingui/core/macro"
+import { Trans } from "@lingui/react/macro"
+import { Moon, Sun, SunMoon } from "lucide-react"
+import { GoBackButton } from "@/components/shared/go-back-button"
 
 export function Settings() {
-  const { history } = useRouter();
-  const { theme, themeSettings, setTheme, setThemeSettings } = useTheme();
+  const { theme, themeSettings, setTheme, setThemeSettings } = useTheme()
 
   const handlePresetChange = (preset: string) => {
     setThemeSettings({
@@ -19,24 +17,18 @@ export function Settings() {
         styles: presets[preset],
       }
     })
-  };
+  }
 
   const themeOptions = [
     { label: t`System`, value: 'system', icon: SunMoon },
     { label: t`Light`, value: 'light', icon: Sun },
     { label: t`Dark`, value: 'dark', icon: Moon },
-  ];
+  ]
 
   return (
     <>
       <div className="sticky top-0 z-[1] bg-background px-4 h-16 flex items-center justify-between gap-x-4">
-        <Button
-          variant="ghost"
-          className="rounded-full !p-2 -ml-1"
-          onClick={() => history.go(-1)}
-        >
-          <ArrowLeft className="size-5" />
-        </Button>
+        <GoBackButton className="-ml-1" />
         <div className="font-bold flex-1">
           <Trans>Settings</Trans>
         </div>
@@ -77,5 +69,5 @@ export function Settings() {
         </div>
       </div>
     </>
-  );
+  )
 }
