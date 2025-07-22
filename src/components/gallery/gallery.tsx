@@ -106,6 +106,11 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
           <span className="sr-only">View post</span>
         </Link>
       </div>
+      {post.content.trim() && (
+        <div className="mt-1">
+          <p className="font-semibold text-sm line-clamp-1 whitespace-pre-wrap">{post.content}</p>
+        </div>
+      )}
     </article>
   );
 }
