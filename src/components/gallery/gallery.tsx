@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PostWithAuthor } from "@/types/response-schema";
 import { Link } from "@tanstack/react-router";
-import { AlertCircleIcon, FilmIcon, ImageIcon, ImagesIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
+import { AlertCircleIcon, FilmIcon, HeartIcon, ImageIcon, ImagesIcon, RepeatIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
 import { HLSPlayer } from "../shared/hls-player";
 import { isMobileDevice } from "@/lib/browser";
 import { MasonryVerticalVirtualizerDynamic } from "@/ui/virtualizer";
@@ -27,7 +27,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
   return (
     <article className="w-full p-1">
       <div
-        className="w-full bg-accent overflow-hidden relative rounded-lg"
+        className="bg-accent border overflow-hidden relative rounded-lg w-full"
         style={{
           aspectRatio: aspectRatioValue
         }}
@@ -81,6 +81,16 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
                 <ImageIcon />
               )}
             </div>
+            {(post.likes > 0 || post.reposts > 0) && (
+              <div className="absolute bottom-2 left-2 bg-background/50 backdrop-blur-sm px-2 py-1.5 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-sm">
+              {post.likes > 0 && (
+                <div className="flex items-center gap-1"><HeartIcon />{post.likes}</div>
+              )}
+              {post.reposts > 0 && (
+                <div className="flex items-center gap-1"><RepeatIcon />{post.reposts}</div>
+              )}
+              </div>
+            )}
           </>
         )}
         <Link
