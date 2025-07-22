@@ -13,7 +13,7 @@ interface GalleryProps {
   posts: PostWithAuthor[];
 }
 
-function GalleryCard({ post }: { post: PostWithAuthor }) {
+function MediaCard({ post }: { post: PostWithAuthor }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb;
@@ -110,7 +110,7 @@ export function Gallery({
       className="p-1"
       items={filteredPosts}
       render={(post) => (
-        <GalleryCard post={post} />
+        <MediaCard post={post} />
       )}
     />
   );
