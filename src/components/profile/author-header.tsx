@@ -3,6 +3,7 @@ import { Button } from '@/ui/button'
 import { sanitizeHandle } from '@/lib/atp/strings/handles'
 import { Trans } from '@lingui/react/macro'
 import { GoBackButton } from '../shared/go-back-button'
+import { FollowButton } from './follow-button'
 
 interface AuthorHeaderProps {
   user: Partial<User>
@@ -25,14 +26,12 @@ export function AuthorHeader({
         )}
       </div>
       <div className="flex items-center">
-        {!isCurrentUser ? (
-          <Button size="sm">
-            <Trans>Follow</Trans>
-          </Button>
-        ) : (
+        {isCurrentUser ? (
           <Button size="sm" variant="outline">
             <Trans>Edit profile</Trans>
           </Button>
+        ) : (
+          <FollowButton size="sm" />
         )}
       </div>
     </div>

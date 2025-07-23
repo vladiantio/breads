@@ -3,10 +3,9 @@ import { Loader2 } from "lucide-react";
 import { useProfile } from "@/lib/atp/hooks/use-profile";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/ui/hover-card";
 import { ProfileDisplay } from "./profile-display";
-import { Button } from "@/ui/button";
 import { useResolveHandle } from "@/lib/atp/hooks/use-resolve-handle";
 import { isMobileDevice } from "@/lib/browser";
-import { Trans } from "@lingui/react/macro";
+import { FollowButton } from "./follow-button";
 
 interface AuthorHoverCardProps extends PropsWithChildren {
   handle?: string;
@@ -47,7 +46,7 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
         ) : data ? (
           <>
             <ProfileDisplay user={data} />
-            <Button className="w-full mt-4"><Trans>Follow</Trans></Button>
+            <FollowButton className="w-full mt-4" />
           </>
         ) : null}
       </HoverCardContent>
