@@ -1,29 +1,31 @@
-import { useState } from "react";
-import { PostWithAuthor } from "@/types/response-schema";
-import { Link } from "@tanstack/react-router";
-import { AlertCircleIcon, FilmIcon, HeartIcon, ImageIcon, ImagesIcon, RepeatIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
-import { HLSPlayer } from "../shared/hls-player";
-import { isMobileDevice } from "@/lib/browser";
-import { MasonryVerticalVirtualizerDynamic } from "@/ui/virtualizer";
+import { useState } from "react"
+import { PostWithAuthor } from "@/types/response-schema"
+import { Link } from "@tanstack/react-router"
+import { AlertCircleIcon, FilmIcon, HeartIcon, ImageIcon, ImagesIcon, RepeatIcon, Volume2Icon, VolumeOffIcon } from "lucide-react"
+import { HLSPlayer } from "../shared/hls-player"
+import { isMobileDevice } from "@/lib/browser"
+import { MasonryVerticalVirtualizerDynamic } from "@/ui/virtualizer"
+import { formatNumber } from "@/utils/number"
 
-const aspectRatioMin = 0.5;
-const aspectRatioMax = 2;
+const aspectRatioMin = 0.5
+const aspectRatioMax = 2
 
 interface GalleryProps {
-  posts: PostWithAuthor[];
+  posts: PostWithAuthor[]
 }
 
 function MediaCard({ post }: { post: PostWithAuthor }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb;
-  const alt = post.embedVideo ? post.embedVideo.alt : post.embedImages?.[0].alt;
-  const aspectRatio = post.embedVideo ? post.embedVideo.aspectRatio : post.embedImages?.[0].aspectRatio;
-  const aspectRatioValue = Math.min(aspectRatioMax, Math.max(aspectRatioMin, aspectRatio ? aspectRatio.width / aspectRatio.height : 1));
+  const [isHovered, setIsHovered] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+  const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb
+  const alt = post.embedVideo ? post.embedVideo.alt : post.embedImages?.[0].alt
+  const aspectRatio = post.embedVideo ? post.embedVideo.aspectRatio : post.embedImages?.[0].aspectRatio
+  const aspectRatioValue = Math.min(aspectRatioMax, Math.max(aspectRatioMin, aspectRatio ? aspectRatio.width / aspectRatio.height : 1))
   const handleHovered = (hovered: boolean) => {
-    if (isMobileDevice()) return;
-    setIsHovered(hovered);
-  };
+    if (isMobileDevice()) return
+    setIsHovered(hovered)
+  }
+
   return (
     <article className="w-full p-1">
       <div
@@ -84,10 +86,10 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
             {(post.likes > 0 || post.reposts > 0) && (
               <div className="absolute bottom-2 left-2 bg-background/50 backdrop-blur-sm px-2 py-1.5 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-sm">
               {post.likes > 0 && (
-                <div className="flex items-center gap-1"><HeartIcon />{post.likes}</div>
+                <div className="flex items-center gap-1"><HeartIcon /><span>{formatNumber(post.likes)}</span></div>
               )}
               {post.reposts > 0 && (
-                <div className="flex items-center gap-1"><RepeatIcon />{post.reposts}</div>
+                <div className="flex items-center gap-1"><RepeatIcon /><span>{formatNumber(post.reposts)}</span></div>
               )}
               </div>
             )}
@@ -112,13 +114,13 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
         </div>
       )}
     </article>
-  );
+  )
 }
 
 export function Gallery({
   posts,
 }: GalleryProps) {
-  const filteredPosts = posts.filter((post) => post.embedImages?.length || post.embedVideo);
+  const filteredPosts = posts.filter((post) => post.embedImages?.length || post.embedVideo)
 
   return (
     <MasonryVerticalVirtualizerDynamic
@@ -128,5 +130,5 @@ export function Gallery({
         <MediaCard post={post} />
       )}
     />
-  );
+  )
 }
