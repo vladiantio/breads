@@ -6,6 +6,7 @@ import { EmbedPost } from './embed-post'
 import { Alert, AlertTitle } from '@/ui/alert'
 import { AlertCircleIcon } from 'lucide-react'
 import { usePostCard } from './post-card-context'
+import { cn } from '@/lib/utils'
 
 export function PostCardContent() {
   const {
@@ -23,7 +24,7 @@ export function PostCardContent() {
   } = usePostCard()
 
   return (
-    <div className="space-y-4 mt-4">
+    <div className={cn("space-y-4", (isDetail || isEmbed) ? "mt-4" : "mt-1")}>
       {content && content.trim().length > 0
         ? <RichTextRenderer text={content} facets={facets} />
         : null}
