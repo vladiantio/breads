@@ -25,7 +25,7 @@ export function AuthorLink({
   const validHandle = isInvalidHandle(username) ? did ?? username : username;
 
   return (
-    <div className="inline-flex items-center overflow-hidden">
+    <div className={cn("inline-flex items-center gap-x-2 overflow-hidden", className)}>
       {onlyText ? (
         <span className="font-semibold text-foreground truncate">{displayName || sanitizeHandle(username)}</span>
       ) : (
@@ -33,7 +33,7 @@ export function AuthorLink({
           <Link
             to="/profile/$username"
             params={{ username: validHandle }}
-            className={cn("font-semibold text-foreground hover:underline active:opacity-60 truncate", className)}
+            className="font-semibold text-foreground truncate hover:underline active:opacity-60"
             onClick={(e) => e.stopPropagation()}
           >
             {displayName || sanitizeHandle(username)}
@@ -41,7 +41,7 @@ export function AuthorLink({
         </AuthorHoverCard>
       )}
       <VerifiedBadge
-        className="ml-2 size-3"
+        className="size-3 shrink-0"
         verification={verification}
       />
     </div>
