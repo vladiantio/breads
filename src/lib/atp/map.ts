@@ -76,7 +76,7 @@ export function mapEmbedViews(embed?:
   }
 
   if (embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
-    if ((embed as $Typed<AppBskyEmbedRecordWithMedia.View>).media.$type === 'app.bsky.embed.external#view')
+    if ((embed as $Typed<AppBskyEmbedRecordWithMedia.View>).media)
       postWithAuthor = mapEmbedViews((embed as $Typed<AppBskyEmbedRecordWithMedia.View>).media);
 
     if ((embed as $Typed<AppBskyEmbedRecordWithMedia.View>).record.record.$type === 'app.bsky.embed.record#viewRecord')
