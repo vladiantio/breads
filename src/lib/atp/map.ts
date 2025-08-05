@@ -34,7 +34,7 @@ export function mapEmbedPostWithAuthor(post: AppBskyEmbedRecord.ViewRecord) {
 
   const embedMapped = mapEmbedViews(embed);
 
-  const postWithAuthor: PostWithAuthor =  {
+  const postWithAuthor: PostWithAuthor = {
     id: post.cid,
     uri: post.uri,
     author: mapAuthor(author),
@@ -45,6 +45,7 @@ export function mapEmbedPostWithAuthor(post: AppBskyEmbedRecord.ViewRecord) {
     replies: post.replyCount ?? 0,
     reposts: post.repostCount ?? 0,
     labelInfo: labelsToInfo(post.labels),
+    langs: record.langs as string[],
     ...embedMapped
   };
 
@@ -105,6 +106,7 @@ export function mapPostWithAuthor(post: AppBskyFeedDefs.PostView, reason?: Reaso
     isThreadParent,
     labelInfo: labelsToInfo(post.labels),
     viewer: post.viewer,
+    langs: record.langs as string[],
     ...embedMapped
   };
 

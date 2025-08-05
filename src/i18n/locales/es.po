@@ -261,3 +261,13 @@ msgstr "Desnudez no sexual"
 
 msgid "Graphic Media"
 msgstr "Contenido gráfico"
+
+# Post Translator
+msgid "Translate this post"
+msgstr "Traducir este post"
+
+msgid "Translating..."
+msgstr "Traduciendo..."
+
+msgid "Translated post with"
+msgstr "Post traducido con"

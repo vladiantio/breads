@@ -1,12 +1,13 @@
-import { RichTextRenderer } from '../shared/rich-text-renderer'
-import { EmbedExternal } from './embed-external'
-import { EmbedImages } from './embed-images'
-import { EmbedVideo } from './embed-video'
-import { EmbedPost } from './embed-post'
-import { Alert, AlertTitle } from '@/ui/alert'
-import { AlertCircleIcon } from 'lucide-react'
-import { usePostCard } from './post-card-context'
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils"
+import { RichTextRenderer } from "../shared/rich-text-renderer"
+import { EmbedExternal } from "./embed-external"
+import { EmbedImages } from "./embed-images"
+import { EmbedVideo } from "./embed-video"
+import { EmbedPost } from "./embed-post"
+import { Alert, AlertTitle } from "@/ui/alert"
+import { AlertCircleIcon } from "lucide-react"
+import { usePostCard } from "./post-card-context"
+import { PostCardContentTranslate } from "./post-card-content-translate"
 
 export function PostCardContent() {
   const {
@@ -28,6 +29,8 @@ export function PostCardContent() {
       {content && content.trim().length > 0
         ? <RichTextRenderer text={content} facets={facets} />
         : null}
+
+      <PostCardContentTranslate />
 
       {labelInfo && (
         <Alert>
