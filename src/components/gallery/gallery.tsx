@@ -53,17 +53,17 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
               <>
                 <HLSPlayer
                   src={post.embedVideo.playlist}
-                  poster={post.embedVideo.thumbnail}
+                  poster={thumb}
                   autoPlay
                   disablePictureInPicture
                   loop
                   muted={isMuted}
-                  className="object-contain absolute inset-0 size-full"
+                  className="object-contain absolute inset-0 size-full backdrop-blur-md"
                 />
                 <button
                   aria-label={isMuted ? "Unmute" : "Mute"}
                   aria-pressed={isMuted}
-                  className="absolute z-[1] bottom-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
+                  className="dark absolute z-[1] bottom-2 right-2 bg-background/50 backdrop-blur-sm text-foreground p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
                   onClick={() => setIsMuted(prev => !prev)}
                 >
                   {isMuted ? (
@@ -74,7 +74,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
                 </button>
               </>
             )}
-            <div className="absolute top-2 right-2 bg-background/50 backdrop-blur-sm p-2 rounded-full [&>svg]:size-4">
+            <div className="dark absolute top-2 right-2 bg-background/50 backdrop-blur-sm text-foreground p-2 rounded-full [&>svg]:size-4">
               {post.embedVideo ? (
                 <FilmIcon />
               ) : post.embedImages!.length > 1 ? (
@@ -84,7 +84,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
               )}
             </div>
             {(post.likes > 0 || post.reposts > 0) && (
-              <div className="absolute bottom-2 left-2 bg-background/50 backdrop-blur-sm px-2 py-1.5 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-sm">
+              <div className="dark absolute bottom-2 left-2 bg-background/50 backdrop-blur-sm text-foreground px-3 py-2 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-xs">
               {post.likes > 0 && (
                 <div className="flex items-center gap-1"><HeartIcon /><span>{formatNumber(post.likes)}</span></div>
               )}
