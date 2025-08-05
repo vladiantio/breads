@@ -65,7 +65,7 @@ export function PostCardContentTranslate() {
           className="block h-auto p-0"
           onClick={translate}
         >
-          <Trans>Translated post with</Trans> <strong>Translator API</strong>
+          <Trans>Translated with</Trans> <strong>Translator API</strong>
         </Button>
       ) : (
         <Button
@@ -73,7 +73,7 @@ export function PostCardContentTranslate() {
           className="block h-auto p-0"
           onClick={translate}
         >
-          <Trans>Translate this post</Trans>
+          <Trans>Translate</Trans>
         </Button>
       )}
       {(translatedContent && showTranslatedContent) && (

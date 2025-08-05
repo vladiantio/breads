@@ -262,12 +262,12 @@ msgstr "Non-sexual Nudity"
 msgid "Graphic Media"
 msgstr "Graphic Media"
 
-# Post Translator
-msgid "Translate this post"
-msgstr "Translate this post"
+# Translator
+msgid "Translate"
+msgstr "Translate"
 
 msgid "Translating..."
 msgstr "Translating..."
 
-msgid "Translated post with"
-msgstr "Translated post with"
+msgid "Translated with"
+msgstr "Translated with"
