@@ -33,6 +33,7 @@ export function PostCardContentTranslate() {
       return
     }
 
+    setError("")
     setIsTranslating(true)
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
