@@ -6,6 +6,16 @@
 
 A minimal Bluesky client.
 
-_This project is still under development..._
+**Note:** This project is still under development.
 
 </div>
+
+## Features
+
+- Hashtags limiter
+- Post translation with [Translator API](https://developer.chrome.com/docs/ai/translator-api)
+- Masonry view in media/video profile's tabs
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
