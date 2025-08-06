@@ -269,5 +269,8 @@ msgstr "Traducir"
 msgid "Translating..."
 msgstr "Traduciendo..."
 
+msgid "Translate with"
+msgstr "Traducir con"
+
 msgid "Translated with"
 msgstr "Traducido con"

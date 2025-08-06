@@ -1,27 +1,34 @@
 import {
+  ArrowUpRightIcon,
   Copy,
   Flag,
+  LanguagesIcon,
   LinkIcon,
   MoreHorizontal,
   XCircle
-} from 'lucide-react'
+} from "lucide-react"
 import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/ui/dropdown-menu'
-import { Trans } from '@lingui/react/macro'
-import { Button } from '@/ui/button'
-import { usePostCard } from './post-card-context'
-import { isMobileDevice } from '@/lib/browser'
-import { Drawer, DrawerContent, DrawerTrigger } from '@/ui/drawer'
-import { useState } from 'react'
-import { cn } from '@/lib/utils'
-import { Separator } from '@/ui/separator'
+} from "@/ui/dropdown-menu"
+import { Trans } from "@lingui/react/macro"
+import { Button } from "@/ui/button"
+import { usePostCard } from "./post-card-context"
+import { isMobileDevice } from "@/lib/browser"
+import { Drawer, DrawerContent, DrawerTrigger } from "@/ui/drawer"
+import { useMemo, useState } from "react"
+import { cn } from "@/lib/utils"
+import { Separator } from "@/ui/separator"
+import { detectLocale } from "@/i18n/languages"
 
-type AltReaderButtonProps = React.ComponentProps<"button">;
+type AltReaderButtonProps = React.ComponentProps<"button">
+
+const targetLanguage = detectLocale()
+const getGTranslateUrl = (source: string, target: string, content: string) => `https://translate.google.com/?sl=${source}&tl=${target}&text=${encodeURIComponent(content)}&op=translate`
+const getDeeplUrl = (source: string, target: string, content: string) => `https://www.deepl.com/translator#${source}/${target}/${encodeURIComponent(content)}`
 
 function PostCardMenuButton({
   className,
@@ -52,9 +59,15 @@ export function PostCardMenu() {
     onCopyText,
     onNotInterested,
     onReport,
+    post: {
+      content,
+      langs,
+    }
   } = usePostCard()
   const [open, setOpen] = useState(false)
   const isMobile = isMobileDevice()
+
+  const sourceLanguage = useMemo(() => langs?.[0] ?? "en", [langs])
 
   if (isMobile)
     return (
@@ -64,6 +77,35 @@ export function PostCardMenu() {
         </DrawerTrigger>
         <DrawerContent>
           <div className="flex flex-col pb-6">
+            {(content && content.trim().length > 0
+              && sourceLanguage != targetLanguage) ? (
+              <>
+                <Button asChild className="justify-start h-12" size="lg" variant="ghost">
+                  <a
+                    href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <LanguagesIcon />
+                    <span><Trans>Translate with</Trans> Google Translate</span>
+                    <ArrowUpRightIcon className="ml-auto" />
+                  </a>
+                </Button>
+                <Button asChild className="justify-start h-12" size="lg" variant="ghost">
+                  <a
+                    href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <LanguagesIcon />
+                    <span><Trans>Translate with</Trans> DeepL</span>
+                    <ArrowUpRightIcon className="ml-auto" />
+                  </a>
+                </Button>
+              </>
+            ) : null}
             <Button onClick={onCopyLink} className="justify-start h-12" size="lg" variant="ghost">
               <LinkIcon />
               <span><Trans>Copy link</Trans></span>
@@ -92,6 +134,35 @@ export function PostCardMenu() {
         <PostCardMenuButton />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-fit">
+        {(content && content.trim().length > 0
+          && sourceLanguage != targetLanguage) ? (
+          <>
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <a
+                href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <LanguagesIcon />
+                <span><Trans>Translate with</Trans> Google Translate</span>
+                <ArrowUpRightIcon className="ml-auto" />
+              </a>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <a
+                href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <LanguagesIcon />
+                <span><Trans>Translate with</Trans> DeepL</span>
+                <ArrowUpRightIcon className="ml-auto" />
+              </a>
+            </DropdownMenuItem>
+          </>
+        ) : null}
         <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
           <LinkIcon />
           <span><Trans>Copy link</Trans></span>
