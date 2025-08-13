@@ -1,4 +1,4 @@
-import { Hashtag } from '@/pages/hashtag'
+import { Hashtag } from '@/features/search/hashtag'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/hashtag/$tag')({

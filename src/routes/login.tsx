@@ -1,4 +1,4 @@
-import { Login } from '@/pages/login'
+import { Login } from '@/features/login/login'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/login')({

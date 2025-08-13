@@ -1,4 +1,4 @@
-import { Post } from '@/pages/post';
+import { Post } from '@/features/post/post'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app/profile/$username/post/$postId')({

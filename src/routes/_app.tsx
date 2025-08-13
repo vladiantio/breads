@@ -1,4 +1,4 @@
-import { Layout } from '@/components/layout/layout'
+import { Layout } from '@/layouts/layout'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_app')({
