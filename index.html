@@ -4,15 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Breads</title>
-    <meta name="description" content="Breads - A minimalist web client for Bluesky" />
-    <link rel="icon" type="image/svg+xml" href="/img/logo.svg" />
+    <meta
+      name="description"
+      content="Breads - A minimalist web client for Bluesky"
+    />
     <link rel="preconnect" href="https://public.api.bsky.app" />
     <link rel="preconnect" href="https://bsky.social" />
+    <link rel="icon" type="image/svg+xml" href="/img/logo.svg" />
+    <link rel="manifest" href="/manifest.json" />
     <script>
       document.documentElement.classList.toggle(
         "dark",
         localStorage.theme === "dark" ||
-          (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+          (!("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches),
       );
     </script>
   </head>
