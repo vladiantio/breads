@@ -1,13 +1,13 @@
 import { formatTimestamp } from "@/utils/date"
-import { AuthorLink } from "../shared/author-link"
+import { AuthorLink } from "../profile/author-link"
 import { sanitizeHandle } from "@/lib/atp/strings/handles"
 import { usePostCard } from "./post-card-context"
 import { cn } from "@/lib/utils"
 
 export function PostCardHeader() {
   const {
-    post: { 
-      author, 
+    post: {
+      author,
       timestamp,
     },
     isSameAuthorFeed,

@@ -1,7 +1,7 @@
 import { User } from "@/types/response-schema";
 import { FC } from "react";
 import { UserAvatar } from "../shared/user-avatar";
-import { VerifiedBadge } from "../shared/verified-badge";
+import { VerifiedBadge } from "./verified-badge";
 import { parseBio } from "@/utils/parse-bio";
 import { formatNumber } from "@/utils/number";
 import { sanitizeHandle } from "@/lib/atp/strings/handles";
@@ -15,7 +15,7 @@ export const ProfileDisplay: FC<ProfileDisplayProps> = ({ user }) => {
   return (
     <>
       <div className="flex gap-x-4 items-center">
-        <UserAvatar 
+        <UserAvatar
           username={user.username}
           displayName={user.displayName}
           src={user.avatar}

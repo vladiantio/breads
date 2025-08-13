@@ -1,4 +1,4 @@
-import { AuthorLink } from "@/components/shared/author-link";
+import { AuthorLink } from "@/components/profile/author-link";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { DebouncedInput } from "@/ui/debounced-input";
 import { InputAddOns, InputAddOnLabel } from "@/ui/input-add-ons";

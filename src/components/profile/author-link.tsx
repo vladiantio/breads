@@ -1,9 +1,9 @@
-import { Link } from "@tanstack/react-router";
-import { AuthorHoverCard } from "../profile/author-hover-card";
-import { cn } from "@/lib/utils";
-import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles";
-import type { AppBskyActorDefs } from "@atproto/api";
-import { VerifiedBadge } from "./verified-badge";
+import { Link } from "@tanstack/react-router"
+import { AuthorHoverCard } from "./author-hover-card"
+import { cn } from "@/lib/utils"
+import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles"
+import type { AppBskyActorDefs } from "@atproto/api"
+import { VerifiedBadge } from "./verified-badge"
 
 interface AuthorLinkProps {
   did?: string
@@ -22,7 +22,7 @@ export function AuthorLink({
   verification,
   onlyText,
 }: AuthorLinkProps) {
-  const validHandle = isInvalidHandle(username) ? did ?? username : username;
+  const validHandle = isInvalidHandle(username) ? did ?? username : username
 
   return (
     <div className={cn("inline-flex items-center gap-x-2 overflow-hidden", className)}>
@@ -45,5 +45,5 @@ export function AuthorLink({
         verification={verification}
       />
     </div>
-  );
+  )
 }
