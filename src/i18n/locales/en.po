@@ -142,8 +142,8 @@ msgstr "You'll see less content like this"
 msgid "Pinned"
 msgstr "Pinned"
 
-msgid "Reposted by {username}"
-msgstr "Reposted by {username}"
+msgid "Reposted by {repostedBy}"
+msgstr "Reposted by {repostedBy}"
 
 # Login Page
 msgid "Sign in with your Bluesky account"
