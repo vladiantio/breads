@@ -8,160 +8,218 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppSearchRouteImport } from './routes/_app.search'
+import { Route as AppNotificationsRouteImport } from './routes/_app.notifications'
+import { Route as AppHashtagTagRouteImport } from './routes/_app.hashtag.$tag'
+import { Route as AppProfileUsernameRouteRouteImport } from './routes/_app.profile.$username.route'
+import { Route as AppProfileUsernameIndexRouteImport } from './routes/_app.profile.$username.index'
+import { Route as AppProfileUsernamePostPostIdRouteImport } from './routes/_app.profile.$username.post.$postId'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as LoginImport } from './routes/login'
-import { Route as AppImport } from './routes/_app'
-import { Route as AppIndexImport } from './routes/_app.index'
-import { Route as AppSettingsImport } from './routes/_app.settings'
-import { Route as AppSearchImport } from './routes/_app.search'
-import { Route as AppNotificationsImport } from './routes/_app.notifications'
-import { Route as AppHashtagTagImport } from './routes/_app.hashtag.$tag'
-import { Route as AppProfileUsernameRouteImport } from './routes/_app.profile.$username.route'
-import { Route as AppProfileUsernameIndexImport } from './routes/_app.profile.$username.index'
-import { Route as AppProfileUsernamePostPostIdImport } from './routes/_app.profile.$username.post.$postId'
-
-// Create/Update Routes
-
-const LoginRoute = LoginImport.update({
+const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AppRoute = AppImport.update({
+const AppRoute = AppRouteImport.update({
   id: '/_app',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AppIndexRoute = AppIndexImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppSettingsRoute = AppSettingsImport.update({
+const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppSearchRoute = AppSearchImport.update({
+const AppSearchRoute = AppSearchRouteImport.update({
   id: '/search',
   path: '/search',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppNotificationsRoute = AppNotificationsImport.update({
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppHashtagTagRoute = AppHashtagTagImport.update({
+const AppHashtagTagRoute = AppHashtagTagRouteImport.update({
   id: '/hashtag/$tag',
   path: '/hashtag/$tag',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppProfileUsernameRouteRoute = AppProfileUsernameRouteImport.update({
+const AppProfileUsernameRouteRoute = AppProfileUsernameRouteRouteImport.update({
   id: '/profile/$username',
   path: '/profile/$username',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppProfileUsernameIndexRoute = AppProfileUsernameIndexImport.update({
+const AppProfileUsernameIndexRoute = AppProfileUsernameIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppProfileUsernameRouteRoute,
 } as any)
-
 const AppProfileUsernamePostPostIdRoute =
-  AppProfileUsernamePostPostIdImport.update({
+  AppProfileUsernamePostPostIdRouteImport.update({
     id: '/post/$postId',
     path: '/post/$postId',
     getParentRoute: () => AppProfileUsernameRouteRoute,
   } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/login': typeof LoginRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/search': typeof AppSearchRoute
+  '/settings': typeof AppSettingsRoute
+  '/': typeof AppIndexRoute
+  '/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
+  '/hashtag/$tag': typeof AppHashtagTagRoute
+  '/profile/$username/': typeof AppProfileUsernameIndexRoute
+  '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
+}
+export interface FileRoutesByTo {
+  '/login': typeof LoginRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/search': typeof AppSearchRoute
+  '/settings': typeof AppSettingsRoute
+  '/': typeof AppIndexRoute
+  '/hashtag/$tag': typeof AppHashtagTagRoute
+  '/profile/$username': typeof AppProfileUsernameIndexRoute
+  '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_app/notifications': typeof AppNotificationsRoute
+  '/_app/search': typeof AppSearchRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
+  '/_app/hashtag/$tag': typeof AppHashtagTagRoute
+  '/_app/profile/$username/': typeof AppProfileUsernameIndexRoute
+  '/_app/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/login'
+    | '/notifications'
+    | '/search'
+    | '/settings'
+    | '/'
+    | '/profile/$username'
+    | '/hashtag/$tag'
+    | '/profile/$username/'
+    | '/profile/$username/post/$postId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/login'
+    | '/notifications'
+    | '/search'
+    | '/settings'
+    | '/'
+    | '/hashtag/$tag'
+    | '/profile/$username'
+    | '/profile/$username/post/$postId'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/login'
+    | '/_app/notifications'
+    | '/_app/search'
+    | '/_app/settings'
+    | '/_app/'
+    | '/_app/profile/$username'
+    | '/_app/hashtag/$tag'
+    | '/_app/profile/$username/'
+    | '/_app/profile/$username/post/$postId'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_app': {
-      id: '/_app'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AppImport
-      parentRoute: typeof rootRoute
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_app/notifications': {
-      id: '/_app/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof AppNotificationsImport
-      parentRoute: typeof AppImport
-    }
-    '/_app/search': {
-      id: '/_app/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof AppSearchImport
-      parentRoute: typeof AppImport
-    }
-    '/_app/settings': {
-      id: '/_app/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AppSettingsImport
-      parentRoute: typeof AppImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/': {
       id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AppIndexImport
-      parentRoute: typeof AppImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/_app/profile/$username': {
-      id: '/_app/profile/$username'
-      path: '/profile/$username'
-      fullPath: '/profile/$username'
-      preLoaderRoute: typeof AppProfileUsernameRouteImport
-      parentRoute: typeof AppImport
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/search': {
+      id: '/_app/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AppSearchRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notifications': {
+      id: '/_app/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/hashtag/$tag': {
       id: '/_app/hashtag/$tag'
       path: '/hashtag/$tag'
       fullPath: '/hashtag/$tag'
-      preLoaderRoute: typeof AppHashtagTagImport
-      parentRoute: typeof AppImport
+      preLoaderRoute: typeof AppHashtagTagRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/profile/$username': {
+      id: '/_app/profile/$username'
+      path: '/profile/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof AppProfileUsernameRouteRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/profile/$username/': {
       id: '/_app/profile/$username/'
       path: '/'
       fullPath: '/profile/$username/'
-      preLoaderRoute: typeof AppProfileUsernameIndexImport
-      parentRoute: typeof AppProfileUsernameRouteImport
+      preLoaderRoute: typeof AppProfileUsernameIndexRouteImport
+      parentRoute: typeof AppProfileUsernameRouteRoute
     }
     '/_app/profile/$username/post/$postId': {
       id: '/_app/profile/$username/post/$postId'
       path: '/post/$postId'
       fullPath: '/profile/$username/post/$postId'
-      preLoaderRoute: typeof AppProfileUsernamePostPostIdImport
-      parentRoute: typeof AppProfileUsernameRouteImport
+      preLoaderRoute: typeof AppProfileUsernamePostPostIdRouteImport
+      parentRoute: typeof AppProfileUsernameRouteRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AppProfileUsernameRouteRouteChildren {
   AppProfileUsernameIndexRoute: typeof AppProfileUsernameIndexRoute
@@ -199,156 +257,10 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
-export interface FileRoutesByFullPath {
-  '': typeof AppRouteWithChildren
-  '/login': typeof LoginRoute
-  '/notifications': typeof AppNotificationsRoute
-  '/search': typeof AppSearchRoute
-  '/settings': typeof AppSettingsRoute
-  '/': typeof AppIndexRoute
-  '/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
-  '/hashtag/$tag': typeof AppHashtagTagRoute
-  '/profile/$username/': typeof AppProfileUsernameIndexRoute
-  '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
-}
-
-export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
-  '/notifications': typeof AppNotificationsRoute
-  '/search': typeof AppSearchRoute
-  '/settings': typeof AppSettingsRoute
-  '/': typeof AppIndexRoute
-  '/hashtag/$tag': typeof AppHashtagTagRoute
-  '/profile/$username': typeof AppProfileUsernameIndexRoute
-  '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/_app': typeof AppRouteWithChildren
-  '/login': typeof LoginRoute
-  '/_app/notifications': typeof AppNotificationsRoute
-  '/_app/search': typeof AppSearchRoute
-  '/_app/settings': typeof AppSettingsRoute
-  '/_app/': typeof AppIndexRoute
-  '/_app/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
-  '/_app/hashtag/$tag': typeof AppHashtagTagRoute
-  '/_app/profile/$username/': typeof AppProfileUsernameIndexRoute
-  '/_app/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ''
-    | '/login'
-    | '/notifications'
-    | '/search'
-    | '/settings'
-    | '/'
-    | '/profile/$username'
-    | '/hashtag/$tag'
-    | '/profile/$username/'
-    | '/profile/$username/post/$postId'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/login'
-    | '/notifications'
-    | '/search'
-    | '/settings'
-    | '/'
-    | '/hashtag/$tag'
-    | '/profile/$username'
-    | '/profile/$username/post/$postId'
-  id:
-    | '__root__'
-    | '/_app'
-    | '/login'
-    | '/_app/notifications'
-    | '/_app/search'
-    | '/_app/settings'
-    | '/_app/'
-    | '/_app/profile/$username'
-    | '/_app/hashtag/$tag'
-    | '/_app/profile/$username/'
-    | '/_app/profile/$username/post/$postId'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  AppRoute: typeof AppRouteWithChildren
-  LoginRoute: typeof LoginRoute
-}
-
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/_app",
-        "/login"
-      ]
-    },
-    "/_app": {
-      "filePath": "_app.tsx",
-      "children": [
-        "/_app/notifications",
-        "/_app/search",
-        "/_app/settings",
-        "/_app/",
-        "/_app/profile/$username",
-        "/_app/hashtag/$tag"
-      ]
-    },
-    "/login": {
-      "filePath": "login.tsx"
-    },
-    "/_app/notifications": {
-      "filePath": "_app.notifications.tsx",
-      "parent": "/_app"
-    },
-    "/_app/search": {
-      "filePath": "_app.search.tsx",
-      "parent": "/_app"
-    },
-    "/_app/settings": {
-      "filePath": "_app.settings.tsx",
-      "parent": "/_app"
-    },
-    "/_app/": {
-      "filePath": "_app.index.tsx",
-      "parent": "/_app"
-    },
-    "/_app/profile/$username": {
-      "filePath": "_app.profile.$username.route.tsx",
-      "parent": "/_app",
-      "children": [
-        "/_app/profile/$username/",
-        "/_app/profile/$username/post/$postId"
-      ]
-    },
-    "/_app/hashtag/$tag": {
-      "filePath": "_app.hashtag.$tag.tsx",
-      "parent": "/_app"
-    },
-    "/_app/profile/$username/": {
-      "filePath": "_app.profile.$username.index.tsx",
-      "parent": "/_app/profile/$username"
-    },
-    "/_app/profile/$username/post/$postId": {
-      "filePath": "_app.profile.$username.post.$postId.tsx",
-      "parent": "/_app/profile/$username"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
