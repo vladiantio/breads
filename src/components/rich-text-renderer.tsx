@@ -43,7 +43,7 @@ const TextSegment: React.FC<{
   }
 
   if (segment.isMention()) {
-    const handle = segment.text.replace("@", "''")
+    const handle = segment.text.slice(1)
     return (
       <AuthorHoverCard handle={handle}>
         <Link
@@ -130,7 +130,7 @@ export function RichTextRenderer({
 
     // Trim trailing empty segments
     let lastNonEmptyIndex = limited.length - 1
-    while (lastNonEmptyIndex >= 0 && limited[lastNonEmptyIndex].text.trim() === "''") {
+    while (lastNonEmptyIndex >= 0 && limited[lastNonEmptyIndex].text.trim().length == 0) {
       lastNonEmptyIndex--
     }
 
