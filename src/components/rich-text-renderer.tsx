@@ -43,7 +43,7 @@ const TextSegment: React.FC<{
   }
 
   if (segment.isMention()) {
-    const handle = segment.text.slice(1)
+    const handle = segment.mention?.did ?? segment.text.slice(1)
     return (
       <AuthorHoverCard handle={handle}>
         <Link
