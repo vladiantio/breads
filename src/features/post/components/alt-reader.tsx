@@ -13,7 +13,7 @@ function AltReaderButton({
   return (
     <button
       className={cn(
-        "bg-background/50 backdrop-blur-sm py-1.5 px-3 font-bold text-xs rounded-md transition-all hover:bg-accent/50",
+        "dark bg-background/50 text-foreground backdrop-blur-sm py-1.5 px-3 font-bold text-xs rounded-md transition-all hover:bg-accent/50",
         className,
       )}
       {...props}
