@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, useState } from "react"
-import { Loader2 } from "lucide-react"
+import { AlertCircleIcon, Loader2 } from "lucide-react"
 import { useProfile } from "@/lib/atp/hooks/use-profile"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/ui/hover-card"
 import { ProfileDisplay } from "./profile-display"
@@ -19,11 +19,13 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
 
   const {
     data: actor,
+    error: actorError,
     isLoading: isLoadingActor,
   } = useResolveHandle({ handle, enabled })
 
   const {
     data,
+    error: profileError,
     isLoading: isLoadingProfile,
   } = useProfile({ actor, enabled })
 
@@ -43,6 +45,11 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
       <HoverCardContent className="w-96 p-6 rounded-xl">
         {(isLoadingActor || isLoadingProfile) ? (
           <Loader2 className="animate-spin" />
+        ) : (actorError || profileError) ? (
+          <p className="flex items-center gap-x-3">
+            <AlertCircleIcon />
+            {actorError?.message ?? profileError?.message}
+          </p>
         ) : data ? (
           <>
             <ProfileDisplay user={data} />
