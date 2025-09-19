@@ -3,15 +3,19 @@ import { ProfileTabs } from "./components/profile-tabs"
 import { useDocumentTitle } from "@/hooks/use-document-title"
 import { useProfile } from "@/lib/atp/hooks/use-profile"
 import { useResolveHandle } from "@/lib/atp/hooks/use-resolve-handle"
+import { Alert, AlertTitle } from "@/ui/alert"
+import { AlertCircleIcon } from "lucide-react"
 
 export function Profile({ handle }: { handle?: string }) {
   const {
     data: actor,
+    error: actorError,
     isLoading: isLoadingActor,
   } = useResolveHandle({ handle })
 
   const {
     data: user,
+    error: profileError,
     isLoading: isLoadingProfile,
   } = useProfile({ actor })
 
@@ -26,6 +30,16 @@ export function Profile({ handle }: { handle?: string }) {
 
   if (isLoadingActor || isLoadingProfile)
     return "Loading..."
+
+  if (actorError || profileError)
+    return (
+      <div className="p-4">
+        <Alert>
+          <AlertCircleIcon />
+          <AlertTitle>{actorError?.message ?? profileError?.message}</AlertTitle>
+        </Alert>
+      </div>
+    )
 
   if (!actor)
     return "No actor"
