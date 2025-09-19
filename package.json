@@ -79,12 +79,5 @@
     "typescript-eslint": "^8.24.1",
     "vite": "^7.1.2",
     "vite-plugin-svgr": "^4.3.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "@tailwindcss/oxide",
-      "esbuild"
-    ]
   }
 }
