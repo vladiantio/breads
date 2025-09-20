@@ -5,6 +5,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel"
 import { cn } from "@/lib/utils"
 import { t } from "@lingui/core/macro"
 import { AltReader } from "./alt-reader"
+import { ImageZoom } from "@/ui/image-zoom"
 
 const aspectRatioMin = 0.5
 const aspectRatioMax = 2
@@ -30,6 +31,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
             "mask-x-from-[calc(100%_-_var(--spacing)_*_4)] mask-x-to-100%",
           )}
           opts={{ dragFree: true }}
+          onClick={(e) => e.stopPropagation()}
         >
           <CarouselContent
             className={cn(
@@ -45,12 +47,11 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                   key={image.thumb}
                   className="pl-2 basis-auto"
                 >
-                  <a
-                    href={image.fullsize}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
-                    onClick={(e) => e.stopPropagation()}
+                  <ImageZoom
+                    className="bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
+                    zoomImg={{
+                      src: image.fullsize
+                    }}
                   >
                     <img
                       src={image.thumb}
@@ -63,7 +64,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                       width={image.aspectRatio?.width}
                       height={image.aspectRatio?.height}
                     />
-                  </a>
+                  </ImageZoom>
                   {image.alt && (
                     <div className="relative">
                       <div className="absolute left-2 bottom-2">
@@ -77,7 +78,10 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
           </CarouselContent>
         </Carousel>
       ) : (
-        <div className="flex gap-x-2">
+        <div
+          className="flex gap-x-2"
+          onClick={(e) => e.stopPropagation()}
+        >
           {views.map(image => {
             const { aspectRatio } = image
             const aspectRatioValue = Math.min(aspectRatioMax, Math.max(aspectRatioMin, aspectRatio ? aspectRatio.width / aspectRatio.height : 1))
@@ -89,17 +93,16 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                   flexBasis: `${aspectRatioValue * 100}%`,
                 }}
               >
-                <a
-                  href={image.fullsize}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block h-full w-fit bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
-                  onClick={(e) => e.stopPropagation()}
+                <ImageZoom
+                  className="h-full w-fit bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
+                  zoomImg={{
+                    src: image.fullsize
+                  }}
                 >
                   <img
                     src={image.thumb}
                     alt={image.alt}
-                    className="h-full w-auto object-contain"
+                    className="h-full max-h-[30rem] w-auto object-contain"
                     loading="lazy"
                     style={{
                       aspectRatio: aspectRatioValue
@@ -107,7 +110,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                     width={image.aspectRatio?.width}
                     height={image.aspectRatio?.height}
                   />
-                </a>
+                </ImageZoom>
                 {image.alt && (
                   <div className="relative">
                     <div className="absolute left-4 bottom-4">
