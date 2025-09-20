@@ -14,13 +14,16 @@ export function ProfileDisplay({ user }: ProfileDisplayProps) {
   return (
     <>
       <div className="flex gap-x-4 items-center">
-        <UserAvatar
-          username={user.username}
-          displayName={user.displayName}
-          src={user.avatar}
-          size="xl"
-        />
-        <div>
+        <div className="shrink-0">
+          <UserAvatar
+            username={user.username}
+            displayName={user.displayName}
+            src={user.avatar}
+            size="xl"
+            expandable
+          />
+        </div>
+        <div className="flex-1">
           <div className="flex items-center gap-x-2">
             <h1 className="text-pretty text-xl font-bold">{user.displayName || user.username}</h1>
             <VerifiedBadge
