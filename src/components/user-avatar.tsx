@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar"
 import { useRouter } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { hackModifyThumbnailPath } from "@/lib/atp/utils"
+import { ImageZoom } from "@/ui/image-zoom"
 
 const sizeClasses = {
   sm: "size-8",
@@ -19,6 +20,7 @@ interface UserAvatarProps extends React.ComponentProps<"span"> {
   size?: keyof typeof sizeClasses
   clickable?: boolean
   blurred?: boolean
+  expandable?: boolean
 }
 
 export function UserAvatar({
@@ -28,6 +30,7 @@ export function UserAvatar({
   size = "md",
   clickable = false,
   blurred = false,
+  expandable,
   className,
   ...props
 }: UserAvatarProps) {
@@ -44,6 +47,21 @@ export function UserAvatar({
       })
     }
   }
+
+  if (expandable && src && !blurred)
+    return (
+      <ImageZoom
+        zoomImg={{ src }}
+      >
+        <img
+          src={hackModifyThumbnailPath(src, true)}
+          alt={name}
+          loading="lazy"
+          className={cn("border object-cover rounded-full", sizeClasses[size], className)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </ImageZoom>
+    )
 
   return (
     <Avatar
