@@ -18,15 +18,13 @@ export type PostCardContextProps = {
   isEmbed?: boolean
 }
 
-const PostCardContext = createContext<PostCardContextProps | null>(null)
+export const PostCardContext = createContext<PostCardContextProps | null>(null)
 
 export function usePostCard() {
   const context = useContext(PostCardContext)
   if (!context) {
-    throw new Error("usePostCard must be used within a PostCardProvider.")
+    throw new Error("usePostCard must be used within a PostCardContext.")
   }
 
   return context
 }
-
-export const PostCardProvider = PostCardContext.Provider

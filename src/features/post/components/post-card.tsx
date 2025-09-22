@@ -14,7 +14,7 @@ import { AppBskyFeedDefs } from "@atproto/api"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { copyToClipboard } from "@/utils/clipboard"
-import { PostCardProvider, type PostCardContextProps } from "./post-card-context"
+import { PostCardContext, type PostCardContextProps } from "./post-card-context"
 
 interface PostCardProps {
   post: PostWithAuthor
@@ -154,7 +154,7 @@ export function PostCard({
   )
 
   return (
-    <PostCardProvider value={contextValue}>
+    <PostCardContext value={contextValue}>
       <article
         className={cn(
           "transition-[background-color] rounded-lg",
@@ -218,6 +218,6 @@ export function PostCard({
           </div>
         )}
       </article>
-    </PostCardProvider>
+    </PostCardContext>
   )
 }
