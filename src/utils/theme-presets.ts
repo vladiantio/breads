@@ -1,7 +1,7 @@
 // source: https://github.com/themeselection/shadcn-studio/blob/main/src/utils/theme-presets.ts
 
 // Type Imports
-import type { ThemeStyles } from '@/types/theme'
+import type { ThemeStyles } from '@/theme/theme-types'
 
 // Config Imports
 import { defaultThemeState } from '@/config/theme'
@@ -20,11 +20,11 @@ export function getPresetThemeStyles(name: string): ThemeStyles {
   return {
     light: {
       ...defaultThemeState.light,
-      ...(preset.light || {})
+      ...preset.light
     },
     dark: {
       ...defaultThemeState.dark,
-      ...(preset.dark || {})
+      ...preset.dark
     },
     css: preset.css || {}
   }

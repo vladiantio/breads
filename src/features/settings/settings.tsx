@@ -1,6 +1,6 @@
 import { ThemePresetSelect } from "./theme-preset-select"
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group"
-import { useTheme } from "@/theme/theme-provider"
+import { useTheme } from "@/theme/theme-context"
 import { presets } from "@/utils/theme-presets"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"

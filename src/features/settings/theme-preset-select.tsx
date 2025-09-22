@@ -2,7 +2,7 @@
 import { useMemo } from 'react'
 
 // Type Imports
-import type { ThemePreset, ThemeStyleProps } from '@/types/theme'
+import type { ThemePreset, ThemeStyleProps } from '@/theme/theme-types'
 
 // Component Imports
 import {

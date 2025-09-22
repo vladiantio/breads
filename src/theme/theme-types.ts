@@ -1,5 +1,7 @@
 // source: https://github.com/themeselection/shadcn-studio/blob/main/src/types/theme.ts
 
+export type Theme = "dark" | "light" | "system"
+
 export type ThemeStyleProps = {
   background: string
   foreground: string
