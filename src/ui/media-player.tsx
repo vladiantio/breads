@@ -237,9 +237,9 @@ function MediaPlayerRoot(props: MediaPlayerRootProps) {
 
   return (
     <MediaProvider>
-      <StoreContext.Provider value={store}>
+      <StoreContext value={store}>
         <MediaPlayerRootImpl {...props} />
-      </StoreContext.Provider>
+      </StoreContext>
     </MediaProvider>
   );
 }
@@ -750,7 +750,7 @@ function MediaPlayerRootImpl({
   const RootPrimitive = asChild ? Slot : "div";
 
   return (
-    <MediaPlayerContext.Provider value={contextValue}>
+    <MediaPlayerContext value={contextValue}>
       <RootPrimitive
         aria-labelledby={labelId}
         aria-describedby={descriptionId}
@@ -785,7 +785,7 @@ function MediaPlayerRootImpl({
         {children}
         <MediaPlayerVolumeIndicator />
       </RootPrimitive>
-    </MediaPlayerContext.Provider>
+    </MediaPlayerContext>
   );
 }
 

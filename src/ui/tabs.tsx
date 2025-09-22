@@ -47,13 +47,13 @@ function Tabs({
   )
 
   return (
-    <TabsContext.Provider value={contextValue}>
+    <TabsContext value={contextValue}>
       <TabsPrimitive.Root
         data-slot="tabs"
         className={cn("flex flex-col gap-2", className)}
         {...props}
       />
-    </TabsContext.Provider>
+    </TabsContext>
   )
 }
 
