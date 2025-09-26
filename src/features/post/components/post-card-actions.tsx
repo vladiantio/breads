@@ -1,4 +1,4 @@
-import { Heart, MessageCircle, Repeat, Repeat1, Share2 } from "lucide-react"
+import { Heart, MessageCircle, Repeat, Repeat1, Share } from "lucide-react"
 import { formatNumber } from "@/utils/number"
 import { Button } from "@/ui/button"
 import { cn } from "@/lib/utils"
@@ -72,7 +72,7 @@ export function PostCardActions() {
         className="rounded-full"
         onClick={onShare}
       >
-        <Share2 className="size-5" />
+        <Share className="size-5" />
       </Button>
 
       <PostCardMenu />
