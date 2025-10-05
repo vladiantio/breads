@@ -2,7 +2,7 @@ import { useMemo, useState } from "react"
 import { CreatePost } from "./components/create-post"
 import { FeedTabs } from "./components/feed-tabs"
 import { Button } from "@/ui/button"
-import { AlertCircleIcon, ArrowDownIcon, Loader2 } from "lucide-react"
+import { AlertCircleIcon, ArrowDownIcon } from "lucide-react"
 import { useFeed } from "@/lib/atp/hooks/use-feed"
 import { useTimeline } from "@/lib/atp/hooks/use-timeline"
 import { PostCardSkeleton } from "../post/components/post-card-skeleton"
@@ -10,6 +10,7 @@ import { useAtpStore } from "@/lib/atp/store"
 import { PostFeed } from "../post/components/post-feed"
 import { t } from "@lingui/core/macro"
 import { Alert, AlertDescription, AlertTitle } from "@/ui/alert"
+import { Spinner } from "@/ui/spinner"
 
 function FeedContent() {
   const {
@@ -43,7 +44,7 @@ function FeedContent() {
                 onClick={() => fetchNextPage()}
                 disabled={!hasNextPage || isFetchingNextPage}
               >
-                {isFetchingNextPage && <Loader2 className="animate-spin" />}
+                {isFetchingNextPage && <Spinner />}
                 {hasNextPage
                   ? t`Load more`
                   : t`Nothing more to load`}
@@ -101,7 +102,7 @@ function TimelineContent() {
                 onClick={() => fetchNextPage()}
                 disabled={!hasNextPage || isFetchingNextPage}
               >
-                {isFetchingNextPage && <Loader2 className="animate-spin" />}
+                {isFetchingNextPage && <Spinner />}
                 {hasNextPage
                   ? t`Load more`
                   : t`Nothing more to load`}

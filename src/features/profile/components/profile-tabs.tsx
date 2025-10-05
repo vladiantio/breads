@@ -4,11 +4,12 @@ import { useAuthorFeed } from "@/lib/atp/hooks/use-author-feed"
 import { useMemo, useState } from "react"
 import { PostCardSkeleton } from "../../post/components/post-card-skeleton"
 import { Button } from "@/ui/button"
-import { ArrowDown, Loader2 } from "lucide-react"
+import { ArrowDown } from "lucide-react"
 import { PostFeed } from "../../post/components/post-feed"
 import { Gallery } from "./gallery"
 import { t } from "@lingui/core/macro"
 import { User } from "@/types/response-schema"
+import { Spinner } from "@/ui/spinner"
 
 interface ProfileProps {
   actor: string
@@ -51,7 +52,7 @@ function Posts({ actor, user }: ProfileProps) {
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
         >
-          {isFetchingNextPage && <Loader2 className="animate-spin" />}
+          {isFetchingNextPage && <Spinner />}
           {hasNextPage
             ? t`Load more`
             : t`Nothing more to load`}
@@ -99,7 +100,7 @@ function Reposts({ actor, user }: ProfileProps) {
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
         >
-          {isFetchingNextPage && <Loader2 className="animate-spin" />}
+          {isFetchingNextPage && <Spinner />}
           {hasNextPage
             ? t`Load more`
             : t`Nothing more to load`}
@@ -127,7 +128,7 @@ function Media({ actor }: ProfileProps) {
   if (isLoading)
     return (
       <div className="flex items-center justify-center p-4">
-        <Loader2 className="animate-spin" />
+        <Spinner />
       </div>
     )
 
@@ -142,7 +143,7 @@ function Media({ actor }: ProfileProps) {
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
         >
-          {isFetchingNextPage && <Loader2 className="animate-spin" />}
+          {isFetchingNextPage && <Spinner />}
           {hasNextPage
             ? t`Load more`
             : t`Nothing more to load`}
@@ -170,7 +171,7 @@ function Videos({ actor }: ProfileProps) {
   if (isLoading)
     return (
       <div className="flex items-center justify-center p-4">
-        <Loader2 className="animate-spin" />
+        <Spinner />
       </div>
     )
 
@@ -185,7 +186,7 @@ function Videos({ actor }: ProfileProps) {
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
         >
-          {isFetchingNextPage && <Loader2 className="animate-spin" />}
+          {isFetchingNextPage && <Spinner />}
           {hasNextPage
             ? t`Load more`
             : t`Nothing more to load`}

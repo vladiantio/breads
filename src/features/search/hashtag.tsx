@@ -1,12 +1,13 @@
 import { t } from "@lingui/core/macro"
 import { useRouter } from "@tanstack/react-router"
 import { Button } from "@/ui/button"
-import { AlertCircleIcon, ArrowDownIcon, ArrowLeft, Loader2 } from "lucide-react"
+import { AlertCircleIcon, ArrowDownIcon, ArrowLeft } from "lucide-react"
 import { useMemo } from "react"
 import { usePostsSearch } from "@/lib/atp/hooks/use-posts-search"
 import { PostCardSkeleton } from "../post/components/post-card-skeleton"
 import { PostFeed } from "../post/components/post-feed"
 import { Alert, AlertDescription, AlertTitle } from "@/ui/alert"
+import { Spinner } from "@/ui/spinner"
 
 export function Hashtag({ tag }: { tag: string }) {
   const q = `#${tag}`
@@ -54,7 +55,7 @@ export function Hashtag({ tag }: { tag: string }) {
                 onClick={() => fetchNextPage()}
                 disabled={!hasNextPage || isFetchingNextPage}
               >
-                {isFetchingNextPage && <Loader2 className="animate-spin" />}
+                {isFetchingNextPage && <Spinner />}
                 {hasNextPage
                   ? t`Load more`
                   : t`Nothing more to load`}
