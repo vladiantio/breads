@@ -1,7 +1,7 @@
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import svgr from 'vite-plugin-svgr'
 import { lingui } from "@lingui/vite-plugin";
@@ -13,7 +13,14 @@ export default defineConfig({
       target: 'react',
       autoCodeSplitting: true,
     }),
-    react({ plugins: [["@lingui/swc-plugin", {}]] }),
+    react({
+      babel: {
+        plugins: [
+          'babel-plugin-react-compiler',
+          '@lingui/babel-plugin-lingui-macro',
+        ],
+      },
+    }),
     lingui(),
     tailwindcss(),
     svgr(),
