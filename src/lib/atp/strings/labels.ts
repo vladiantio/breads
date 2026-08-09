@@ -1,6 +1,6 @@
 // source: https://github.com/bluesky-social/social-app/blob/main/bskyembed/src/labels.ts
 import {AppBskyFeedDefs} from '@atproto/api'
-import { t } from "@lingui/core/macro";
+import { t } from '@/i18n/i18n'
 
 export const CONTENT_LABELS = ['porn', 'sexual', 'nudity', 'graphic-media']
 
@@ -12,12 +12,12 @@ export function labelsToInfo(
   switch (label?.val) {
     case 'porn':
     case 'sexual':
-      return t`Adult Content`
+      return t('labels.adultContent')
     case 'nudity':
-      return t`Non-sexual Nudity`
+      return t('labels.nudity')
     case 'gore':
     case 'graphic-media':
-      return t`Graphic Media`
+      return t('labels.graphicMedia')
     default:
       return undefined
   }

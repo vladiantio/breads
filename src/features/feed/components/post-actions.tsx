@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Image, Hash } from 'lucide-react';
 import { Button } from '@/ui/button';
-import { Trans } from '@lingui/react/macro';
+import { useTranslation } from 'react-i18next';
 
 interface PostActionsProps {
   onImageSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,6 +23,7 @@ const PostActions: React.FC<PostActionsProps> = ({
   onCancel
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   return (
     <div className="mt-3 flex items-center justify-between">
@@ -58,7 +59,7 @@ const PostActions: React.FC<PostActionsProps> = ({
             variant="ghost"
             onClick={onCancel}
           >
-            <Trans>Cancel</Trans>
+            {t('common.cancel')}
           </Button>
         )}
 
@@ -67,7 +68,7 @@ const PostActions: React.FC<PostActionsProps> = ({
           disabled={!isValid || isLoading}
           onClick={onPost}
         >
-          {isLoading ? 'Posting...' : 'Post'}
+          {isLoading ? 'Posting...' : t('post.publish')}
         </Button>
       </div>
     </div>

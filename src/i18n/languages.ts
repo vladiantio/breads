@@ -1,22 +1,27 @@
-import { detect } from "@lingui/detect-locale"
-import { fromUrl, fromStorage, fromNavigator } from "@lingui/detect-locale"
+import LanguageDetector, { type DetectorOptions } from "i18next-browser-languagedetector"
 
 export const locales = {
   en: "English",
   es: "Español",
-}
+} as const
+
 export const defaultLocale = "en"
 
-// can be a function with custom logic or just a string, `detect` method will handle it
-const DEFAULT_FALLBACK = () => defaultLocale;
+export type Locale = keyof typeof locales
 
-export const detectLocale = () => {
-  const locale = detect(
-    fromUrl("lang"),
-    fromStorage("lang"),
-    fromNavigator(),
-    DEFAULT_FALLBACK
-  )?.split("-")[0]
+export const detectionOptions: DetectorOptions = {
+  order: ["querystring", "localStorage", "navigator"],
+  lookupQuerystring: "lang",
+  lookupLocalStorage: "lang",
+  caches: [],
+}
 
-  return locale ?? defaultLocale
+const detector = new LanguageDetector()
+detector.init({}, detectionOptions)
+
+export const detectLocale = (): Locale => {
+  const detected = detector.detect()
+  const raw = (Array.isArray(detected) ? detected[0] : detected) ?? defaultLocale
+  const locale = raw.split("-")[0]
+  return (locale in locales ? locale : defaultLocale) as Locale
 }

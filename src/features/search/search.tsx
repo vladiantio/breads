@@ -8,7 +8,7 @@ import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles"
 import { AppBskyActorDefs } from "@atproto/api"
 import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
-import { t } from "@lingui/core/macro"
+import { useTranslation } from "react-i18next"
 
 function AuthorItem({
   actor
@@ -50,6 +50,7 @@ function AuthorItem({
 
 export function Search() {
   const [query, setQuery] = useState('')
+  const { t } = useTranslation()
   const {
     data,
   } = useActorsSearch({ q: query })
@@ -64,7 +65,7 @@ export function Search() {
           <DebouncedInput
             autoFocus
             className="h-12 rounded-xl"
-            placeholder={t`Search...`}
+            placeholder={t("search.placeholder")}
             value={query}
             onChange={(value) => setQuery(String(value))}
           />

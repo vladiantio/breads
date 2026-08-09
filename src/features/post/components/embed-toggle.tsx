@@ -1,7 +1,7 @@
 import { PropsWithChildren, useState } from "react";
 import { Button } from "@/ui/button";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { t } from "@lingui/core/macro";
+import { useTranslation } from "react-i18next";
 
 interface EmbedToggleProps extends PropsWithChildren, React.HTMLAttributes<HTMLButtonElement> {
   label: string
@@ -14,6 +14,7 @@ export function EmbedToggle({
   ...props
 }: EmbedToggleProps) {
   const [ showEmbed, setShowEmbed ] = useState(false);
+  const { t } = useTranslation();
 
   const handleEmbedToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -30,7 +31,7 @@ export function EmbedToggle({
         {...props}
       >
         { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
-        { showEmbed ? t`Hide` : t`Show` } {label}
+        { showEmbed ? t("post.embed.hide") : t("post.embed.show") } {label}
       </Button>
 
       {showEmbed ? (

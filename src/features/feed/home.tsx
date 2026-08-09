@@ -8,9 +8,9 @@ import { useTimeline } from "@/lib/atp/hooks/use-timeline"
 import { PostCardSkeleton } from "../post/components/post-card-skeleton"
 import { useAtpStore } from "@/lib/atp/store"
 import { PostFeed } from "../post/components/post-feed"
-import { t } from "@lingui/core/macro"
 import { Alert, AlertDescription, AlertTitle } from "@/ui/alert"
 import { Spinner } from "@/ui/spinner"
+import { useTranslation } from "react-i18next"
 
 function FeedContent() {
   const {
@@ -22,6 +22,7 @@ function FeedContent() {
     isFetchingNextPage,
     refetch
   } = useFeed()
+  const { t } = useTranslation()
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data])
 
@@ -46,8 +47,8 @@ function FeedContent() {
               >
                 {isFetchingNextPage && <Spinner />}
                 {hasNextPage
-                  ? t`Load more`
-                  : t`Nothing more to load`}
+                  ? t("common.pagination.loadMore")
+                  : t("common.pagination.none")}
                 {hasNextPage && <ArrowDownIcon />}
               </Button>
             </div>
@@ -80,6 +81,7 @@ function TimelineContent() {
     isFetchingNextPage,
     refetch
   } = useTimeline()
+  const { t } = useTranslation()
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data])
 
@@ -104,8 +106,8 @@ function TimelineContent() {
               >
                 {isFetchingNextPage && <Spinner />}
                 {hasNextPage
-                  ? t`Load more`
-                  : t`Nothing more to load`}
+                  ? t("common.pagination.loadMore")
+                  : t("common.pagination.none")}
                 {hasNextPage && <ArrowDownIcon />}
               </Button>
             </div>

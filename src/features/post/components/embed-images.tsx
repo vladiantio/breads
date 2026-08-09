@@ -3,9 +3,9 @@ import { EmbedToggle } from "./embed-toggle"
 import { useImagePreload } from "@/hooks/use-image-preload"
 import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel"
 import { cn } from "@/lib/utils"
-import { t } from "@lingui/core/macro"
 import { AltReader } from "./alt-reader"
 import { ImageZoom } from "@/ui/image-zoom"
+import { useTranslation } from "react-i18next"
 
 const aspectRatioMin = 0.5
 const aspectRatioMax = 2
@@ -17,10 +17,11 @@ interface EmbedImagesProps {
 
 export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
   const { hoverProps } = useImagePreload(views.map(o => o.thumb))
+  const { t } = useTranslation()
 
   return (
     <EmbedToggle
-      label={views.length > 1 ? `${views.length} ${t`images`}` : t`image`}
+      label={views.length > 1 ? `${views.length} ${t("post.embed.images")}` : t("post.embed.image")}
       {...hoverProps}
     >
       {views.length > 2 ? (

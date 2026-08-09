@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react"
 import { AlertCircleIcon } from "lucide-react"
-import { Trans } from "@lingui/react/macro"
 import { detectLocale } from "@/i18n/languages"
 import { Alert, AlertTitle } from "@/ui/alert"
 import { Button } from "@/ui/button"
 import { ShiningText } from "@/ui/shining-text"
 import { usePostCard } from "./post-card-context"
+import { useTranslation } from "react-i18next"
 
 const isTranslatorSupported = "Translator" in self
 const targetLanguage = detectLocale()
@@ -15,6 +15,7 @@ export function PostCardContentTranslate() {
   const [showTranslatedContent, setShowTranslatedContent] = useState(true)
   const [error, setError] = useState("")
   const [translatedContent, setTranslatedContent] = useState("")
+  const { t } = useTranslation()
 
   const {
     post: {
@@ -58,14 +59,14 @@ export function PostCardContentTranslate() {
     && sourceLanguage != targetLanguage) ? (
     <>
       {isTranslating ? (
-        <ShiningText className="block text-sm"><Trans>Translating...</Trans></ShiningText>
+        <ShiningText className="block text-sm">{t("post.translate.inProgress")}</ShiningText>
       ) : (translatedContent && showTranslatedContent) ? (
         <Button
           variant="link"
           className="block h-auto p-0"
           onClick={translate}
         >
-          <Trans>Translated with</Trans> <strong>Translator API</strong>
+          {t("post.translate.done")} <strong>Translator API</strong>
         </Button>
       ) : (
         <Button
@@ -73,7 +74,7 @@ export function PostCardContentTranslate() {
           className="block h-auto p-0"
           onClick={translate}
         >
-          <Trans>Translate</Trans>
+          {t("post.translate.action")}
         </Button>
       )}
       {(translatedContent && showTranslatedContent) && (

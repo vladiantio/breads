@@ -4,7 +4,7 @@ import { ScrollArea, ScrollBar } from "@/ui/scroll-area"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { NavIconLink } from "@/components/nav-icon-link"
 import { LogInIcon, SettingsIcon } from "lucide-react"
-import { t } from "@lingui/core/macro"
+import { useTranslation } from "react-i18next"
 
 interface FeedTabsProps {
   activeTab?: string
@@ -18,6 +18,7 @@ export function FeedTabs({
   onActiveTabChange: setActiveTabProp,
 }: FeedTabsProps) {
   const isMobile = useIsMobile()
+  const { t } = useTranslation()
 
   const [_activeTab, _setActiveTab] = useState(defaultActiveTab)
   const activeTab = activeTabProp ?? _activeTab
@@ -42,14 +43,14 @@ export function FeedTabs({
             <div className="absolute inset-y-0 left-4 flex items-center">
               <NavIconLink
                 icon={SettingsIcon}
-                label={t`Settings`}
+                label={t("nav.settings")}
                 to="/settings"
               />
             </div>
             <div className="absolute inset-y-0 right-4 flex items-center">
               <NavIconLink
                 icon={LogInIcon}
-                label={t`Log in`}
+                label={t("auth.login")}
                 to="/login"
               />
             </div>
@@ -68,14 +69,14 @@ export function FeedTabs({
               value="discover"
               className="grow"
             >
-              {t`Discover`}
+              {t("feed.tabs.discover")}
             </TabsTrigger>
             <TabsTrigger
               id="tab-following"
               value="following"
               className="grow"
             >
-              {t`Following`}
+              {t("feed.tabs.following")}
             </TabsTrigger>
           </TabsList>
           <ScrollBar orientation="horizontal" />

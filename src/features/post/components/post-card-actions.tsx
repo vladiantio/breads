@@ -2,11 +2,12 @@ import { Heart, MessageCircle, Repeat, Repeat1, Share } from "lucide-react"
 import { formatNumber } from "@/utils/number"
 import { Button } from "@/ui/button"
 import { cn } from "@/lib/utils"
-import { t } from "@lingui/core/macro"
 import { PostCardMenu } from "./post-card-menu"
 import { usePostCard } from "./post-card-context"
+import { useTranslation } from "react-i18next"
 
 export function PostCardActions() {
+  const { t } = useTranslation()
   const {
     post: {
       likes,
@@ -25,7 +26,7 @@ export function PostCardActions() {
   return (
     <div className="flex items-center justify-between gap-x-1 mt-4 -mx-3">
       <Button
-        title={t`Reply`}
+        title={t("post.actions.reply")}
         variant="ghost"
         onClick={onReply}
         className="rounded-full"
@@ -38,7 +39,7 @@ export function PostCardActions() {
       </Button>
 
       <Button
-        title={t`Repost`}
+        title={t("post.actions.repost")}
         variant="ghost"
         className={cn("rounded-full", isReposted && "!text-green-500")}
         onClick={onRepost}
@@ -52,7 +53,7 @@ export function PostCardActions() {
       </Button>
 
       <Button
-        title={t`Like`}
+        title={t("post.actions.like")}
         variant="ghost"
         className={cn("rounded-full", isLiked && "!text-red-500")}
         onClick={onLike}
@@ -66,7 +67,7 @@ export function PostCardActions() {
       </Button>
 
       <Button
-        title={t`Share`}
+        title={t("post.actions.share")}
         variant="ghost"
         size="icon"
         className="rounded-full"

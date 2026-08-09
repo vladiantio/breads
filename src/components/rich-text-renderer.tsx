@@ -3,7 +3,7 @@ import { Facet, RichText, RichTextSegment } from "@atproto/api"
 import { Link } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { AuthorHoverCard } from "@/features/profile/components/author-hover-card"
-import { Trans } from "@lingui/react/macro"
+import { useTranslation } from "react-i18next"
 
 interface RichTextRendererProps {
   text: string
@@ -107,6 +107,7 @@ export function RichTextRenderer({
   linkify = true,
 }: RichTextRendererProps) {
   const [tagsExpanded, setTagsExpanded] = useState(false)
+  const { t } = useTranslation()
 
   const lineRichText = useMemo(() => new RichText({ text, facets }), [text, facets])
   const segments = useMemo(() => [...lineRichText.segments()], [lineRichText])
@@ -169,7 +170,7 @@ export function RichTextRenderer({
         }}
         className="text-warning hover:underline active:opacity-60"
       >
-        {tagsExpanded ? <Trans>Show less</Trans> : <Trans>...and {moreTagsCount}+</Trans>}
+        {tagsExpanded ? t("post.tags.showLess") : t("post.tags.more", { moreTagsCount })}
       </button>
     </div>
   )

@@ -7,13 +7,13 @@ import { InputAddOns, InputAddOnLabel } from "@/ui/input-add-ons"
 import { AtSignIcon, LockKeyholeIcon } from "lucide-react"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/ui/input-otp"
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
-import { Trans } from "@lingui/react/macro"
-import { t } from "@lingui/core/macro"
+import { useTranslation } from "react-i18next"
 
 const otpPasteTransformer = (pasted: string) => pasted.replaceAll("-", "''")
 
 export function Login() {
   const { login, isLoading, error } = useAuth()
+  const { t } = useTranslation()
   const {
     register,
     control,
@@ -31,7 +31,7 @@ export function Login() {
 
   return (
     <div className="max-w-[45ch] min-h-dvh mx-auto p-4 place-content-center">
-      <p className="font-bold text-center mb-4"><Trans>Sign in with your Bluesky account</Trans></p>
+      <p className="font-bold text-center mb-4">{t("auth.signInTitle")}</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset disabled={isLoading} className="grid gap-3">
           <div>
@@ -41,10 +41,10 @@ export function Login() {
               </InputAddOnLabel>
               <Input
                 className="h-14"
-                placeholder={t`Username or email address`}
+                placeholder={t("auth.usernameLabel")}
                 autoFocus
                 spellCheck="false"
-                {...register("handle", { required: t`Username or email address is required` })}
+                {...register("handle", { required: t("auth.usernameRequired") })}
               />
             </InputAddOns>
             {errors.handle && <p className="mt-1 text-sm text-destructive">{errors.handle.message}</p>}
@@ -57,9 +57,9 @@ export function Login() {
               </InputAddOnLabel>
               <Input
                 className="h-14"
-                placeholder={t`Password`}
+                placeholder={t("auth.passwordLabel")}
                 type="password"
-                {...register("password", { required: t`Password is required` })}
+                {...register("password", { required: t("auth.passwordRequired") })}
               />
             </InputAddOns>
             {errors.password && <p className="mt-1 text-sm text-destructive">{errors.password.message}</p>}
@@ -69,11 +69,11 @@ export function Login() {
             (error.message === `A sign in code has been sent to your email address` ||
             error.message === `Token is invalid` ? (
               <div>
-                <label className="mb-1 font-semibold block" htmlFor="authFactorToken"><Trans>Two-factor confirmation</Trans></label>
+                <label className="mb-1 font-semibold block" htmlFor="authFactorToken">{t("auth.twoFactorLabel")}</label>
                 <Controller
                   name="authFactorToken"
                   control={control}
-                  rules={{ required: t`Two-factor token is required` }}
+                  rules={{ required: t("auth.twoFactorRequired") }}
                   render={({ field }) => (
                     <InputOTP
                       maxLength={10}
@@ -101,7 +101,7 @@ export function Login() {
                     </InputOTP>
                   )}
                 />
-                <p className="mt-1 text-sm text-muted-foreground"><Trans>Check your email for a sign in code and enter it here.</Trans></p>
+                <p className="mt-1 text-sm text-muted-foreground">{t("auth.twoFactorHint")}</p>
                 {errors.authFactorToken && <p className="mt-1 text-sm text-destructive">{errors.authFactorToken?.message}</p>}
               </div>
             ) : (
@@ -109,7 +109,7 @@ export function Login() {
             ))}
 
           <Button type="submit" size="lg" className="w-full h-14 mt-3">
-            <Trans>Next</Trans>
+            {t("auth.next")}
           </Button>
         </fieldset>
       </form>

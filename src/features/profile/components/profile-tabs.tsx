@@ -7,9 +7,9 @@ import { Button } from "@/ui/button"
 import { ArrowDown } from "lucide-react"
 import { PostFeed } from "../../post/components/post-feed"
 import { Gallery } from "./gallery"
-import { t } from "@lingui/core/macro"
 import { User } from "@/types/response-schema"
 import { Spinner } from "@/ui/spinner"
+import { useTranslation } from "react-i18next"
 
 interface ProfileProps {
   actor: string
@@ -17,6 +17,7 @@ interface ProfileProps {
 }
 
 function Posts({ actor, user }: ProfileProps) {
+  const { t } = useTranslation()
   const {
     data,
     fetchNextPage,
@@ -54,8 +55,8 @@ function Posts({ actor, user }: ProfileProps) {
         >
           {isFetchingNextPage && <Spinner />}
           {hasNextPage
-            ? t`Load more`
-            : t`Nothing more to load`}
+            ? t("common.pagination.loadMore")
+            : t("common.pagination.none")}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -64,6 +65,7 @@ function Posts({ actor, user }: ProfileProps) {
 }
 
 function Reposts({ actor, user }: ProfileProps) {
+  const { t } = useTranslation()
   const {
     data,
     fetchNextPage,
@@ -102,8 +104,8 @@ function Reposts({ actor, user }: ProfileProps) {
         >
           {isFetchingNextPage && <Spinner />}
           {hasNextPage
-            ? t`Load more`
-            : t`Nothing more to load`}
+            ? t("common.pagination.loadMore")
+            : t("common.pagination.none")}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -112,6 +114,7 @@ function Reposts({ actor, user }: ProfileProps) {
 }
 
 function Media({ actor }: ProfileProps) {
+  const { t } = useTranslation()
   const {
     data,
     fetchNextPage,
@@ -145,8 +148,8 @@ function Media({ actor }: ProfileProps) {
         >
           {isFetchingNextPage && <Spinner />}
           {hasNextPage
-            ? t`Load more`
-            : t`Nothing more to load`}
+            ? t("common.pagination.loadMore")
+            : t("common.pagination.none")}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -155,6 +158,7 @@ function Media({ actor }: ProfileProps) {
 }
 
 function Videos({ actor }: ProfileProps) {
+  const { t } = useTranslation()
   const {
     data,
     fetchNextPage,
@@ -188,8 +192,8 @@ function Videos({ actor }: ProfileProps) {
         >
           {isFetchingNextPage && <Spinner />}
           {hasNextPage
-            ? t`Load more`
-            : t`Nothing more to load`}
+            ? t("common.pagination.loadMore")
+            : t("common.pagination.none")}
           {hasNextPage && <ArrowDown />}
         </Button>
       </div>
@@ -205,12 +209,13 @@ export function ProfileTabs({
   user: User
 }) {
   const [activeTab, setActiveTab] = useState('posts')
+  const { t } = useTranslation()
 
   const tabList = [
-    { value: 'posts', label: t`Posts`, component: Posts },
-    { value: 'reposts', label: t`Reposts`, component: Reposts },
-    { value: 'media', label: t`Media`, component: Media },
-    { value: 'videos', label: t`Videos`, component: Videos },
+    { value: 'posts', label: t('profile.tabs.posts'), component: Posts },
+    { value: 'reposts', label: t('profile.tabs.reposts'), component: Reposts },
+    { value: 'media', label: t('profile.tabs.media'), component: Media },
+    { value: 'videos', label: t('profile.tabs.videos'), component: Videos },
   ]
 
   return (

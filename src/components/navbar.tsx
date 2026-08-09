@@ -3,13 +3,14 @@ import { LogInIcon, SettingsIcon } from "lucide-react"
 import { NavIconLink } from "./nav-icon-link"
 import { NavLinks } from "./nav-links"
 import { useCurrentProfile } from "@/lib/atp/hooks/use-current-profile"
-import { t } from "@lingui/core/macro"
+import { useTranslation } from "react-i18next"
 
 export function Navbar() {
   const {
     data: profile,
     isAuthenticated,
   } = useCurrentProfile()
+  const { t } = useTranslation()
 
   return (
     <nav className="flex flex-col justify-between fixed left-0 inset-y-0 p-4">
@@ -24,7 +25,7 @@ export function Navbar() {
         ) : (
           <NavIconLink
             icon={LogInIcon}
-            label={t`Log in`}
+            label={t("auth.login")}
             to="/login"
           />
         )}
@@ -35,7 +36,7 @@ export function Navbar() {
       <div className="flex flex-col items-center gap-1">
         <NavIconLink
           icon={SettingsIcon}
-          label={t`Settings`}
+          label={t("nav.settings")}
           to="/settings"
         />
       </div>

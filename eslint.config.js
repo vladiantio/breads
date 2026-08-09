@@ -3,7 +3,6 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
-import pluginLingui from "eslint-plugin-lingui";
 import oxlint from 'eslint-plugin-oxlint';
 
 export default tseslint.config(
@@ -31,5 +30,4 @@ export default tseslint.config(
       ],
     },
   },
-  pluginLingui.configs["flat/recommended"],
 )

@@ -1,12 +1,13 @@
 import { Button } from "@/ui/button"
-import { Trans } from "@lingui/react/macro"
+import { useTranslation } from "react-i18next"
 
 export function FollowButton(props: React.ComponentProps<typeof Button>) {
+  const { t } = useTranslation()
   return (
     <Button
       {...props}
     >
-      <Trans>Follow</Trans>
+      {t("profile.follow")}
     </Button>
   )
 }

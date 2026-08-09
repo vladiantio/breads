@@ -1,7 +1,7 @@
 import { AppBskyEmbedVideo } from "@atproto/api";
 import { EmbedToggle } from "./embed-toggle";
 import { useImagePreload } from "@/hooks/use-image-preload";
-import { t } from "@lingui/core/macro";
+import { useTranslation } from "react-i18next";
 import {
   MediaPlayer,
   MediaPlayerVideo,
@@ -25,10 +25,11 @@ interface EmbedVideoProps {
 
 export function EmbedVideo({ view }: EmbedVideoProps) {
   const { hoverProps } = useImagePreload(view.thumbnail);
+  const { t } = useTranslation();
 
   return (
     <EmbedToggle
-      label={t`video`}
+      label={t("post.embed.video")}
       {...hoverProps}
     >
       <div

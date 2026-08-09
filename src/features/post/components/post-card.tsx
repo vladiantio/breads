@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import { useState } from "react"
 import { PinIcon, RepeatIcon } from "lucide-react"
 import { UserAvatar } from "@/components/user-avatar"
 import { toast } from "sonner"
@@ -11,10 +11,9 @@ import { useNavigate } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { isInvalidHandle } from "@/lib/atp/strings/handles"
 import { AppBskyFeedDefs } from "@atproto/api"
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
 import { copyToClipboard } from "@/utils/clipboard"
 import { PostCardContext, type PostCardContextProps } from "./post-card-context"
+import { useTranslation } from "react-i18next"
 
 interface PostCardProps {
   post: PostWithAuthor
@@ -30,14 +29,15 @@ export function PostCard({
   authorFeed,
 }: PostCardProps) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp()
 
   // const isLiked = postLikeStatus[post.id]
   // const isReposted = postRepostStatus[post.id]
   const [ isLiked, setIsLiked ] = useState(false)
   const [ isReposted, setIsReposted ] = useState(false)
-  const validHandle = useMemo(() => isInvalidHandle(post.author.username) ? post.author.id : post.author.username, [post.author])
-  const isSameAuthorFeed = useMemo(() => authorFeed ? post.author.id == authorFeed.id : false, [authorFeed, post.author.id])
+  const validHandle = isInvalidHandle(post.author.username) ? post.author.id : post.author.username
+  const isSameAuthorFeed = authorFeed ? post.author.id == authorFeed.id : false
 
   const handlePostClick = (e: React.MouseEvent) => {
     if (isEmbed)
@@ -70,7 +70,7 @@ export function PostCard({
     // navigate(`/post/${post.id}`)
   }
 
-  const handleShare = useCallback((e: React.MouseEvent) => {
+  const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation()
     const postId = post.uri.split("app.bsky.feed.post/")[1]
     const url = `https://bsky.app/profile/${validHandle}/post/${postId}`
@@ -78,43 +78,43 @@ export function PostCard({
       url,
       title: post.content,
     })
-  }, [post.content, post.uri, validHandle])
+  }
 
-  const handleCopyLink = useCallback((e: React.MouseEvent) => {
+  const handleCopyLink = (e: React.MouseEvent) => {
     e.stopPropagation()
     const postId = post.uri.split("app.bsky.feed.post/")[1]
     const url = `https://bsky.app/profile/${validHandle}/post/${postId}`
     copyToClipboard(url).then(() => {
-      toast(t`Link copied`, {
-        description: t`Post link copied to clipboard`,
+      toast(t("toast.linkCopied"), {
+        description: t("toast.linkCopiedDescription"),
         duration: 2000,
       })
     })
-  }, [post.uri, validHandle])
+  }
 
-  const handleCopyText = useCallback((e: React.MouseEvent) => {
+  const handleCopyText = (e: React.MouseEvent) => {
     e.stopPropagation()
     const text = convertRichTextToPlainText(post.content, post.facets)
     copyToClipboard(text).then(() => {
-      toast(t`Text copied`, {
-        description: t`Post text copied to clipboard`,
+      toast(t("toast.textCopied"), {
+        description: t("toast.textCopiedDescription"),
         duration: 2000,
       })
     })
-  }, [post.content, post.facets])
+  }
 
   const handleReport = (e: React.MouseEvent) => {
     e.stopPropagation()
-    toast(t`Report submitted`, {
-      description: t`Thank you for helping keep our community safe`,
+    toast(t("toast.reportSubmitted"), {
+      description: t("toast.reportSubmittedDescription"),
       duration: 2000,
     })
   }
 
   const handleNotInterested = (e: React.MouseEvent) => {
     e.stopPropagation()
-    toast(t`Preference saved`, {
-      description: t`You'll see less content like this`,
+    toast(t("toast.preferenceSaved"), {
+      description: t("toast.preferenceSavedDescription"),
       duration: 2000,
     })
   }
@@ -123,35 +123,22 @@ export function PostCard({
     ? post.reason?.by?.displayName
     : null
 
-  const contextValue = useMemo<PostCardContextProps>(
-    () => ({
-      post,
-      isSameAuthorFeed,
-      isLiked,
-      isReposted,
-      onLike: handleLike,
-      onRepost: handleRepost,
-      onShare: handleShare,
-      onReply: handleReply,
-      onCopyLink: handleCopyLink,
-      onCopyText: handleCopyText,
-      onNotInterested: handleNotInterested,
-      onReport: handleReport,
-      isDetail,
-      isEmbed,
-    }),
-    [
-      handleCopyLink,
-      handleCopyText,
-      handleShare,
-      isDetail,
-      isEmbed,
-      isLiked,
-      isReposted,
-      isSameAuthorFeed,
-      post,
-    ]
-  )
+  const contextValue: PostCardContextProps = {
+    post,
+    isSameAuthorFeed,
+    isLiked,
+    isReposted,
+    onLike: handleLike,
+    onRepost: handleRepost,
+    onShare: handleShare,
+    onReply: handleReply,
+    onCopyLink: handleCopyLink,
+    onCopyText: handleCopyText,
+    onNotInterested: handleNotInterested,
+    onReport: handleReport,
+    isDetail,
+    isEmbed,
+  }
 
   return (
     <PostCardContext value={contextValue}>
@@ -166,7 +153,7 @@ export function PostCard({
         ? (
           <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
             <PinIcon className="size-4 ml-6" />
-            <Trans>Pinned</Trans>
+            {t("post.pinned")}
           </div>
         )
         : null }
@@ -174,7 +161,7 @@ export function PostCard({
         {repostedBy ? (
           <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
             <RepeatIcon className="size-4 ml-6" />
-            <Trans>Reposted by {repostedBy}</Trans>
+            {t("post.repostedBy", { repostedBy })}
           </div>
         ) : null}
 

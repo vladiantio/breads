@@ -6,28 +6,29 @@ import SquarePenIcon from '@/icons/square-pen.svg?react'
 import BellIcon from '@/icons/bell.svg?react'
 import UserIcon from '@/icons/person-rounded.svg?react'
 import { useAtpStore } from "@/lib/atp/store"
-import { t } from "@lingui/core/macro"
+import { useTranslation } from "react-i18next"
 
 export function NavLinks() {
   const { isAuthenticated, session } = useAtpStore()
+  const { t } = useTranslation()
 
   return (
     <>
       <NavIconLink
         icon={HomeIcon}
-        label={t`Home`}
+        label={t("nav.home")}
         to="/"
         fillOnHover
       />
 
       <NavIconLink
         icon={SearchIcon}
-        label={t`Search`}
+        label={t("nav.search")}
         to="/search"
       />
 
       <Button
-        title={t`New Post`}
+        title={t("nav.newPost")}
         size="icon"
         className="p-6 rounded-full"
       >
@@ -36,14 +37,14 @@ export function NavLinks() {
 
       <NavIconLink
         icon={BellIcon}
-        label={t`Notifications`}
+        label={t("nav.notifications")}
         to={isAuthenticated ? "/notifications" : "/login"}
         fillOnHover
       />
 
       <NavIconLink
         icon={UserIcon}
-        label={t`Profile`}
+        label={t("nav.profile")}
         to={isAuthenticated ? "/profile/$username" : "/login"}
         params={{
           username: session?.handle,

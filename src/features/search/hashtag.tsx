@@ -1,4 +1,3 @@
-import { t } from "@lingui/core/macro"
 import { useRouter } from "@tanstack/react-router"
 import { Button } from "@/ui/button"
 import { AlertCircleIcon, ArrowDownIcon, ArrowLeft } from "lucide-react"
@@ -8,10 +7,12 @@ import { PostCardSkeleton } from "../post/components/post-card-skeleton"
 import { PostFeed } from "../post/components/post-feed"
 import { Alert, AlertDescription, AlertTitle } from "@/ui/alert"
 import { Spinner } from "@/ui/spinner"
+import { useTranslation } from "react-i18next"
 
 export function Hashtag({ tag }: { tag: string }) {
   const q = `#${tag}`
   const { history } = useRouter()
+  const { t } = useTranslation()
   const {
     data,
     error,
@@ -57,8 +58,8 @@ export function Hashtag({ tag }: { tag: string }) {
               >
                 {isFetchingNextPage && <Spinner />}
                 {hasNextPage
-                  ? t`Load more`
-                  : t`Nothing more to load`}
+                  ? t("common.pagination.loadMore")
+                  : t("common.pagination.none")}
                 {hasNextPage && <ArrowDownIcon />}
               </Button>
             </div>

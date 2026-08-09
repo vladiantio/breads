@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/ui/dropdown-menu"
-import { Trans } from "@lingui/react/macro"
+import { useTranslation } from "react-i18next"
 import { Button } from "@/ui/button"
 import { usePostCard } from "./post-card-context"
 import { isMobileDevice } from "@/lib/browser"
@@ -66,6 +66,7 @@ export function PostCardMenu() {
   } = usePostCard()
   const [open, setOpen] = useState(false)
   const isMobile = isMobileDevice()
+  const { t } = useTranslation()
 
   const sourceLanguage = useMemo(() => langs?.[0] ?? "en", [langs])
 
@@ -88,7 +89,7 @@ export function PostCardMenu() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <LanguagesIcon />
-                    <span><Trans>Translate with</Trans> Google Translate</span>
+                    <span>{t("post.translate.with")} Google Translate</span>
                     <ArrowUpRightIcon className="ml-auto" />
                   </a>
                 </Button>
@@ -100,7 +101,7 @@ export function PostCardMenu() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <LanguagesIcon />
-                    <span><Trans>Translate with</Trans> DeepL</span>
+                    <span>{t("post.translate.with")} DeepL</span>
                     <ArrowUpRightIcon className="ml-auto" />
                   </a>
                 </Button>
@@ -108,20 +109,20 @@ export function PostCardMenu() {
             ) : null}
             <Button onClick={onCopyLink} className="justify-start h-12" size="lg" variant="ghost">
               <LinkIcon />
-              <span><Trans>Copy link</Trans></span>
+              <span>{t("post.menu.copyLink")}</span>
             </Button>
             <Button onClick={onCopyText} className="justify-start h-12" size="lg" variant="ghost">
               <Copy />
-              <span><Trans>Copy text</Trans></span>
+              <span>{t("post.menu.copyText")}</span>
             </Button>
             <Separator />
             <Button onClick={onNotInterested} className="justify-start h-12" size="lg" variant="ghost">
               <XCircle />
-              <span><Trans>Not interested in this post</Trans></span>
+              <span>{t("post.menu.notInterested")}</span>
             </Button>
             <Button onClick={onReport} className="justify-start h-12" size="lg" variant="ghost-destructive">
               <Flag />
-              <span><Trans>Report post</Trans></span>
+              <span>{t("post.menu.report")}</span>
             </Button>
           </div>
         </DrawerContent>
@@ -145,7 +146,7 @@ export function PostCardMenu() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <LanguagesIcon />
-                <span><Trans>Translate with</Trans> Google Translate</span>
+                <span>{t("post.translate.with")} Google Translate</span>
                 <ArrowUpRightIcon className="ml-auto" />
               </a>
             </DropdownMenuItem>
@@ -157,7 +158,7 @@ export function PostCardMenu() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <LanguagesIcon />
-                <span><Trans>Translate with</Trans> DeepL</span>
+                <span>{t("post.translate.with")} DeepL</span>
                 <ArrowUpRightIcon className="ml-auto" />
               </a>
             </DropdownMenuItem>
@@ -165,20 +166,20 @@ export function PostCardMenu() {
         ) : null}
         <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
           <LinkIcon />
-          <span><Trans>Copy link</Trans></span>
+          <span>{t("post.menu.copyLink")}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onCopyText} className="cursor-pointer">
           <Copy />
-          <span><Trans>Copy text</Trans></span>
+          <span>{t("post.menu.copyText")}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onNotInterested} className="cursor-pointer">
           <XCircle />
-          <span><Trans>Not interested in this post</Trans></span>
+          <span>{t("post.menu.notInterested")}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onReport} className="cursor-pointer" variant="destructive">
           <Flag />
-          <span><Trans>Report post</Trans></span>
+          <span>{t("post.menu.report")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
