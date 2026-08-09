@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import type { AppBskyActorDefs } from "@atproto/api"
+import type { AppBskyActorDefs } from "@atcute/bluesky"
 
 // source: https://github.com/bluesky-social/social-app/blob/main/src/components/verification/index.ts
 

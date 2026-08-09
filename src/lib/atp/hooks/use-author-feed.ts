@@ -1,19 +1,22 @@
 import { InfiniteData, QueryKey, useInfiniteQuery } from '@tanstack/react-query';
+import { ok } from '@atcute/client';
 import { useAtpStore } from '../store';
 import { ResponseSchema } from '@/types/response-schema';
 import { mapPosts } from '../map';
 import { TypeFilterKey } from '../types/type-filter-key';
+import { isType } from '../types/is-type';
+import type { ActorIdentifier } from '@atcute/lexicons';
 import {
   AppBskyEmbedRecord,
   AppBskyEmbedVideo,
   AppBskyFeedDefs,
   AppBskyFeedGetAuthorFeed,
-} from '@atproto/api';
+} from '@atcute/bluesky';
 
 interface UseAuthorFeed {
   actor: string
   includePins?: boolean
-  filter?: AppBskyFeedGetAuthorFeed.QueryParams['filter']
+  filter?: AppBskyFeedGetAuthorFeed.$params['filter']
   typeFilter?: TypeFilterKey
   enabled?: boolean
 }
@@ -25,7 +28,7 @@ export function useAuthorFeed({
   typeFilter,
   enabled = true,
 }: UseAuthorFeed) {
-  const { agent } = useAtpStore();
+  const { client } = useAtpStore();
 
   return useInfiniteQuery<ResponseSchema, Error, InfiniteData<ResponseSchema>, QueryKey, string | undefined>({
     queryKey: [
@@ -50,8 +53,8 @@ export function useAuthorFeed({
           filter,
         }
 
-        const { data } =
-          await agent.app.bsky.feed.getAuthorFeed(authorFeedParams)
+        const data =
+          await ok(client.get('app.bsky.feed.getAuthorFeed', { params: { ...authorFeedParams, actor: actor as ActorIdentifier } }))
 
         if (!data) {
           break
@@ -65,19 +68,19 @@ export function useAuthorFeed({
 
         const newFilteredItems = data.feed.filter((item) => {
           const isReply = item.reply
-          const isRepost = AppBskyFeedDefs.isReasonRepost(item.reason)
-          const isPin = AppBskyFeedDefs.isReasonPin(item.reason)
+          const isRepost = isType<AppBskyFeedDefs.ReasonRepost>(item.reason, 'app.bsky.feed.defs#reasonRepost')
+          const isPin = isType<AppBskyFeedDefs.ReasonPin>(item.reason, 'app.bsky.feed.defs#reasonPin')
           let filterApplied = true
           if (filter === 'posts_and_author_threads') {
             filterApplied = !isReply || isRepost || isPin || isAuthorReplyChain(actor, item, data.feed)
           }
           if (filter === 'posts_with_video') {
-            filterApplied = AppBskyEmbedVideo.isView(item.post.embed)
+            filterApplied = isType<AppBskyEmbedVideo.View>(item.post.embed, 'app.bsky.embed.video#view')
           }
           if (typeFilter === 'reposts') return filterApplied && isRepost
           if (typeFilter === 'no_reposts') return filterApplied && !isRepost
-          if (typeFilter === 'quotes') return filterApplied && AppBskyEmbedRecord.isView(item.post.embed) && !isRepost
-          if (typeFilter === 'quotes_and_reposts') return filterApplied && (isRepost || AppBskyEmbedRecord.isView(item.post.embed))
+          if (typeFilter === 'quotes') return filterApplied && isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view') && !isRepost
+          if (typeFilter === 'quotes_and_reposts') return filterApplied && (isRepost || isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view'))
           return filterApplied
         })
 
@@ -97,7 +100,7 @@ export function useAuthorFeed({
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined,
-    enabled: enabled && !!agent,
+    enabled: enabled && !!client,
   })
 }
 
@@ -112,7 +115,7 @@ function isAuthorReplyChain(
 
   const replyParent = post.reply?.parent
 
-  if (AppBskyFeedDefs.isPostView(replyParent)) {
+  if (isType<AppBskyFeedDefs.PostView>(replyParent, 'app.bsky.feed.defs#postView')) {
     // reply parent is by a different user
     if (replyParent.author.did !== actor) return false
 

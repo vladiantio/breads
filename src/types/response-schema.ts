@@ -1,13 +1,12 @@
 import {
-  $Typed,
   AppBskyActorDefs,
   AppBskyEmbedExternal,
   AppBskyEmbedImages,
   AppBskyEmbedVideo,
   AppBskyFeedDefs,
-  ComAtprotoRepoStrongRef,
-  Facet,  
-} from "@atproto/api";
+  AppBskyRichtextFacet,
+} from "@atcute/bluesky";
+import { ComAtprotoRepoStrongRef } from "@atcute/atproto";
 
 export interface ResponseSchema {
   posts: PostWithAuthor[];
@@ -20,7 +19,7 @@ export interface ThreadResponseSchema {
   replies: ThreadResponseSchema[];
 }
 
-export type Reason = $Typed<AppBskyFeedDefs.ReasonRepost> | $Typed<AppBskyFeedDefs.ReasonPin> | { $type: string }
+export type Reason = AppBskyFeedDefs.ReasonRepost | AppBskyFeedDefs.ReasonPin | { $type: string }
 
 export interface Post {
   id: string;
@@ -33,7 +32,7 @@ export interface Post {
   replies: number;
   liked?: boolean;
   reposted?: boolean;
-  facets?: Facet[];
+  facets?: AppBskyRichtextFacet.Main[];
   embedImages?: AppBskyEmbedImages.ViewImage[];
   embedVideo?: AppBskyEmbedVideo.View;
   embedExternal?: AppBskyEmbedExternal.ViewExternal;

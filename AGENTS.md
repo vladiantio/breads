@@ -4,7 +4,7 @@ A minimal Bluesky client (web + Tauri desktop). React 19, Vite 7, TypeScript str
 
 ## Commands
 
-- `pnpm dev` — Vite dev server on port **5790** (non-default; Tauri's `devUrl` depends on it, don't change the port without updating `src-tauri/tauri.conf.json`)
+- `pnpm dev` — Vite dev server on port **5790**, host **127.0.0.1** (AT Protocol OAuth forbids `localhost`; both are load-bearing — Tauri's `devUrl` and the OAuth redirect URI depend on them, don't change without updating `src-tauri/tauri.conf.json` and `vite.config.ts`)
 - `pnpm build` — `tsc -b && vite build`; **typecheck happens only via build** (no separate typecheck script)
 - `pnpm lint` — `oxlint && eslint` (both run; oxlint catches most, eslint adds react-hooks/react-refresh rules)
 - `pnpm test` — `vitest run` (happy-dom); unit tests are colocated in `src/` as `*.test.ts` and are strict-typechecked by `pnpm build` (no @testing-library/react — component rendering tests are out of scope)
@@ -21,8 +21,10 @@ A minimal Bluesky client (web + Tauri desktop). React 19, Vite 7, TypeScript str
 
 ## Architecture
 
-- **Bluesky access** is centralized in `src/lib/atp/`: `store.ts` (zustand + persist, `CredentialSession`/`Agent`), `map.ts` maps raw atproto types into local types from `src/types/`. Keep atproto API usage inside `src/lib/atp` and use mapped types everywhere else.
-- Two endpoints in `src/lib/atp/constants/endpoints.ts`: `AUTHENTICATED_ENDPOINT` (bsky.social, user sessions) and `PUBLIC_ENDPOINT` (public.api.bsky.app, anonymous reads). Choose deliberately to avoid rate limits.
+- **Bluesky access** is centralized in `src/lib/atp/`: `store.ts` (zustand + persist under the `atcute-oauth` key storing only `{ did, handle }`; OAuth sessions live in the browser's localStorage via `@atcute/oauth-browser-client`, which persists tokens internally — never store them yourself), `map.ts` maps raw atproto types into local types from `src/types/`. Keep atproto API usage inside `src/lib/atp` and use mapped types everywhere else.
+- **Auth is OAuth 2.0 + PKCE + DPoP** (`@atcute/oauth-browser-client`), handle-entry only: `startAuth(identifier)` redirects to the PDS authorization server, `src/routes/oauth/callback.tsx` finalizes and stores `did` + `handle` (via `com.atproto.server.getSession`). `store.ts` holds a single `@atcute/client` `Client` whose handler is swapped between `simpleFetchHandler(PUBLIC_ENDPOINT)` (anonymous) and `OAuthUserAgent` (authenticated). Remote calls go through `client.get('nsid', { params })` + the `ok()` helper (throws on failure); XRPC method typing comes from `@atcute/bluesky` (see `src/types/atcute.d.ts`).
+- One endpoint in `src/lib/atp/constants/endpoints.ts`: `PUBLIC_ENDPOINT` (public.api.bsky.app, anonymous reads + OAuth handle resolution). No password endpoints exist — the old `AUTHENTICATED_ENDPOINT`/password auth was removed by the atcute migration; every password session must re-authenticate once via OAuth.
+- OAuth client metadata: `public/oauth-client-metadata.json` (placeholders — must be hosted at its `client_id` URL for production). `vite.config.ts` injects `VITE_OAUTH_CLIENT_ID`/`VITE_OAUTH_REDIRECT_URI`/`VITE_OAUTH_SCOPE` per the atcute README pattern: the loopback `http://localhost?redirect_uri=...` client_id trick in dev, the hosted metadata values in builds.
 - Feature code lives in `src/features/` (feed, login, post, profile, search, settings); shared domain logic in `src/lib/`; React Query for data fetching (TanStack).
 - Tailwind v4: CSS-first config in `src/styles/index.css` (no `tailwind.config`).
 - Commits follow conventional-style messages (`feat(scope): ...`, `chore(deps): ...`).

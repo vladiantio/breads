@@ -9,7 +9,7 @@ import { useAtpStore } from "@/lib/atp/store"
 import { useTranslation } from "react-i18next"
 
 export function NavLinks() {
-  const { isAuthenticated, session } = useAtpStore()
+  const { isAuthenticated, handle } = useAtpStore()
   const { t } = useTranslation()
 
   return (
@@ -47,7 +47,7 @@ export function NavLinks() {
         label={t("nav.profile")}
         to={isAuthenticated ? "/profile/$username" : "/login"}
         params={{
-          username: session?.handle,
+          username: handle ?? undefined,
         }}
         fillOnHover
       />

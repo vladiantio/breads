@@ -1,40 +1,54 @@
 // source: https://github.com/akari-blue/akari/blob/main/src/lib/bluesky/store.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { Client, ok, simpleFetchHandler } from '@atcute/client';
 import {
-  AtpSessionData,
-  Agent,
-  CredentialSession,
-} from '@atproto/api';
+  CompositeDidDocumentResolver,
+  LocalActorResolver,
+  PlcDidDocumentResolver,
+  WebDidDocumentResolver,
+  XrpcHandleResolver,
+} from '@atcute/identity-resolver';
 import {
-  AUTHENTICATED_ENDPOINT,
-  PUBLIC_ENDPOINT,
-} from './constants/endpoints';
+  OAuthUserAgent,
+  configureOAuth,
+  createAuthorizationUrl,
+  deleteStoredSession,
+  finalizeAuthorization,
+  getSession,
+} from '@atcute/oauth-browser-client';
+import { PUBLIC_ENDPOINT } from './constants/endpoints';
+import type { ActorIdentifier, Did } from '@atcute/lexicons';
 
-export type AtpCredentials = {
-  handle: string;
-  password: string;
-  authFactorToken?: string;
-};
+configureOAuth({
+  metadata: {
+    client_id: import.meta.env.VITE_OAUTH_CLIENT_ID,
+    redirect_uri: import.meta.env.VITE_OAUTH_REDIRECT_URI,
+  },
+  identityResolver: new LocalActorResolver({
+    handleResolver: new XrpcHandleResolver({ serviceUrl: PUBLIC_ENDPOINT }),
+    didDocumentResolver: new CompositeDidDocumentResolver({
+      methods: {
+        plc: new PlcDidDocumentResolver(),
+        web: new WebDidDocumentResolver(),
+      },
+    }),
+  }),
+});
 
-type Session = AtpSessionData & {
-  didDoc?:
-    | {
-        service: {
-          id: string;
-          serviceEndpoint: string;
-          type: 'AtprotoPersonalDataServer';
-        }[];
-      }
-    | undefined;
-};
+function createClient(agent?: OAuthUserAgent): Client {
+  return new Client({
+    handler: agent ?? simpleFetchHandler({ service: PUBLIC_ENDPOINT }),
+  });
+}
 
 type AtpState = {
-  credentialSession: CredentialSession;
-  agent: Agent;
+  client: Client;
+  did: string | null;
+  handle: string | null;
   isAuthenticated: boolean;
-  session: Session | null;
-  login: (credentials: AtpCredentials) => Promise<void>;
+  startAuth: (identifier: string) => Promise<void>;
+  finalizeAuth: (params: URLSearchParams) => Promise<string>;
   logout: () => Promise<void>;
   restoreSession: () => Promise<void>;
 };
@@ -42,93 +56,93 @@ type AtpState = {
 export const useAtpStore = create<AtpState>()(
   persist(
     (set, get) => ({
-      credentialSession: createPublicSession(),
-      agent: new Agent(createPublicSession()),
+      client: createClient(),
+      did: null,
+      handle: null,
       isAuthenticated: false,
 
-      login: async (credentials: AtpCredentials) => {
-        const { credentialSession, session } = await loginAndCreateAuthenticatedSession(credentials);
-        const agent = new Agent(credentialSession);
-
-        // Store session data
-        set({
-          agent,
-          credentialSession,
-          isAuthenticated: true,
-          session: {
-            ...session,
-            active: true,
-            didDoc: session.didDoc as Session['didDoc'],
-          },
+      startAuth: async (identifier: string) => {
+        const authUrl = await createAuthorizationUrl({
+          target: { type: 'account', identifier: identifier as ActorIdentifier },
+          scope: import.meta.env.VITE_OAUTH_SCOPE,
         });
+
+        // let the browser persist the auth flow's local storage before navigating away
+        await new Promise(resolve => setTimeout(resolve, 200));
+        window.location.assign(authUrl);
+      },
+
+      finalizeAuth: async (params: URLSearchParams) => {
+        const { session } = await finalizeAuthorization(params);
+        const agent = new OAuthUserAgent(session);
+        const client = createClient(agent);
+
+        const data = await ok(client.get('com.atproto.server.getSession'));
+
+        set({
+          client,
+          did: data.did,
+          handle: data.handle,
+          isAuthenticated: true,
+        });
+
+        return data.did;
       },
 
       logout: async () => {
-        const { credentialSession } = get();
-        await credentialSession.logout();
-        const newCredentialSession = createPublicSession();
-        const agent = new Agent(newCredentialSession);
+        const { did } = get();
+        if (did) {
+          try {
+            const session = await getSession(did as Did, { allowStale: true });
+            const agent = new OAuthUserAgent(session);
+            await agent.signOut();
+          } catch {
+            deleteStoredSession(did as Did);
+          }
+        }
+
         set({
-          agent,
-          credentialSession: newCredentialSession,
+          client: createClient(),
+          did: null,
+          handle: null,
           isAuthenticated: false,
-          session: null
         });
         // reload the page after logout
         window.location.reload();
       },
 
       restoreSession: async () => {
-        const { session, isAuthenticated } = get();
-        if (session !== null && !isAuthenticated) {
-          try {
-            const credentialSession = await resumeSession(session);
-            const agent = new Agent(credentialSession);
-            set({
-              agent,
-              credentialSession,
-              isAuthenticated: true
-            });
-          } catch (error) {
-            const credentialSession = createPublicSession();
-            const agent = new Agent(credentialSession);
-            console.error('Failed to restore session:', error);
-            set({
-              agent,
-              credentialSession,
-              isAuthenticated: false,
-              session: null
-            });
-          }
+        const { did, isAuthenticated } = get();
+        if (did === null || isAuthenticated) {
+          return;
+        }
+        try {
+          const session = await getSession(did as Did, { allowStale: true });
+          const agent = new OAuthUserAgent(session);
+          const client = createClient(agent);
+
+          const data = await ok(client.get('com.atproto.server.getSession'));
+
+          set({
+            client,
+            did: data.did,
+            handle: data.handle,
+            isAuthenticated: true,
+          });
+        } catch (error) {
+          console.error('Failed to restore session:', error);
+          set({
+            client: createClient(),
+            did: null,
+            handle: null,
+            isAuthenticated: false,
+          });
         }
       },
-
-      session: null,
     }),
     {
-      name: 'atp-store',
-      partialize: (state) => ({ session: state.session }),
+      name: 'atcute-oauth',
+      partialize: (state) => ({ did: state.did, handle: state.handle }),
     },
   ),
 );
-
-function createPublicSession() {
-  return new CredentialSession(new URL(PUBLIC_ENDPOINT));
-}
-
-async function loginAndCreateAuthenticatedSession(credentials: AtpCredentials) {
-  const credentialSession = new CredentialSession(new URL(AUTHENTICATED_ENDPOINT));
-  const { data: session } = await credentialSession.login({
-    identifier: credentials.handle,
-    password: credentials.password,
-    authFactorToken: credentials.authFactorToken,
-    allowTakendown: true,
-  });
-  return { credentialSession, session };
-}
-
-async function resumeSession(session: AtpSessionData) {
-  const credentialSession = new CredentialSession(new URL(AUTHENTICATED_ENDPOINT));
-  await credentialSession.resumeSession(session);
-  return credentialSession;
-}

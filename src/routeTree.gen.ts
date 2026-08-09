@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as OauthCallbackRouteImport } from './routes/oauth/callback'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppSearchRouteImport } from './routes/_app.search'
 import { Route as AppNotificationsRouteImport } from './routes/_app.notifications'
@@ -33,6 +34,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const OauthCallbackRoute = OauthCallbackRouteImport.update({
+  id: '/oauth/callback',
+  path: '/oauth/callback',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AppNotificationsRoute
   '/search': typeof AppSearchRoute
   '/settings': typeof AppSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/': typeof AppIndexRoute
   '/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
   '/hashtag/$tag': typeof AppHashtagTagRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof AppNotificationsRoute
   '/search': typeof AppSearchRoute
   '/settings': typeof AppSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/': typeof AppIndexRoute
   '/hashtag/$tag': typeof AppHashtagTagRoute
   '/profile/$username': typeof AppProfileUsernameIndexRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/_app/notifications': typeof AppNotificationsRoute
   '/_app/search': typeof AppSearchRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/_app/': typeof AppIndexRoute
   '/_app/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
   '/_app/hashtag/$tag': typeof AppHashtagTagRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/settings'
+    | '/oauth/callback'
     | '/'
     | '/profile/$username'
     | '/hashtag/$tag'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/settings'
+    | '/oauth/callback'
     | '/'
     | '/hashtag/$tag'
     | '/profile/$username'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
     | '/_app/notifications'
     | '/_app/search'
     | '/_app/settings'
+    | '/oauth/callback'
     | '/_app/'
     | '/_app/profile/$username'
     | '/_app/hashtag/$tag'
@@ -144,6 +156,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
+  OauthCallbackRoute: typeof OauthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/oauth/callback': {
+      id: '/oauth/callback'
+      path: '/oauth/callback'
+      fullPath: '/oauth/callback'
+      preLoaderRoute: typeof OauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -260,6 +280,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
+  OauthCallbackRoute: OauthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

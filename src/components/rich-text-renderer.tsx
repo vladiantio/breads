@@ -1,13 +1,15 @@
 import { Fragment, useCallback, useMemo, useState, memo } from "react"
-import { Facet, RichText, RichTextSegment } from "@atproto/api"
+import type { RichtextSegment } from "@atcute/bluesky-richtext-segmenter"
+import type { AppBskyRichtextFacet } from "@atcute/bluesky"
 import { Link } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { AuthorHoverCard } from "@/features/profile/components/author-hover-card"
 import { useTranslation } from "react-i18next"
+import { segmentizeFacets, type RichtextFeature } from "@/lib/atp/utils"
 
 interface RichTextRendererProps {
   text: string
-  facets?: Facet[]
+  facets?: AppBskyRichtextFacet.Main[]
   // Optional className for styling
   className?: string
   // To control whether to render links as <a> tags
@@ -20,7 +22,7 @@ const handleStopPropagation = (e: React.MouseEvent) => {
 
 // Component for rendering a single segment (link, mention, tag, or plain text)
 const TextSegment: React.FC<{
-  segment: RichTextSegment
+  segment: RichtextSegment<RichtextFeature>
   linkify: boolean
   index: number
 }> = memo(({ segment, linkify, index }) => {
@@ -28,11 +30,13 @@ const TextSegment: React.FC<{
     return <Fragment key={`text-${index}`}>{segment.text}</Fragment>
   }
 
-  if (segment.isLink()) {
+  const feature = segment.features?.[0]
+
+  if (feature?.$type === 'app.bsky.richtext.facet#link') {
     return (
       <a
         key={`link-${index}`}
-        href={segment.link!.uri}
+        href={feature.uri}
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleStopPropagation}
@@ -42,8 +46,8 @@ const TextSegment: React.FC<{
     )
   }
 
-  if (segment.isMention()) {
-    const handle = segment.mention?.did ?? segment.text.slice(1)
+  if (feature?.$type === 'app.bsky.richtext.facet#mention') {
+    const handle = feature.did ?? segment.text.slice(1)
     return (
       <AuthorHoverCard handle={handle}>
         <Link
@@ -58,12 +62,12 @@ const TextSegment: React.FC<{
     )
   }
 
-  if (segment.isTag()) {
+  if (feature?.$type === 'app.bsky.richtext.facet#tag') {
     return (
       <Link
         key={`tag-${index}`}
         to="/hashtag/$tag"
-        params={{ tag: segment.tag!.tag }}
+        params={{ tag: feature.tag }}
         onClick={handleStopPropagation}
       >
         {segment.text}
@@ -80,7 +84,7 @@ const TextSegment: React.FC<{
  * @component
  * @param {Object} props - The component props
  * @param {string} props.text - The text content to render
- * @param {Facet[]} [props.facets] - Array of facets containing styling/link information
+ * @param {AppBskyRichtextFacet.Main[]} [props.facets] - Array of facets containing styling/link information
  * @param {string} [props.className] - Additional CSS class names
  * @param {boolean} [props.linkify=true] - Whether to automatically convert URLs to links
  *
@@ -96,9 +100,8 @@ const TextSegment: React.FC<{
  *
  * @remarks
  * The component handles text processing by:
- * 1. Calculating byte indices for facet distribution
- * 2. Mapping facets to appropriate segments
- * 3. Adjusting facet indices relative to segment starts
+ * 1. Segmenting the text by facet byte offsets
+ * 2. Rendering each segment according to its feature type
  */
 export function RichTextRenderer({
   text,
@@ -109,20 +112,22 @@ export function RichTextRenderer({
   const [tagsExpanded, setTagsExpanded] = useState(false)
   const { t } = useTranslation()
 
-  const lineRichText = useMemo(() => new RichText({ text, facets }), [text, facets])
-  const segments = useMemo(() => [...lineRichText.segments()], [lineRichText])
+  const segments = useMemo(() => segmentizeFacets(text, facets), [text, facets])
 
   const { hasOnlyTags, limitedSegments, tagsCount } = useMemo(() => {
-    const hasOnlyTags = segments.every(segment => !segment.isTag())
+    const hasOnlyTags = segments.every(segment =>
+      !segment.features?.some(feature => feature.$type === 'app.bsky.richtext.facet#tag')
+    )
     if (hasOnlyTags) {
       return { hasOnlyTags: true, limitedSegments: segments, tagsCount: 0 }
     }
 
     let count = 0
-    const limited: RichTextSegment[] = []
+    const limited: RichtextSegment<RichtextFeature>[] = []
 
     for (const segment of segments) {
-      if (segment.isTag()) {
+      const isTag = segment.features?.some(feature => feature.$type === 'app.bsky.richtext.facet#tag') ?? false
+      if (isTag) {
         count++
         if (count > 3 && !tagsExpanded) continue
       }
@@ -142,7 +147,7 @@ export function RichTextRenderer({
     }
   }, [segments, tagsExpanded])
 
-  const renderSegments = useCallback((segs: RichTextSegment[]) => (
+  const renderSegments = useCallback((segs: RichtextSegment<RichtextFeature>[]) => (
     segs.map((segment, i) => (
       <TextSegment
         key={`segment-${i}`}

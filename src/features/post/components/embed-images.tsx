@@ -1,4 +1,4 @@
-import { AppBskyEmbedImages } from "@atproto/api"
+import { AppBskyEmbedImages } from "@atcute/bluesky"
 import { EmbedToggle } from "./embed-toggle"
 import { useImagePreload } from "@/hooks/use-image-preload"
 import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel"

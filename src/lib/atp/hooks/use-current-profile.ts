@@ -3,12 +3,12 @@ import { useProfile } from "./use-profile";
 import { useResolveHandle } from "./use-resolve-handle";
 
 export function useCurrentProfile() {
-  const { isAuthenticated, session } = useAtpStore();
+  const { isAuthenticated, handle } = useAtpStore();
 
   const {
     data: actor,
     isLoading: isLoadingActor,
-  } = useResolveHandle({ handle: session?.handle, enabled: isAuthenticated && !!session });
+  } = useResolveHandle({ handle: handle ?? undefined, enabled: isAuthenticated && !!handle });
 
   const {
     data,
@@ -18,6 +18,6 @@ export function useCurrentProfile() {
   return {
     data,
     isLoading: isLoadingActor || isLoadingProfile,
-    isAuthenticated: isAuthenticated && !!session,
+    isAuthenticated: isAuthenticated && !!handle,
   };
 }

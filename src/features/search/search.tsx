@@ -5,7 +5,7 @@ import { InputAddOns, InputAddOnLabel } from "@/ui/input-add-ons"
 import SearchIcon from '@/icons/search.svg?react'
 import { useActorsSearch } from "@/lib/atp/hooks/use-actors-search"
 import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles"
-import { AppBskyActorDefs } from "@atproto/api"
+import { AppBskyActorDefs } from "@atcute/bluesky"
 import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"

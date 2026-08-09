@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
+import { ok } from "@atcute/client";
 import { useAtpStore } from "../store";
+import type { Handle } from "@atcute/lexicons";
 
 interface UseResolveHandle {
   handle?: string
@@ -10,7 +12,7 @@ export function useResolveHandle({
   handle,
   enabled = true,
 }: UseResolveHandle) {
-  const { agent } = useAtpStore();
+  const { client } = useAtpStore();
 
   return useQuery({
     queryKey: ['resolve-handle', handle],
@@ -21,10 +23,12 @@ export function useResolveHandle({
         return handle;
       }
 
-      const { data } = await agent.com.atproto.identity.resolveHandle({ handle });
+      const data = await ok(client.get('com.atproto.identity.resolveHandle', {
+        params: { handle: handle as Handle }
+      }));
 
       return data.did;
     },
-    enabled: enabled && !!agent && !!handle,
+    enabled: enabled && !!client && !!handle,
   })
 }

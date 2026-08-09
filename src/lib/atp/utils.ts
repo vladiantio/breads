@@ -1,11 +1,24 @@
-import { Facet, RichText } from "@atproto/api";
+import { segmentize, type RichtextSegment } from "@atcute/bluesky-richtext-segmenter";
+import type { AppBskyRichtextFacet } from "@atcute/bluesky";
 
-export const convertRichTextToPlainText = (text: string, facets?: Facet[]): string => {
+export type RichtextFeature =
+  | AppBskyRichtextFacet.Mention
+  | AppBskyRichtextFacet.Link
+  | AppBskyRichtextFacet.Tag;
+
+export const segmentizeFacets = (
+  text: string,
+  facets?: AppBskyRichtextFacet.Main[],
+): RichtextSegment<RichtextFeature>[] => segmentize(text, facets);
+
+export const convertRichTextToPlainText = (text: string, facets?: AppBskyRichtextFacet.Main[]): string => {
   try {
-    const richText = new RichText({ text, facets });
-    return [...richText.segments()].map(segment => {
-      if (segment.isLink())
-        return segment.link!.uri;
+    return segmentizeFacets(text, facets).map(segment => {
+      const link = segment.features?.find(
+        (feature): feature is AppBskyRichtextFacet.Link => feature.$type === 'app.bsky.richtext.facet#link'
+      );
+      if (link)
+        return link.uri;
       else
         return segment.text;
     }).join('');

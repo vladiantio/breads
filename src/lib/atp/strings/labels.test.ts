@@ -1,4 +1,4 @@
-import { ComAtprotoLabelDefs } from "@atproto/api"
+import { ComAtprotoLabelDefs } from "@atcute/atproto"
 import { beforeEach, describe, expect, it } from "vitest"
 import { dynamicActivate } from "@/i18n/i18n"
 import { labelsToInfo } from "./labels"

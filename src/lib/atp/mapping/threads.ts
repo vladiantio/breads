@@ -1,10 +1,10 @@
 // source: https://github.com/bluesky-social/social-app/blob/main/src/state/queries/post-thread.ts
 
-import { dangerousIsType } from '@/utils/validation';
-import { AppBskyFeedDefs, AppBskyFeedGetPostThread, AppBskyFeedPost } from '@atproto/api';
+import { isType } from '../types/is-type';
+import { AppBskyFeedDefs, AppBskyFeedGetPostThread, AppBskyFeedPost } from '@atcute/bluesky';
 import { REPLY_TREE_DEPTH } from '../constants/threads';
 
-type ThreadViewNode = AppBskyFeedGetPostThread.OutputSchema['thread']
+type ThreadViewNode = AppBskyFeedGetPostThread.$output['thread']
 
 export interface ThreadCtx {
   depth: number
@@ -21,7 +21,7 @@ export type ThreadPost = {
   _reactKey: string
   uri: string
   post: AppBskyFeedDefs.PostView
-  record: AppBskyFeedPost.Record
+  record: AppBskyFeedPost.Main
   parent: ThreadNode | undefined
   replies: ThreadNode[] | undefined
   hasOPLike: boolean | undefined
@@ -59,10 +59,10 @@ export function responseToThreadNodes(
   direction: 'up' | 'down' | 'start' = 'start',
 ): ThreadNode {
   if (
-    AppBskyFeedDefs.isThreadViewPost(node) &&
-    dangerousIsType<AppBskyFeedPost.Record>(
+    isType<AppBskyFeedDefs.ThreadViewPost>(node, 'app.bsky.feed.defs#threadViewPost') &&
+    isType<AppBskyFeedPost.Main>(
       node.post.record,
-      AppBskyFeedPost.isRecord,
+      'app.bsky.feed.post',
     )
   ) {
     const post = node.post
@@ -99,9 +99,9 @@ export function responseToThreadNodes(
         hasMoreSelfThread: false, // populated in `annotateSelfThread`
       },
     }
-  } else if (AppBskyFeedDefs.isBlockedPost(node)) {
+  } else if (isType<AppBskyFeedDefs.BlockedPost>(node, 'app.bsky.feed.defs#blockedPost')) {
     return {type: 'blocked', _reactKey: node.uri, uri: node.uri, ctx: {depth}}
-  } else if (AppBskyFeedDefs.isNotFoundPost(node)) {
+  } else if (isType<AppBskyFeedDefs.NotFoundPost>(node, 'app.bsky.feed.defs#notFoundPost')) {
     return {type: 'not-found', _reactKey: node.uri, uri: node.uri, ctx: {depth}}
   } else {
     return {type: 'unknown', uri: ''}

@@ -1,4 +1,5 @@
 import { InfiniteData, QueryKey, useInfiniteQuery } from '@tanstack/react-query';
+import { ok } from '@atcute/client';
 import { useAtpStore } from '../store';
 import { ResponseSchema } from '@/types/response-schema';
 import { mapPostWithAuthor } from '../map';
@@ -14,17 +15,14 @@ export function usePostsSearch({
   limit = 25,
   sort = 'top',
 }: UsePostsSearch) {
-  const { agent } = useAtpStore();
+  const { client } = useAtpStore();
 
   return useInfiniteQuery<ResponseSchema, Error, InfiniteData<ResponseSchema>, QueryKey, string | undefined>({
     queryKey: ['posts-search', { q, limit, sort }],
     queryFn: async ({ pageParam: cursor }) => {
-      const { data } = await agent.app.bsky.feed.searchPosts({
-        q,
-        limit,
-        sort,
-        cursor
-      });
+      const data = await ok(client.get('app.bsky.feed.searchPosts', {
+        params: { q, limit, sort, cursor }
+      }));
 
       const posts = data.posts.map(post => mapPostWithAuthor(post));
 
@@ -32,7 +30,7 @@ export function usePostsSearch({
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined,
-    enabled: !!agent && !!q.trim(),
+    enabled: !!client && !!q.trim(),
     staleTime: Infinity,
   });
 }

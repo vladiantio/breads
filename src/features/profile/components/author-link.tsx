@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router"
 import { AuthorHoverCard } from "./author-hover-card"
 import { cn } from "@/lib/utils"
 import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles"
-import type { AppBskyActorDefs } from "@atproto/api"
+import type { AppBskyActorDefs } from "@atcute/bluesky"
 import { VerifiedBadge } from "./verified-badge"
 
 interface AuthorLinkProps {

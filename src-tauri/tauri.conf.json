@@ -5,7 +5,7 @@
   "identifier": "app.breads",
   "build": {
     "frontendDist": "../dist",
-    "devUrl": "http://localhost:5790",
+    "devUrl": "http://127.0.0.1:5790",
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build"
   },

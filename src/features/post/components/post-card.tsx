@@ -10,7 +10,8 @@ import { PostCardHeader } from "./post-card-header"
 import { useNavigate } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { isInvalidHandle } from "@/lib/atp/strings/handles"
-import { AppBskyFeedDefs } from "@atproto/api"
+import { AppBskyFeedDefs } from "@atcute/bluesky"
+import { isType } from "@/lib/atp/types/is-type"
 import { copyToClipboard } from "@/utils/clipboard"
 import { PostCardContext, type PostCardContextProps } from "./post-card-context"
 import { useTranslation } from "react-i18next"
@@ -119,7 +120,7 @@ export function PostCard({
     })
   }
 
-  const repostedBy = AppBskyFeedDefs.isReasonRepost(post.reason)
+  const repostedBy = isType<AppBskyFeedDefs.ReasonRepost>(post.reason, 'app.bsky.feed.defs#reasonRepost')
     ? post.reason?.by?.displayName
     : null
 
@@ -149,7 +150,7 @@ export function PostCard({
         )}
         onClick={handlePostClick}
       >
-        {AppBskyFeedDefs.isReasonPin(post.reason)
+        {isType<AppBskyFeedDefs.ReasonPin>(post.reason, 'app.bsky.feed.defs#reasonPin')
         ? (
           <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
             <PinIcon className="size-4 ml-6" />

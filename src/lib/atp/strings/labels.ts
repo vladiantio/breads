@@ -1,5 +1,5 @@
 // source: https://github.com/bluesky-social/social-app/blob/main/bskyembed/src/labels.ts
-import {AppBskyFeedDefs} from '@atproto/api'
+import {AppBskyFeedDefs} from '@atcute/bluesky'
 import { t } from '@/i18n/i18n'
 
 export const CONTENT_LABELS = ['porn', 'sexual', 'nudity', 'graphic-media']

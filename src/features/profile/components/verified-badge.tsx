@@ -1,4 +1,4 @@
-import type { AppBskyActorDefs } from "@atproto/api";
+import type { AppBskyActorDefs } from "@atcute/bluesky";
 import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification";
 import TrustedVerifierIcon from "@/icons/trusted-verifier.svg?react";
 import VerifiedAccountIcon from "@/icons/verified-account.svg?react";

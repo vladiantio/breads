@@ -1,6 +1,6 @@
 // source: https://github.com/bluesky-social/social-app/blob/main/src/types/bsky/profile.ts
 
-import { type AppBskyActorDefs, type ChatBskyActorDefs } from '@atproto/api'
+import { type AppBskyActorDefs, type ChatBskyActorDefs } from '@atcute/bluesky'
 
 /**
  * Matches any profile view exported by our SDK

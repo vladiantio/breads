@@ -1,4 +1,4 @@
-import { AppBskyEmbedVideo } from "@atproto/api";
+import { AppBskyEmbedVideo } from "@atcute/bluesky";
 import { EmbedToggle } from "./embed-toggle";
 import { useImagePreload } from "@/hooks/use-image-preload";
 import { useTranslation } from "react-i18next";

@@ -1,10 +1,11 @@
 import { InfiniteData, QueryKey, useInfiniteQuery } from '@tanstack/react-query';
+import { ok } from '@atcute/client';
 import { useAtpStore } from '../store';
 import { ResponseSchema } from '@/types/response-schema';
 import { mapPosts } from '../map';
 
 export function useFeed() {
-  const { agent } = useAtpStore();
+  const { client } = useAtpStore();
 
   const feed = 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot';
 
@@ -13,11 +14,9 @@ export function useFeed() {
     queryFn: async ({ pageParam: cursor }) => {
       if (!feed) throw new Error('Feed not found');
 
-      const { data } = await agent.app.bsky.feed.getFeed({
-        feed,
-        cursor,
-        limit: 30
-      });
+      const data = await ok(client.get('app.bsky.feed.getFeed', {
+        params: { feed, cursor, limit: 30 }
+      }));
 
       const posts = mapPosts(data.feed);
 
@@ -25,7 +24,7 @@ export function useFeed() {
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined,
-    enabled: !!agent && feed !== undefined,
+    enabled: !!client && feed !== undefined,
     staleTime: Infinity,
   });
 }

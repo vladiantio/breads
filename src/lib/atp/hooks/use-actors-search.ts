@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { ok } from '@atcute/client';
 import { useAtpStore } from '../store';
 
 interface UseActorsSearch {
@@ -10,14 +11,16 @@ export function useActorsSearch({
   q,
   limit = 10,
 }: UseActorsSearch) {
-  const { agent } = useAtpStore();
+  const { client } = useAtpStore();
 
   return useQuery({
     queryKey: ['actors-search', { q, limit }],
     queryFn: async () => {
-      const { data } = await agent.app.bsky.actor.searchActorsTypeahead({ q, limit });
+      const data = await ok(client.get('app.bsky.actor.searchActorsTypeahead', {
+        params: { q, limit }
+      }));
       return data.actors;
     },
-    enabled: !!agent && !!q.trim(),
+    enabled: !!client && !!q.trim(),
   });
 }

@@ -1,29 +1,22 @@
-import { AtpCredentials, useAtpStore } from '../store';
+import { useAtpStore } from '../store';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 export function useAuth() {
-  const { login, logout, isAuthenticated } = useAtpStore();
+  const { startAuth, logout, isAuthenticated } = useAtpStore();
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
   const loginMutation = useMutation({
-    mutationFn: async (credentials: AtpCredentials) => {
+    mutationFn: async (identifier: string) => {
       try {
-        await login(credentials);
-        toast.success('Successfully logged in!');
+        await startAuth(identifier);
       } catch (error) {
         toast.error(error instanceof Error ? error.message : 'Failed to login');
         throw error;
       }
-    },
-    onSuccess: () => {
-      // Redirect to the homepage
-      const redirect = new URLSearchParams(window.location.search).get('redirect');
-      const url = new URL(redirect || '/', window.location.origin);
-      navigate({ to: url.pathname });
     },
   });
 

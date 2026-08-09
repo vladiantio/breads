@@ -1,4 +1,4 @@
-import { AppBskyEmbedExternal } from "@atproto/api";
+import { AppBskyEmbedExternal } from "@atcute/bluesky";
 import { EmbedToggle } from "./embed-toggle";
 import { parseTenorGif } from "@/lib/embed-player";
 import { YTEmbed } from "@/components/yt-embed";
