@@ -40,14 +40,16 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
       >
         <div className="bg-accent border overflow-hidden rounded-lg size-full select-none">
           <MediaPlayer autoHide>
-            <MediaPlayerVideo asChild>
-              <HLSPlayer
-                autoPlay
-                src={view.playlist}
-                poster={view.thumbnail}
-                playsInline
-              />
-            </MediaPlayerVideo>
+            <MediaPlayerVideo
+              render={
+                <HLSPlayer
+                  autoPlay
+                  src={view.playlist}
+                  poster={view.thumbnail}
+                  playsInline
+                />
+              }
+            />
             <MediaPlayerError />
             <MediaPlayerVolumeIndicator />
             <MediaPlayerControls placement="middle">

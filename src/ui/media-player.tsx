@@ -20,9 +20,10 @@ import {
 } from "./tooltip";
 import { useComposedRefs } from "@/lib/compose-refs";
 import { cn } from "@/lib/utils";
-import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
-import * as SliderPrimitive from "@radix-ui/react-slider";
-import { Slot } from "@radix-ui/react-slot";
+import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card";
+import { Slider as SliderPrimitive } from "@base-ui/react/slider";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import {
   AlertTriangleIcon,
   CaptionsOffIcon,
@@ -215,7 +216,7 @@ interface MediaPlayerRootProps
   label?: string;
   tooltipDelayDuration?: number;
   tooltipSideOffset?: number;
-  asChild?: boolean;
+  render?: React.ReactElement;
   autoHide?: boolean;
   disabled?: boolean;
   withoutTooltip?: boolean;
@@ -262,7 +263,7 @@ function MediaPlayerRootImpl({
   label,
   tooltipDelayDuration = 600,
   tooltipSideOffset = FLOATING_MENU_SIDE_OFFSET,
-  asChild,
+  render,
   autoHide = false,
   disabled = false,
   withoutTooltip = false,
@@ -746,54 +747,58 @@ function MediaPlayerRootImpl({
     ]
   );
 
-  const RootPrimitive = asChild ? Slot : "div";
-
-  return (
-    <MediaPlayerContext value={contextValue}>
-      <RootPrimitive
-        aria-labelledby={labelId}
-        aria-describedby={descriptionId}
-        aria-disabled={disabled}
-        data-disabled={disabled ? "" : undefined}
-        data-controls-visible={controlsVisible ? "" : undefined}
-        data-slot="media-player"
-        data-state={isFullscreen ? "fullscreen" : "windowed"}
-        dir={dir}
-        tabIndex={disabled ? undefined : 0}
-        {...props}
-        ref={composedRef}
-        onMouseLeave={onMouseLeave}
-        onMouseMove={onMouseMove}
-        onKeyDown={onKeyDown}
-        onKeyUp={onKeyUp}
-        className={cn(
+  const RootPrimitive = useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        "aria-labelledby": labelId,
+        "aria-describedby": descriptionId,
+        "aria-disabled": disabled,
+        "data-disabled": disabled ? "" : undefined,
+        "data-controls-visible": controlsVisible ? "" : undefined,
+        "data-slot": "media-player",
+        "data-state": isFullscreen ? "fullscreen" : "windowed",
+        dir,
+        tabIndex: disabled ? undefined : 0,
+        onMouseLeave,
+        onMouseMove,
+        onKeyDown,
+        onKeyUp,
+        className: cn(
           "dark relative isolate flex flex-col overflow-hidden rounded-lg bg-background outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_video]:relative [&_video]:object-contain",
           "data-[state=fullscreen]:[&_video]:size-full [:fullscreen_&]:flex [:fullscreen_&]:h-full [:fullscreen_&]:max-h-screen [:fullscreen_&]:flex-col [:fullscreen_&]:justify-between",
           "[&_video::-webkit-media-text-track-display]:top-auto! [&_video::-webkit-media-text-track-display]:bottom-[4%]! [&_video::-webkit-media-text-track-display]:mb-0! data-[state=fullscreen]:data-[controls-visible]:[&_video::-webkit-media-text-track-display]:bottom-[9%]! data-[controls-visible]:[&_video::-webkit-media-text-track-display]:bottom-[13%]! data-[state=fullscreen]:[&_video::-webkit-media-text-track-display]:bottom-[7%]!",
           className
-        )}
-      >
-        <span id={labelId} className="sr-only">
-          {label ?? "Media player"}
-        </span>
-        <span id={descriptionId} className="sr-only">
-          {isVideo
-            ? "Video player with custom controls for playback, volume, seeking, and more. Use space bar to play/pause, arrow keys (←/→) to seek, and arrow keys (↑/↓) to adjust volume."
-            : "Audio player with custom controls for playback, volume, seeking, and more. Use space bar to play/pause, Shift + arrow keys (←/→) to seek, and arrow keys (↑/↓) to adjust volume."}
-        </span>
-        {children}
-        <MediaPlayerVolumeIndicator />
-      </RootPrimitive>
-    </MediaPlayerContext>
-  );
+        ),
+        children: (
+          <>
+            <span id={labelId} className="sr-only">
+              {label ?? "Media player"}
+            </span>
+            <span id={descriptionId} className="sr-only">
+              {isVideo
+                ? "Video player with custom controls for playback, volume, seeking, and more. Use space bar to play/pause, arrow keys (←/→) to seek, and arrow keys (↑/↓) to adjust volume."
+                : "Audio player with custom controls for playback, volume, seeking, and more. Use space bar to play/pause, Shift + arrow keys (←/→) to seek, and arrow keys (↑/↓) to adjust volume."}
+            </span>
+            {children}
+            <MediaPlayerVolumeIndicator />
+          </>
+        ),
+      } as React.ComponentProps<"div">,
+      props
+    ),
+    ref: [composedRef],
+  });
+
+  return <MediaPlayerContext value={contextValue}>{RootPrimitive}</MediaPlayerContext>;
 }
 
-interface MediaPlayerVideoProps extends React.ComponentProps<"video"> {
-  asChild?: boolean;
-}
+interface MediaPlayerVideoProps
+  extends useRender.ComponentProps<"video"> {}
 
 function MediaPlayerVideo({
-  asChild,
+  render,
   ref,
   onClick,
   className,
@@ -822,52 +827,63 @@ function MediaPlayerVideo({
     [dispatch, onClick]
   );
 
-  const VideoPrimitive = asChild ? Slot : "video";
+  const VideoPrimitive = useRender({
+    defaultTagName: "video",
+    render,
+    props: mergeProps<"video">(
+      {
+        "aria-describedby": context.descriptionId,
+        "aria-labelledby": context.labelId,
+        "data-slot": "media-player-video",
+        id: context.mediaId,
+        onClick: onPlayToggle,
+        className: cn("cursor-pointer", className),
+        ref: composedRef,
+      } as React.ComponentProps<"video">,
+      props
+    ),
+  });
 
-  return (
-    <VideoPrimitive
-      aria-describedby={context.descriptionId}
-      aria-labelledby={context.labelId}
-      data-slot="media-player-video"
-      {...props}
-      id={context.mediaId}
-      ref={composedRef}
-      onClick={onPlayToggle}
-      className={cn("cursor-pointer", className)}
-    />
-  );
+  return VideoPrimitive;
 }
 
-interface MediaPlayerAudioProps extends React.ComponentProps<"audio"> {
-  asChild?: boolean;
-}
+interface MediaPlayerAudioProps
+  extends useRender.ComponentProps<"audio"> {}
 
-function MediaPlayerAudio({ asChild, ref, ...props }: MediaPlayerAudioProps) {
+function MediaPlayerAudio({
+  render,
+  ref,
+  ...props
+}: MediaPlayerAudioProps) {
   const context = useMediaPlayerContext("MediaPlayerAudio");
   const mediaRefCallback = useMediaRef();
   const composedRef = useComposedRefs(ref, context.mediaRef, mediaRefCallback);
 
-  const AudioPrimitive = asChild ? Slot : "audio";
+  const AudioPrimitive = useRender({
+    defaultTagName: "audio",
+    render,
+    props: mergeProps<"audio">(
+      {
+        "aria-describedby": context.descriptionId,
+        "aria-labelledby": context.labelId,
+        "data-slot": "media-player-audio",
+        id: context.mediaId,
+        ref: composedRef,
+      } as React.ComponentProps<"audio">,
+      props
+    ),
+  });
 
-  return (
-    <AudioPrimitive
-      aria-describedby={context.descriptionId}
-      aria-labelledby={context.labelId}
-      data-slot="media-player-audio"
-      {...props}
-      id={context.mediaId}
-      ref={composedRef}
-    />
-  );
+  return AudioPrimitive;
 }
 
 interface MediaPlayerControlsProps extends React.ComponentProps<"div"> {
-  asChild?: boolean;
+  render?: React.ReactElement;
   placement?: "top" | "middle" | "bottom";
 }
 
 function MediaPlayerControls({
-  asChild,
+  render,
   placement = "bottom",
   className,
   ...props
@@ -878,36 +894,40 @@ function MediaPlayerControls({
   );
   const controlsVisible = useStoreSelector((state) => state.controlsVisible);
 
-  const ControlsPrimitive = asChild ? Slot : "div";
+  const ControlsPrimitive = useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        "data-disabled": context.disabled ? "" : undefined,
+        "data-slot": "media-player-controls",
+        "data-state": isFullscreen ? "fullscreen" : "windowed",
+        "data-visible": controlsVisible ? "" : undefined,
+        dir: context.dir,
+        className: cn(
+          "dark pointer-events-none absolute z-50 flex items-center gap-2 px-6 py-3 opacity-0 transition-opacity duration-200 data-[visible]:pointer-events-auto data-[visible]:opacity-100 [:fullscreen_&]:px-8 [:fullscreen_&]:py-6 [:fullscreen_&]:gap-4",
+          placement === "top" && "top-0 inset-x-0",
+          placement === "middle" &&
+            "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+          placement === "bottom" && "bottom-0 inset-x-0",
+          className
+        ),
+      } as React.ComponentProps<"div">,
+      props
+    ),
+  });
 
-  return (
-    <ControlsPrimitive
-      data-disabled={context.disabled ? "" : undefined}
-      data-slot="media-player-controls"
-      data-state={isFullscreen ? "fullscreen" : "windowed"}
-      data-visible={controlsVisible ? "" : undefined}
-      dir={context.dir}
-      className={cn(
-        "dark pointer-events-none absolute z-50 flex items-center gap-2 px-6 py-3 opacity-0 transition-opacity duration-200 data-[visible]:pointer-events-auto data-[visible]:opacity-100 [:fullscreen_&]:px-8 [:fullscreen_&]:py-6 [:fullscreen_&]:gap-4",
-        placement === "top" && "top-0 inset-x-0",
-        placement === "middle" &&
-          "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-        placement === "bottom" && "bottom-0 inset-x-0",
-        className
-      )}
-      {...props}
-    />
-  );
+  return ControlsPrimitive;
 }
 
 interface MediaPlayerLoadingProps extends React.ComponentProps<"div"> {
   delayMs?: number;
-  asChild?: boolean;
+  render?: React.ReactElement;
 }
 
 function MediaPlayerLoading({
   delayMs = LOADING_DELAY_MS,
-  asChild,
+  render,
   className,
   children: _,
   ...props
@@ -952,31 +972,35 @@ function MediaPlayerLoading({
 
   if (!shouldRender) return null;
 
-  const LoadingPrimitive = asChild ? Slot : "div";
+  const LoadingPrimitive = useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        role: "status",
+        "aria-live": "polite",
+        "data-slot": "media-player-loading",
+        className: cn(
+          "fade-in-0 zoom-in-95 pointer-events-none absolute inset-0 z-50 flex animate-in items-center justify-center duration-200",
+          className
+        ),
+        children: (
+          <Loader2Icon className="size-20 animate-spin stroke-[.0938rem] text-foreground" />
+        ),
+      } as React.ComponentProps<"div">,
+      props
+    ),
+  });
 
-  return (
-    <LoadingPrimitive
-      role="status"
-      aria-live="polite"
-      data-slot="media-player-loading"
-      {...props}
-      className={cn(
-        "fade-in-0 zoom-in-95 pointer-events-none absolute inset-0 z-50 flex animate-in items-center justify-center duration-200",
-        className
-      )}
-    >
-      <Loader2Icon className="size-20 animate-spin stroke-[.0938rem] text-foreground" />
-    </LoadingPrimitive>
-  );
+  return LoadingPrimitive;
 }
 
-interface MediaPlayerErrorProps extends React.ComponentProps<"div"> {
+interface MediaPlayerErrorProps extends useRender.ComponentProps<"div"> {
   error?: MediaError | null;
   label?: string;
   description?: string;
   onRetry?: () => void;
   onReload?: () => void;
-  asChild?: boolean;
 }
 
 function MediaPlayerError({
@@ -985,7 +1009,7 @@ function MediaPlayerError({
   description,
   onRetry: onRetryProp,
   onReload: onReloadProp,
-  asChild,
+  render,
   className,
   children,
   ...props
@@ -1079,73 +1103,75 @@ function MediaPlayerError({
 
   if (!error) return null;
 
-  const ErrorPrimitive = asChild ? Slot : "div";
+  const ErrorPrimitive = useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        role: "alert",
+        "aria-describedby": descriptionId,
+        "aria-labelledby": labelId,
+        "aria-live": "assertive",
+        "data-slot": "media-player-error",
+        "data-state": isFullscreen ? "fullscreen" : "windowed",
+        className: cn(
+          "pointer-events-auto absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/80 text-white backdrop-blur-sm",
+          className
+        ),
+        children: children ?? (
+          <div className="flex max-w-md flex-col items-center gap-4 px-6 py-8 text-center">
+            <AlertTriangleIcon className="size-12 text-destructive" />
+            <div className="flex flex-col gap-px text-center">
+              <h3 className="font-semibold text-xl tracking-tight">
+                {errorLabel}
+              </h3>
+              <p className="text-balance text-muted-foreground text-sm leading-relaxed">
+                {errorDescription}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={onRetry}
+                disabled={actionState.retryPending}
+              >
+                {actionState.retryPending ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  <RefreshCcwIcon />
+                )}
+                Try again
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onReload}
+                disabled={actionState.reloadPending}
+              >
+                {actionState.reloadPending ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  <RotateCcwIcon />
+                )}
+                Reload page
+              </Button>
+            </div>
+          </div>
+        ),
+      } as React.ComponentProps<"div">,
+      props
+    ),
+  });
 
-  return (
-    <ErrorPrimitive
-      role="alert"
-      aria-describedby={descriptionId}
-      aria-labelledby={labelId}
-      aria-live="assertive"
-      data-slot="media-player-error"
-      data-state={isFullscreen ? "fullscreen" : "windowed"}
-      {...props}
-      className={cn(
-        "pointer-events-auto absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/80 text-white backdrop-blur-sm",
-        className
-      )}
-    >
-      {children ?? (
-        <div className="flex max-w-md flex-col items-center gap-4 px-6 py-8 text-center">
-          <AlertTriangleIcon className="size-12 text-destructive" />
-          <div className="flex flex-col gap-px text-center">
-            <h3 className="font-semibold text-xl tracking-tight">
-              {errorLabel}
-            </h3>
-            <p className="text-balance text-muted-foreground text-sm leading-relaxed">
-              {errorDescription}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={onRetry}
-              disabled={actionState.retryPending}
-            >
-              {actionState.retryPending ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                <RefreshCcwIcon />
-              )}
-              Try again
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onReload}
-              disabled={actionState.reloadPending}
-            >
-              {actionState.reloadPending ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                <RotateCcwIcon />
-              )}
-              Reload page
-            </Button>
-          </div>
-        </div>
-      )}
-    </ErrorPrimitive>
-  );
+  return ErrorPrimitive;
 }
 
-interface MediaPlayerVolumeIndicatorProps extends React.ComponentProps<"div"> {
-  asChild?: boolean;
-}
+interface MediaPlayerVolumeIndicatorProps
+  extends useRender.ComponentProps<"div"> {}
 
 function MediaPlayerVolumeIndicator({
-  asChild,
+  render,
   className,
   ...props
 }: MediaPlayerVolumeIndicatorProps) {
@@ -1165,61 +1191,65 @@ function MediaPlayerVolumeIndicator({
   const barCount = 10;
   const activeBarCount = Math.ceil(effectiveVolume * barCount);
 
-  const VolumeIndicatorPrimitive = asChild ? Slot : "div";
-
-  return (
-    <VolumeIndicatorPrimitive
-      role="status"
-      aria-live="polite"
-      aria-label={`Volume ${mediaMuted ? "muted" : `${volumePercentage}%`}`}
-      data-slot="media-player-volume-indicator"
-      {...props}
-      className={cn(
-        "pointer-events-none absolute inset-0 z-50 flex items-center justify-center",
-        className
-      )}
-    >
-      <div className="fade-in-0 zoom-in-95 flex animate-in flex-col items-center gap-3 rounded-lg bg-black/30 px-6 py-4 text-white backdrop-blur-xs duration-200">
-        <div className="flex items-center gap-2">
-          {mediaVolumeLevel === "off" || mediaMuted ? (
-            <VolumeXIcon className="size-6" />
-          ) : mediaVolumeLevel === "high" ? (
-            <Volume2Icon className="size-6" />
-          ) : (
-            <Volume1Icon className="size-6" />
-          )}
-          <span className="font-medium text-sm tabular-nums">
-            {mediaMuted ? "Muted" : `${volumePercentage}%`}
-          </span>
-        </div>
-        <div className="flex items-center gap-1">
-          {Array.from({ length: barCount }, (_, index) => (
-            <div
-              key={index}
-              className={cn(
-                "w-1.5 rounded-full transition-all duration-150",
-                index < activeBarCount && !mediaMuted
-                  ? "scale-100 bg-white"
-                  : "scale-90 bg-white/30"
+  const VolumeIndicatorPrimitive = useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        role: "status",
+        "aria-live": "polite",
+        "aria-label": `Volume ${mediaMuted ? "muted" : `${volumePercentage}%`}`,
+        "data-slot": "media-player-volume-indicator",
+        className: cn(
+          "pointer-events-none absolute inset-0 z-50 flex items-center justify-center",
+          className
+        ),
+        children: (
+          <div className="fade-in-0 zoom-in-95 flex animate-in flex-col items-center gap-3 rounded-lg bg-black/30 px-6 py-4 text-white backdrop-blur-xs duration-200">
+            <div className="flex items-center gap-2">
+              {mediaVolumeLevel === "off" || mediaMuted ? (
+                <VolumeXIcon className="size-6" />
+              ) : mediaVolumeLevel === "high" ? (
+                <Volume2Icon className="size-6" />
+              ) : (
+                <Volume1Icon className="size-6" />
               )}
-              style={{
-                height: `${12 + index * 2}px`,
-                animationDelay: `${index * 50}ms`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    </VolumeIndicatorPrimitive>
-  );
+              <span className="font-medium text-sm tabular-nums">
+                {mediaMuted ? "Muted" : `${volumePercentage}%`}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: barCount }, (_, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "w-1.5 rounded-full transition-all duration-150",
+                    index < activeBarCount && !mediaMuted
+                      ? "scale-100 bg-white"
+                      : "scale-90 bg-white/30"
+                  )}
+                  style={{
+                    height: `${12 + index * 2}px`,
+                    animationDelay: `${index * 50}ms`,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        ),
+      } as React.ComponentProps<"div">,
+      props
+    ),
+  });
+
+  return VolumeIndicatorPrimitive;
 }
 
-interface MediaPlayerControlsOverlayProps extends React.ComponentProps<"div"> {
-  asChild?: boolean;
-}
+interface MediaPlayerControlsOverlayProps
+  extends useRender.ComponentProps<"div"> {}
 
 function MediaPlayerControlsOverlay({
-  asChild,
+  render,
   className,
   ...props
 }: MediaPlayerControlsOverlayProps) {
@@ -1228,20 +1258,24 @@ function MediaPlayerControlsOverlay({
   );
   const controlsVisible = useStoreSelector((state) => state.controlsVisible);
 
-  const OverlayPrimitive = asChild ? Slot : "div";
+  const OverlayPrimitive = useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        "data-slot": "media-player-controls-overlay",
+        "data-state": isFullscreen ? "fullscreen" : "windowed",
+        "data-visible": controlsVisible ? "" : undefined,
+        className: cn(
+          "-z-10 pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 transition-opacity duration-200 data-[visible]:opacity-100",
+          className
+        ),
+      } as React.ComponentProps<"div">,
+      props
+    ),
+  });
 
-  return (
-    <OverlayPrimitive
-      data-slot="media-player-controls-overlay"
-      data-state={isFullscreen ? "fullscreen" : "windowed"}
-      data-visible={controlsVisible ? "" : undefined}
-      {...props}
-      className={cn(
-        "-z-10 pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 transition-opacity duration-200 data-[visible]:opacity-100",
-        className
-      )}
-    />
-  );
+  return OverlayPrimitive;
 }
 
 type MediaPlayerPlayProps = React.ComponentProps<typeof Button>;
@@ -1880,8 +1914,8 @@ function MediaPlayerSeek({
   );
 
   const onSeek = React.useCallback(
-    (value: number[]) => {
-      const time = value[0] ?? 0;
+    (value: number | readonly number[]) => {
+      const time = Array.isArray(value) ? value[0] ?? 0 : value;
 
       setSeekState((prev) => ({ ...prev, pendingSeekTime: time }));
       store.setState("dragging", true);
@@ -1902,8 +1936,8 @@ function MediaPlayerSeek({
   );
 
   const onSeekCommit = React.useCallback(
-    (value: number[]) => {
-      const time = value[0] ?? 0;
+    (value: number | readonly number[]) => {
+      const time = Array.isArray(value) ? value[0] ?? 0 : value;
 
       if (seekThrottleRef.current) {
         cancelAnimationFrame(seekThrottleRef.current);
@@ -2034,38 +2068,40 @@ function MediaPlayerSeek({
         max={seekableEnd}
         step={0.01}
         className={cn(
-          "group relative flex w-full touch-none select-none items-center data-[disabled]:pointer-events-none data-[disabled]:opacity-50 h-6 cursor-grab active:cursor-grabbing",
+          "group relative flex w-full touch-none select-none items-center data-disabled:pointer-events-none data-disabled:opacity-50 h-6 cursor-grab active:cursor-grabbing",
           className
         )}
         value={[displayValue]}
         onValueChange={onSeek}
-        onValueCommit={onSeekCommit}
+        onValueCommitted={onSeekCommit}
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
         onPointerMove={onPointerMove}
       >
-        <SliderPrimitive.Track className="relative grow overflow-hidden h-1 w-full rounded-full bg-foreground/40 transition-[height] group-hover:h-1.5">
-          <div
-            data-slot="media-player-seek-buffered"
-            className="absolute h-full bg-foreground/70 will-change-[width]"
-            style={{
-              width: `${bufferedProgress * 100}%`,
-            }}
-          />
-          <SliderPrimitive.Range className="absolute h-full bg-primary will-change-[width]" />
-          {seekState.isHovering && seekableEnd > 0 && (
+        <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50">
+          <SliderPrimitive.Track className="relative grow overflow-hidden h-1 w-full rounded-full bg-foreground/40 transition-[height] group-hover:h-1.5">
             <div
-              data-slot="media-player-seek-hover-range"
-              className="absolute h-full bg-primary/70 will-change-[width,opacity]"
+              data-slot="media-player-seek-buffered"
+              className="absolute h-full bg-foreground/70 will-change-[width]"
               style={{
-                width: `var(${SEEK_HOVER_PERCENT}, 0%)`,
-                transition: "opacity 150ms ease-out",
+                width: `${bufferedProgress * 100}%`,
               }}
             />
-          )}
-          {chapterSeparators}
-        </SliderPrimitive.Track>
-        <SliderPrimitive.Thumb className="relative z-10 block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 opacity-0 transition-[color,box-shadow,opacity] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-50 group-hover:opacity-100" />
+            <SliderPrimitive.Indicator className="absolute h-full bg-primary will-change-[width]" />
+            {seekState.isHovering && seekableEnd > 0 && (
+              <div
+                data-slot="media-player-seek-hover-range"
+                className="absolute h-full bg-primary/70 will-change-[width,opacity]"
+                style={{
+                  width: `var(${SEEK_HOVER_PERCENT}, 0%)`,
+                  transition: "opacity 150ms ease-out",
+                }}
+              />
+            )}
+            {chapterSeparators}
+          </SliderPrimitive.Track>
+          <SliderPrimitive.Thumb className="relative z-10 block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 opacity-0 transition-[color,box-shadow,opacity] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-50 group-hover:opacity-100" />
+        </SliderPrimitive.Control>
       </SliderPrimitive.Root>
       {!withoutTooltip &&
         !context.withoutTooltip &&
@@ -2152,12 +2188,9 @@ function MediaPlayerSeek({
 }
 
 interface MediaPlayerVolumeProps
-  extends React.ComponentProps<typeof SliderPrimitive.Root> {
-  asChild?: boolean;
-}
+  extends React.ComponentProps<typeof SliderPrimitive.Root> {}
 
 function MediaPlayerVolume({
-  asChild: _,
   className,
   disabled,
   ...props
@@ -2185,8 +2218,8 @@ function MediaPlayerVolume({
   }, [dispatch, mediaMuted]);
 
   const onVolumeChange = React.useCallback(
-    (value: number[]) => {
-      const volume = value[0] ?? 0;
+    (value: number | readonly number[]) => {
+      const volume = Array.isArray(value) ? value[0] ?? 0 : value;
       store.setState("dragging", true);
       dispatch({
         type: MediaActionTypes.MEDIA_VOLUME_REQUEST,
@@ -2197,8 +2230,8 @@ function MediaPlayerVolume({
   );
 
   const onVolumeCommit = React.useCallback(
-    (value: number[]) => {
-      const volume = value[0] ?? 0;
+    (value: number | readonly number[]) => {
+      const volume = Array.isArray(value) ? value[0] ?? 0 : value;
       store.setState("dragging", false);
       dispatch({
         type: MediaActionTypes.MEDIA_VOLUME_REQUEST,
@@ -2211,13 +2244,11 @@ function MediaPlayerVolume({
   const effectiveVolume = mediaMuted ? 0 : mediaVolume;
 
   return (
-    <HoverCardPrimitive.Root
+    <PreviewCardPrimitive.Root
       data-disabled={isDisabled ? "" : undefined}
-      openDelay={0}
-      closeDelay={100}
       data-slot="media-player-volume-container"
     >
-      <HoverCardPrimitive.Trigger>
+      <PreviewCardPrimitive.Trigger delay={0} closeDelay={100}>
         <MediaPlayerTooltip tooltip="Volume" shortcut="M">
           <Button
             id={volumeTriggerId}
@@ -2242,57 +2273,62 @@ function MediaPlayerVolume({
             )}
           </Button>
         </MediaPlayerTooltip>
-      </HoverCardPrimitive.Trigger>
-      <HoverCardPrimitive.Portal data-slot="media-player-volume-portal">
-        <HoverCardPrimitive.Content
-          data-slot="media-player-volume-content"
+      </PreviewCardPrimitive.Trigger>
+      <PreviewCardPrimitive.Portal data-slot="media-player-volume-portal">
+        <PreviewCardPrimitive.Positioner
           align="center"
           side="top"
           sideOffset={0}
-          className={cn(
-            "bg-popover data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--radix-hover-card-content-transform-origin) rounded-md border py-4 px-2 shadow-md outline-hidden",
-            className
-          )}
+          className="isolate z-50"
         >
-          <SliderPrimitive.Root
-            id={sliderId}
-            aria-controls={context.mediaId}
-            aria-valuetext={`${Math.round(effectiveVolume * 100)}% volume`}
-            data-slider=""
-            data-slot="media-player-volume"
-            {...props}
-            min={0}
-            max={1}
-            step={0.1}
+          <PreviewCardPrimitive.Popup
+            data-slot="media-player-volume-content"
             className={cn(
-              "relative flex flex-col touch-none select-none items-center h-16 w-4 cursor-pointer",
+              "bg-popover data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--transform-origin) rounded-md border py-4 px-2 shadow-md outline-hidden",
               className
             )}
-            disabled={isDisabled}
-            value={[effectiveVolume]}
-            onValueChange={onVolumeChange}
-            onValueCommit={onVolumeCommit}
-            orientation="vertical"
           >
-            <SliderPrimitive.Track className="relative grow overflow-hidden w-1 h-full rounded-full bg-accent">
-              <SliderPrimitive.Range className="absolute w-full bg-primary will-change-[height]" />
-            </SliderPrimitive.Track>
-            <SliderPrimitive.Thumb className="block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 transition-[color,box-shadow] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50" />
-          </SliderPrimitive.Root>
-        </HoverCardPrimitive.Content>
-      </HoverCardPrimitive.Portal>
-    </HoverCardPrimitive.Root>
+            <SliderPrimitive.Root
+              id={sliderId}
+              aria-controls={context.mediaId}
+              aria-valuetext={`${Math.round(effectiveVolume * 100)}% volume`}
+              data-slider=""
+              data-slot="media-player-volume"
+              {...props}
+              min={0}
+              max={1}
+              step={0.1}
+              className={cn(
+                "relative flex flex-col touch-none select-none items-center h-16 w-4 cursor-pointer",
+                className
+              )}
+              disabled={isDisabled}
+              value={[effectiveVolume]}
+              onValueChange={onVolumeChange}
+              onValueCommitted={onVolumeCommit}
+              orientation="vertical"
+            >
+              <SliderPrimitive.Control className="relative flex flex-col touch-none items-center select-none data-disabled:opacity-50">
+                <SliderPrimitive.Track className="relative grow overflow-hidden w-1 h-full rounded-full bg-accent">
+                  <SliderPrimitive.Indicator className="absolute w-full bg-primary will-change-[height]" />
+                </SliderPrimitive.Track>
+                <SliderPrimitive.Thumb className="block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 transition-[color,box-shadow] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50" />
+              </SliderPrimitive.Control>
+            </SliderPrimitive.Root>
+          </PreviewCardPrimitive.Popup>
+        </PreviewCardPrimitive.Positioner>
+      </PreviewCardPrimitive.Portal>
+    </PreviewCardPrimitive.Root>
   );
 }
 
-interface MediaPlayerTimeProps extends React.ComponentProps<"div"> {
+interface MediaPlayerTimeProps extends useRender.ComponentProps<"div"> {
   variant?: "progress" | "remaining" | "duration";
-  asChild?: boolean;
 }
 
 function MediaPlayerTime({
   variant = "progress",
-  asChild,
+  render,
   className,
   ...props
 }: MediaPlayerTimeProps) {
@@ -2326,48 +2362,56 @@ function MediaPlayerTime({
     };
   }, [variant, mediaCurrentTime, seekableEnd]);
 
-  const TimePrimitive = asChild ? Slot : "div";
-
   if (variant === "remaining" || variant === "duration") {
-    return (
-      <TimePrimitive
-        data-slot="media-player-time"
-        data-variant={variant}
-        dir={context.dir}
-        {...props}
-        className={cn(
-          "font-medium text-foreground/80 text-sm tabular-nums py-1 px-3 rounded-full bg-background/60",
-          className
-        )}
-        aria-label={variant === "remaining" ? "Remaining time" : "Duration"}
-      >
-        {times[variant]}
-      </TimePrimitive>
-    );
+    return useRender({
+      defaultTagName: "div",
+      render,
+      props: mergeProps<"div">(
+        {
+          "data-slot": "media-player-time",
+          "data-variant": variant,
+          dir: context.dir,
+          "aria-label": variant === "remaining" ? "Remaining time" : "Duration",
+          className: cn(
+            "font-medium text-foreground/80 text-sm tabular-nums py-1 px-3 rounded-full bg-background/60",
+            className
+          ),
+          children: times[variant],
+        } as React.ComponentProps<"div">,
+        props
+      ),
+    });
   }
 
-  return (
-    <TimePrimitive
-      data-slot="media-player-time"
-      data-variant={variant}
-      dir={context.dir}
-      {...props}
-      className={cn(
-        "flex items-center gap-1 font-medium text-foreground/80 text-sm py-1 px-3 rounded-full bg-background/60",
-        className
-      )}
-    >
-      <span className="tabular-nums text-foreground" aria-label="Current time">
-        {times.current}
-      </span>
-      <span role="separator" aria-hidden="true" tabIndex={-1}>
-        /
-      </span>
-      <span className="tabular-nums" aria-label="Duration">
-        {times.duration}
-      </span>
-    </TimePrimitive>
-  );
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        "data-slot": "media-player-time",
+        "data-variant": variant,
+        dir: context.dir,
+        className: cn(
+          "flex items-center gap-1 font-medium text-foreground/80 text-sm py-1 px-3 rounded-full bg-background/60",
+          className
+        ),
+        children: (
+          <>
+            <span className="tabular-nums text-foreground" aria-label="Current time">
+              {times.current}
+            </span>
+            <span role="separator" aria-hidden="true" tabIndex={-1}>
+              /
+            </span>
+            <span className="tabular-nums" aria-label="Duration">
+              {times.duration}
+            </span>
+          </>
+        ),
+      } as React.ComponentProps<"div">,
+      props
+    ),
+  });
 }
 
 interface MediaPlayerPlaybackSpeedProps
