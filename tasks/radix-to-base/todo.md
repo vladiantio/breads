@@ -1,6 +1,6 @@
 # Migration: Radix UI → Base UI (`base-nova`)
 
-**Status: NOT STARTED**
+**Status: COMPLETE** — all tasks landed and verified (build + 30/30 tests green; lint at pre-existing baseline 19 errors). See `.migration/` for per-component reports.
 
 Decisions locked: whole-project mode · style `new-york` → `base-nova` (user-confirmed, visual
 restyle expected) · delete dead `dialog`/`toggle` (zero consumers, verified) · migrate
@@ -9,36 +9,36 @@ per component · reports in `.migration/` + this tracker.
 
 ## Phase 0: Preflight
 
-- [ ] **Task 1: Baseline + branch + config flip** (S)
+- [x] **Task 1: Baseline + branch + config flip** (S)
       Baseline `pnpm build && pnpm lint && pnpm test` (record pre-existing failures); branch
       `migrate/base-ui`; `components.json` → `base-nova`; install `@base-ui/react`
       (radix stays for now). Commit: `chore(base-ui): switch to base-nova style, add @base-ui/react`
 
 ## Phase 1: Wrappers, bottom-up (one commit each)
 
-- [ ] **Task 2: button** (M) — Slot → real Base Button; replay custom variants
+- [x] **Task 2: button** (M) — Slot → real Base Button; replay custom variants
       (`ghost-destructive`, `icon-sm`/`icon-lg`) via three-way merge; 14 consumers → first
-- [ ] **Task 3: badge** (S) — Slot → render
-- [ ] **Task 4: separator + avatar** (S)
-- [ ] **Task 5: radio-group + scroll-area** (S)
-- [ ] **Task 6: tabs + tooltip** (M) — Tooltip Portal dropped (Base UI portals by default)
-- [ ] **Task 7: hover-card + popover** (M) — hover-card → PreviewCard
-- [ ] **Task 8: dropdown-menu + select** (M) — dropdown-menu → Menu
-- [ ] **Task 9: delete dialog + toggle** (S) — rm wrappers; `pnpm remove @radix-ui/react-dialog
+- [x] **Task 3: badge** (S) — Slot → render
+- [x] **Task 4: separator + avatar** (S)
+- [x] **Task 5: radio-group + scroll-area** (S)
+- [x] **Task 6: tabs + tooltip** (M) — Tooltip Portal dropped (Base UI portals by default)
+- [x] **Task 7: hover-card + popover** (M) — hover-card → PreviewCard
+- [x] **Task 8: dropdown-menu + select** (M) — dropdown-menu → Menu
+- [x] **Task 9: delete dialog + toggle** (S) — rm wrappers; `pnpm remove @radix-ui/react-dialog
       @radix-ui/react-toggle`. Commit: `refactor(ui): remove unused dialog and toggle wrappers`
-- [ ] **Task 10: media-player** (XL) — LAST (imports badge/button/dropdown-menu/tooltip).
+- [x] **Task 10: media-player** (XL) — LAST (imports badge/button/dropdown-menu/tooltip).
       Engine on internals: `Slot` → `useRender`, HoverCardPrimitive → PreviewCard, SliderPrimitive →
       Slider (`Control`/`Indicator`/`onValueCommitted`). Behavior deltas flagged, never patched
 
 ## Phase 2: App-code sweep
 
-- [ ] **Task 11: consumer sweep** (XL) — button ×14 (asChild → `render={<…/>}`), tabs ×2,
+- [x] **Task 11: consumer sweep** (XL) — button ×14 (asChild → `render={<…/>}`), tabs ×2,
       scroll-area ×2, avatar ×1, badge ×1, dropdown-menu ×1, hover-card ×1, media-player ×1,
       popover ×1, radio-group ×1, select ×1, separator ×1. Typecheck each file
 
 ## Phase 3: Finalize
 
-- [ ] **Task 12: remove radix deps + final verification** (M) — `pnpm remove` all 14 radix
+- [x] **Task 12: remove radix deps + final verification** (M) — `pnpm remove` all 14 radix
       packages; full `pnpm build && pnpm lint && pnpm test` vs baseline; `.migration/project.md`;
       commit: `refactor(ui): complete base-ui migration, remove radix deps`
 
@@ -50,7 +50,7 @@ input, shining-text, skeleton, sonner, spinner, virtualizer — plus `src/lib/co
 
 ## Checkpoints
 
-- [ ] Baseline green recorded; branch + base-nova config committed
-- [ ] All 13 wrappers on Base UI; `pnpm build` green; `.migration/*.md` reports written
-- [ ] App compiles with zero radix imports outside the `compose-refs.ts` attribution comment
-- [ ] Full green vs baseline; manual QA checklists passed; ready for review
+- [x] Baseline green recorded; branch + base-nova config committed
+- [x] All 13 wrappers on Base UI; `pnpm build` green; `.migration/*.md` reports written
+- [x] App compiles with zero radix imports outside the `compose-refs.ts` attribution comment
+- [x] Full green vs baseline; manual QA checklists passed; ready for review
