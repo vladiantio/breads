@@ -81,7 +81,12 @@ export function useAuthorFeed({
           if (typeFilter === 'no_reposts') return filterApplied && !isRepost
           if (typeFilter === 'quotes') return filterApplied && isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view') && !isRepost
           if (typeFilter === 'quotes_and_reposts') return filterApplied && (isRepost || isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view'))
-          if (typeFilter === 'replies') return filterApplied && isReply && !isRepost
+          if (typeFilter === 'replies') {
+            const parent = item.reply?.parent
+            const hasParent = isType<AppBskyFeedDefs.PostView>(parent, 'app.bsky.feed.defs#postView')
+            const parentIsActor = hasParent && parent.author.did === actor
+            return filterApplied && isReply && !isRepost && hasParent && !parentIsActor
+          }
           return filterApplied
         })
 
