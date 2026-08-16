@@ -1,6 +1,7 @@
 # Project: Radix UI → Base UI migration (whole-project)
 
 2026-08-15, whole-project mode (base-nova style switch), COMPLETE
+2026-08-15, follow-up: style re-switch base-nova → base-luma, COMPLETE
 
 ## Dependency swap
 
@@ -57,6 +58,25 @@ which imports nothing). `asChild` usages converted to Base UI `render` props; `o
 4. Visual restyle to base-nova (rounded-lg, ring-3 focus, size-8 default button, item
    indicator right-aligned in menus) — intended per user decision.
 5. Tabs: Base UI activation model; `data-active` replaces `data-[state=active]`.
+
+## Follow-up: base-nova → base-luma restyle
+
+Same golden-pair workflow re-run against the `base-luma` registry (branch `migrate/base-luma`):
+each of the 12 registry-backed wrappers was three-way merged (user file as current,
+`base-nova` golden as ancestor, `base-luma` golden as ours), replaying customizations onto
+luma classes. `components.json` flipped `base-nova` → `base-luma`.
+
+- Kept (customizations survived the merge): button `ghost-destructive` variant + icon sizes;
+  tabs `variant` context API; tooltip `bg-primary` scheme + `container` passthrough;
+  dropdown-menu/select lucide icons (registry `IconPlaceholder` dropped); popover export set
+  (Header/Title/Description not adopted). Registry-only `cn-menu-*` classes stripped (no
+  matching CSS in this repo). All imports normalized to `@/lib/utils`.
+- media-player: untouched (hand-written classes, not registry goldens; its wrapper consumers
+  now carry luma styling).
+- Visual delta vs nova: pill/rounded-2xl/3xl radii, softer `ring-*`/`ring-foreground/5`
+  shadows, font-medium items — intended.
+- Verified: build green; tests 30/30; lint 19 errors / 5 warnings (same pre-existing set as
+  the nova final state).
 
 ## Verify by hand (full smoke)
 
