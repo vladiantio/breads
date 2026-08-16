@@ -2072,16 +2072,25 @@ function MediaPlayerSeek({
         onPointerLeave={onPointerLeave}
         onPointerMove={onPointerMove}
       >
-        <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50">
-          <SliderPrimitive.Track className="relative grow overflow-hidden h-1 w-full rounded-full bg-foreground/40 transition-[height] group-hover:h-1.5">
+        <SliderPrimitive.Control
+          data-slot="media-player-seek-control"
+          className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50"
+        >
+          <SliderPrimitive.Track
+            data-slot="media-player-seek-track"
+            className="relative grow overflow-hidden h-1 w-full rounded-full bg-foreground/30 transition-[height] group-hover:h-1.5"
+          >
             <div
               data-slot="media-player-seek-buffered"
-              className="absolute h-full bg-foreground/70 will-change-[width]"
+              className="absolute h-full bg-foreground/50 will-change-[width]"
               style={{
                 width: `${bufferedProgress * 100}%`,
               }}
             />
-            <SliderPrimitive.Indicator className="absolute h-full bg-primary will-change-[width]" />
+            <SliderPrimitive.Indicator
+              data-slot="media-player-seek-indicator"
+              className="absolute h-full bg-white will-change-[width]"
+            />
             {seekState.isHovering && seekableEnd > 0 && (
               <div
                 data-slot="media-player-seek-hover-range"
@@ -2094,7 +2103,10 @@ function MediaPlayerSeek({
             )}
             {chapterSeparators}
           </SliderPrimitive.Track>
-          <SliderPrimitive.Thumb className="relative z-10 block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 opacity-0 transition-[color,box-shadow,opacity] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-50 group-hover:opacity-100" />
+          <SliderPrimitive.Thumb
+            data-slot="media-player-seek-thumb"
+            className="relative z-10 block h-4 w-6 shrink-0 rounded-full bg-white shadow-md ring-1 ring-black/10 opacity-0 transition-[color,box-shadow,background-color,opacity] select-none not-dark:bg-clip-padding will-change-transform hover:ring-4 hover:ring-ring/30 focus-visible:outline-hidden focus-visible:ring-4 focus-visible:ring-ring/30 focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-50 group-hover:opacity-100"
+          />
         </SliderPrimitive.Control>
       </SliderPrimitive.Root>
       {!withoutTooltip &&
@@ -2277,7 +2289,7 @@ function MediaPlayerVolume({
           <PreviewCardPrimitive.Popup
             data-slot="media-player-volume-content"
             className={cn(
-              "bg-popover data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--transform-origin) rounded-md border py-4 px-2 shadow-md outline-hidden",
+              "dark bg-popover data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--transform-origin) rounded-md border py-4 px-2 shadow-md outline-hidden",
               className
             )}
           >
@@ -2301,11 +2313,11 @@ function MediaPlayerVolume({
               onValueCommitted={onVolumeCommit}
               orientation="vertical"
             >
-              <SliderPrimitive.Control className="relative flex flex-col touch-none items-center select-none data-disabled:opacity-50">
+              <SliderPrimitive.Control className="relative flex h-full flex-col touch-none items-center select-none data-disabled:opacity-50">
                 <SliderPrimitive.Track className="relative grow overflow-hidden w-1 h-full rounded-full bg-accent">
-                  <SliderPrimitive.Indicator className="absolute w-full bg-primary will-change-[height]" />
+                  <SliderPrimitive.Indicator className="absolute w-full bg-white will-change-[height]" />
                 </SliderPrimitive.Track>
-                <SliderPrimitive.Thumb className="block size-2.5 shrink-0 rounded-full bg-primary shadow-sm ring-ring/50 transition-[color,box-shadow] will-change-transform hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50" />
+                <SliderPrimitive.Thumb className="block h-4 w-2.5 shrink-0 rounded-full bg-white shadow-md ring-1 ring-black/10 transition-[color,box-shadow,background-color] select-none not-dark:bg-clip-padding hover:ring-4 hover:ring-ring/30 focus-visible:ring-4 focus-visible:ring-ring/30 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50" />
               </SliderPrimitive.Control>
             </SliderPrimitive.Root>
           </PreviewCardPrimitive.Popup>
