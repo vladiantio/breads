@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useState } from "react"
+import { FC, useState } from "react"
 import { AlertCircleIcon } from "lucide-react"
 import { useProfile } from "@/lib/atp/hooks/use-profile"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/ui/hover-card"
@@ -8,8 +8,9 @@ import { isMobileDevice } from "@/lib/browser"
 import { FollowButton } from "./follow-button"
 import { Spinner } from "@/ui/spinner"
 
-interface AuthorHoverCardProps extends PropsWithChildren {
+interface AuthorHoverCardProps {
   handle?: string
+  children: React.ReactElement
 }
 
 export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
@@ -33,15 +34,13 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
   if (isMobileDevice()) return children
 
   return (
-    <HoverCard
-      openDelay={400}
-      closeDelay={200}
-    >
+    <HoverCard>
       <HoverCardTrigger
+        delay={400}
+        closeDelay={200}
         onMouseEnter={() => setEnabled(true)}
-        asChild
+        render={children}
       >
-        {children}
       </HoverCardTrigger>
       <HoverCardContent className="w-96 p-6 rounded-xl">
         {(isLoadingActor || isLoadingProfile) ? (

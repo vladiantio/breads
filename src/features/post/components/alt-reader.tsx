@@ -45,9 +45,7 @@ export function AltReader({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <AltReaderButton />
-      </PopoverTrigger>
+      <PopoverTrigger render={<AltReaderButton />} />
       <PopoverContent sideOffset={8}>{alt}</PopoverContent>
     </Popover>
   );
