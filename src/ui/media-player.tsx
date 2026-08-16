@@ -5,6 +5,7 @@ import { Button } from "./button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuPortal,
@@ -2951,7 +2952,9 @@ function MediaPlayerSettings({
           sideOffset={sideOffset}
           className="w-56 data-[side=top]:mb-3.5"
         >
-          <DropdownMenuLabel className="sr-only">Settings</DropdownMenuLabel>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel className="sr-only">Settings</DropdownMenuLabel>
+          </DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <span className="flex-1">Speed</span>
