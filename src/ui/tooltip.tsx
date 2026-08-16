@@ -47,7 +47,10 @@ function TooltipPortal({
 
 function TooltipContent({
   className,
+  side = "top",
   sideOffset = 0,
+  align = "center",
+  alignOffset = 0,
   container,
   children,
   ...props
@@ -61,6 +64,9 @@ function TooltipContent({
   return (
     <TooltipPrimitive.Portal container={container}>
       <TooltipPrimitive.Positioner
+        align={align}
+        alignOffset={alignOffset}
+        side={side}
         sideOffset={sideOffset}
         className="isolate z-50"
       >
