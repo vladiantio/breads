@@ -81,7 +81,7 @@ export function useAuthorFeed({
           if (typeFilter === 'no_reposts') return filterApplied && !isRepost
           if (typeFilter === 'quotes') return filterApplied && isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view') && !isRepost
           if (typeFilter === 'quotes_and_reposts') return filterApplied && (isRepost || isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view'))
-          if (typeFilter === 'replies') return filterApplied && isReply
+          if (typeFilter === 'replies') return filterApplied && isReply && !isRepost
           return filterApplied
         })
 
