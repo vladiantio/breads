@@ -83,6 +83,26 @@ const SEEK_TOOLTIP_Y = "--seek-tooltip-y";
 const SPRITE_CONTAINER_WIDTH = 224;
 const SPRITE_CONTAINER_HEIGHT = 128;
 
+const timeCache = new Map<number, string>();
+
+function getCachedTime(time: number, duration: number) {
+  const roundedTime = Math.floor(time);
+  const key = roundedTime + duration * 10000;
+
+  if (timeCache.has(key)) {
+    return timeCache.get(key) as string;
+  }
+
+  const formatted = timeUtils.formatTime(time, duration);
+  timeCache.set(key, formatted);
+
+  if (timeCache.size > 100) {
+    timeCache.clear();
+  }
+
+  return formatted;
+}
+
 const CONTROLS_VISIBLE_TIMEOUT_MS = 3000;
 
 type Direction = "ltr" | "rtl";
@@ -294,7 +314,6 @@ function MediaPlayerRootImpl({
   const menuOpen = useStoreSelector((state) => state.menuOpen);
 
   const hideControlsTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-  const lastMouseMoveRef = React.useRef<number>(Date.now());
   const volumeIndicatorTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const mediaPaused = useMediaSelector((state) => state.mediaPaused ?? true);
@@ -305,19 +324,25 @@ function MediaPlayerRootImpl({
   const [mounted, setMounted] = React.useState(false);
   React.useLayoutEffect(() => setMounted(true), []);
 
-  const portalContainer = mounted
-    ? isFullscreen
-      ? rootRef.current
-      : globalThis.document.body
-    : null;
+  const portalContainer = React.useSyncExternalStore(
+    () => () => {},
+    () =>
+      mounted && isFullscreen
+        ? rootRef.current
+        : globalThis.document.body,
+    () => null
+  );
 
-  const isVideo =
-    typeof HTMLVideoElement !== "undefined" &&
-    mediaRef.current instanceof HTMLVideoElement;
+  const isVideo = React.useSyncExternalStore(
+    () => () => {},
+    () =>
+      typeof HTMLVideoElement !== "undefined" &&
+      mediaRef.current instanceof HTMLVideoElement,
+    () => false
+  );
 
   const onControlsShow = React.useCallback(() => {
     store.setState("controlsVisible", true);
-    lastMouseMoveRef.current = Date.now();
 
     if (hideControlsTimeoutRef.current) {
       clearTimeout(hideControlsTimeoutRef.current);
@@ -657,26 +682,27 @@ function MediaPlayerRootImpl({
     const mediaElement = mediaRef.current;
     if (!mediaElement) return;
 
+    const onTimeUpdateHandler = () =>
+      onTimeUpdate?.(mediaElement.currentTime);
+    const onVolumeChangeHandler = () => {
+      onVolumeChange?.(mediaElement.volume);
+      onMuted?.(mediaElement.muted);
+    };
+    const onMediaErrorHandler = () => onMediaError?.(mediaElement.error);
+    const onFullscreenChangeHandler = () =>
+      onFullscreenChange?.(!!document.fullscreenElement);
+
     if (onPlay) mediaElement.addEventListener("play", onPlay);
     if (onPause) mediaElement.addEventListener("pause", onPause);
     if (onEnded) mediaElement.addEventListener("ended", onEnded);
     if (onTimeUpdate)
-      mediaElement.addEventListener("timeupdate", () =>
-        onTimeUpdate?.(mediaElement.currentTime)
-      );
+      mediaElement.addEventListener("timeupdate", onTimeUpdateHandler);
     if (onVolumeChange)
-      mediaElement.addEventListener("volumechange", () => {
-        onVolumeChange?.(mediaElement.volume);
-        onMuted?.(mediaElement.muted);
-      });
+      mediaElement.addEventListener("volumechange", onVolumeChangeHandler);
     if (onMediaError)
-      mediaElement.addEventListener("error", () =>
-        onMediaError?.(mediaElement.error)
-      );
+      mediaElement.addEventListener("error", onMediaErrorHandler);
     if (onFullscreenChange) {
-      document.addEventListener("fullscreenchange", () =>
-        onFullscreenChange?.(!!document.fullscreenElement)
-      );
+      document.addEventListener("fullscreenchange", onFullscreenChangeHandler);
     }
 
     return () => {
@@ -684,21 +710,15 @@ function MediaPlayerRootImpl({
       if (onPause) mediaElement.removeEventListener("pause", onPause);
       if (onEnded) mediaElement.removeEventListener("ended", onEnded);
       if (onTimeUpdate)
-        mediaElement.removeEventListener("timeupdate", () =>
-          onTimeUpdate?.(mediaElement.currentTime)
-        );
+        mediaElement.removeEventListener("timeupdate", onTimeUpdateHandler);
       if (onVolumeChange)
-        mediaElement.removeEventListener("volumechange", () => {
-          onVolumeChange?.(mediaElement.volume);
-          onMuted?.(mediaElement.muted);
-        });
+        mediaElement.removeEventListener("volumechange", onVolumeChangeHandler);
       if (onMediaError)
-        mediaElement.removeEventListener("error", () =>
-          onMediaError?.(mediaElement.error)
-        );
+        mediaElement.removeEventListener("error", onMediaErrorHandler);
       if (onFullscreenChange) {
-        document.removeEventListener("fullscreenchange", () =>
-          onFullscreenChange?.(!!document.fullscreenElement)
+        document.removeEventListener(
+          "fullscreenchange",
+          onFullscreenChangeHandler
         );
       }
       if (volumeIndicatorTimeoutRef.current) {
@@ -752,6 +772,7 @@ function MediaPlayerRootImpl({
     defaultTagName: "div",
     render,
     props: mergeProps<"div">(
+      // eslint-disable-next-line react-hooks/refs -- handlers/ref flow to the DOM element; refs are read only when events fire
       {
         "aria-labelledby": labelId,
         "aria-describedby": descriptionId,
@@ -786,10 +807,10 @@ function MediaPlayerRootImpl({
             <MediaPlayerVolumeIndicator />
           </>
         ),
+        ref: composedRef,
       } as React.ComponentProps<"div">,
       props
     ),
-    ref: [composedRef],
   });
 
   return <MediaPlayerContext value={contextValue}>{RootPrimitive}</MediaPlayerContext>;
@@ -1514,9 +1535,10 @@ function MediaPlayerSeek({
   const tooltipRef = React.useRef<HTMLDivElement>(null);
   const justCommittedRef = React.useRef<boolean>(false);
 
-  const hoverTimeRef = React.useRef(0);
   const tooltipXRef = React.useRef(0);
   const tooltipYRef = React.useRef(0);
+
+  const [hoverTime, setHoverTime] = React.useState(0);
   const seekRectRef = React.useRef<DOMRect | null>(null);
   const collisionDataRef = React.useRef<{
     padding: { top: number; right: number; bottom: number; left: number };
@@ -1535,34 +1557,13 @@ function MediaPlayerSeek({
   const lastPointerXRef = React.useRef<number>(0);
   const previewDebounceRef = React.useRef<number | null>(null);
 
-  const timeCache = React.useRef<Map<number, string>>(new Map());
-
   const displayValue = seekState.pendingSeekTime ?? mediaCurrentTime;
-
   const isDisabled = disabled || context.disabled;
   const tooltipDisabled =
     withoutTooltip || context.withoutTooltip || store.getState().menuOpen;
 
   const currentTooltipSideOffset =
     tooltipSideOffset ?? context.tooltipSideOffset;
-
-  const getCachedTime = React.useCallback((time: number, duration: number) => {
-    const roundedTime = Math.floor(time);
-    const key = roundedTime + duration * 10000;
-
-    if (timeCache.current.has(key)) {
-      return timeCache.current.get(key) as string;
-    }
-
-    const formatted = timeUtils.formatTime(time, duration);
-    timeCache.current.set(key, formatted);
-
-    if (timeCache.current.size > 100) {
-      timeCache.current.clear();
-    }
-
-    return formatted;
-  }, []);
 
   const currentTime = getCachedTime(displayValue, seekableEnd);
   const duration = getCachedTime(seekableEnd, seekableEnd);
@@ -1708,18 +1709,18 @@ function MediaPlayerSeek({
     [onCollisionDataUpdate, seekState.hasInitialPosition]
   );
 
-  const onHoverProgressUpdate = React.useCallback(() => {
-    if (!seekRef.current || seekableEnd <= 0) return;
+  const onHoverProgressUpdate = React.useCallback(
+    (hoverTime: number) => {
+      if (!seekRef.current || seekableEnd <= 0) return;
 
-    const hoverPercent = Math.min(
-      100,
-      (hoverTimeRef.current / seekableEnd) * 100
-    );
-    seekRef.current.style.setProperty(
-      SEEK_HOVER_PERCENT,
-      `${hoverPercent.toFixed(4)}%`
-    );
-  }, [seekableEnd]);
+      const hoverPercent = Math.min(100, (hoverTime / seekableEnd) * 100);
+      seekRef.current.style.setProperty(
+        SEEK_HOVER_PERCENT,
+        `${hoverPercent.toFixed(4)}%`
+      );
+    },
+    [seekableEnd]
+  );
 
   React.useEffect(() => {
     if (seekState.pendingSeekTime !== null) {
@@ -1874,9 +1875,9 @@ function MediaPlayerSeek({
         const relativeX = offsetXOnSeekBar / seekRect.width;
         const calculatedHoverTime = relativeX * seekableEnd;
 
-        hoverTimeRef.current = calculatedHoverTime;
+        if (!tooltipDisabled) setHoverTime(calculatedHoverTime);
 
-        onHoverProgressUpdate();
+        onHoverProgressUpdate(calculatedHoverTime);
 
         const wasHovering = seekState.isHovering;
         const isCurrentlyHovering =
@@ -1992,9 +1993,9 @@ function MediaPlayerSeek({
     };
   }, []);
 
-  const currentChapterCue = getCurrentChapterCue(hoverTimeRef.current);
-  const thumbnail = getThumbnail(hoverTimeRef.current);
-  const hoverTime = getCachedTime(hoverTimeRef.current, seekableEnd);
+  const currentChapterCue = getCurrentChapterCue(hoverTime);
+  const thumbnail = getThumbnail(hoverTime);
+  const hoverTimeDisplay = getCachedTime(hoverTime, seekableEnd);
 
   const chapterSeparators = React.useMemo(() => {
     if (withoutChapter || chapterCues.length <= 1 || seekableEnd <= 0) {
@@ -2046,7 +2047,7 @@ function MediaPlayerSeek({
       transform: `scale(${scale})`,
       transformOrigin: "top left",
     };
-  }, [thumbnail?.coords, thumbnail?.src]);
+  }, [thumbnail]);
 
   const SeekSlider = (
     <div data-slot="media-player-seek-container" className="relative w-full">
@@ -2147,7 +2148,7 @@ function MediaPlayerSeek({
                     ) : (
                       <img
                         src={thumbnail.src}
-                        alt={`Preview at ${hoverTime}`}
+                        alt={`Preview at ${hoverTimeDisplay}`}
                         className="size-full object-cover"
                       />
                     )}
@@ -2170,8 +2171,8 @@ function MediaPlayerSeek({
                   )}
                 >
                   {tooltipTimeVariant === "progress"
-                    ? `${hoverTime} / ${duration}`
-                    : hoverTime}
+                    ? `${hoverTimeDisplay} / ${duration}`
+                    : hoverTimeDisplay}
                 </div>
               </div>
             </div>
@@ -2548,6 +2549,7 @@ function MediaPlayerLoop({
       const mediaElement = context.mediaRef.current;
       if (mediaElement) {
         const newLoopState = !mediaElement.loop;
+        // eslint-disable-next-line react-hooks/immutability -- DOM element property, not React state
         mediaElement.loop = newLoopState;
         setIsLooping(newLoopState);
       }
@@ -3206,7 +3208,4 @@ export {
   MediaPlayerSettings as Settings,
   MediaPlayerPortal as Portal,
   MediaPlayerTooltip as Tooltip,
-  //
-  useMediaSelector as useMediaPlayer,
-  useStoreSelector as useMediaPlayerStore,
 };

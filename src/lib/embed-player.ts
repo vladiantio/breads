@@ -13,8 +13,7 @@ export function parseTenorGif(urlp: URL):
     return {success: false}
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prefer-const
-  let [_, id, filename] = urlp.pathname.split('/')
+  let [, id, filename] = urlp.pathname.split('/')
 
   if (!id || !filename) {
     return {success: false}

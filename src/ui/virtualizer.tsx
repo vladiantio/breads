@@ -1,5 +1,74 @@
-import { useRef } from "react"
-import { useWindowVirtualizer } from "@tanstack/react-virtual"
+import { useCallback, useRef, useState, useSyncExternalStore } from "react"
+import {
+  useWindowVirtualizer,
+  type VirtualItem,
+} from "@tanstack/react-virtual"
+
+function useScrollMargin(parentRef: React.RefObject<HTMLDivElement | null>) {
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      const el = parentRef.current
+      if (!el) return () => {}
+      const update = () => onStoreChange()
+      const observer = new ResizeObserver(update)
+      observer.observe(el)
+      update()
+      return () => observer.disconnect()
+    },
+    [parentRef]
+  )
+
+  return useSyncExternalStore(
+    subscribe,
+    () => parentRef.current?.offsetTop ?? 0,
+    () => 0
+  )
+}
+
+interface VirtualizerStore {
+  subscribe: (listener: () => void) => () => void
+  emit: () => void
+}
+
+function createVirtualizerStore(): VirtualizerStore {
+  const listeners = new Set<() => void>()
+  return {
+    subscribe: (listener) => {
+      listeners.add(listener)
+      return () => {
+        listeners.delete(listener)
+      }
+    },
+    emit: () => {
+      listeners.forEach((listener) => listener())
+    },
+  }
+}
+
+function useVirtualizerState(options: Parameters<typeof useWindowVirtualizer>[0]) {
+  const [store] = useState(createVirtualizerStore)
+
+  const virtualizer = useWindowVirtualizer({
+    ...options,
+    onChange: (instance, sync) => {
+      store.emit()
+      options.onChange?.(instance, sync)
+    },
+  })
+
+  const virtualItems = useSyncExternalStore(
+    store.subscribe,
+    () => virtualizer.getVirtualItems(),
+    () => []
+  )
+  const totalSize = useSyncExternalStore(
+    store.subscribe,
+    () => virtualizer.getTotalSize(),
+    () => 0
+  )
+
+  return { virtualizer, virtualItems, totalSize }
+}
 
 interface VirtualizerProps<T> extends React.ComponentProps<"div"> {
   items: T[]
@@ -16,23 +85,22 @@ export function RowVirtualizerDynamic<T>({
   ...props
 }: VirtualizerProps<T>) {
   const parentRef = useRef<HTMLDivElement>(null)
-  const scrollMargin = parentRef.current?.offsetTop ?? 0
+  const scrollMargin = useScrollMargin(parentRef)
 
-  const virtualizer = useWindowVirtualizer({
+  const { virtualizer, virtualItems, totalSize } = useVirtualizerState({
     count: items.length,
     estimateSize,
     overscan,
     scrollMargin,
   })
 
-  const virtualItems = virtualizer.getVirtualItems()
   const translateY = (virtualItems[0]?.start ?? 0) - scrollMargin
 
   return (
     <div ref={parentRef} {...props}>
       <div
         style={{
-          height: `${virtualizer.getTotalSize()}px`,
+          height: `${totalSize}px`,
           width: '100%',
           position: 'relative',
         }}
@@ -72,9 +140,9 @@ export function MasonryVerticalVirtualizerDynamic<T>({
   lanes?: number
 }) {
   const parentRef = useRef<HTMLDivElement>(null)
-  const scrollMargin = parentRef.current?.offsetTop ?? 0
+  const scrollMargin = useScrollMargin(parentRef)
 
-  const virtualizer = useWindowVirtualizer({
+  const { virtualizer, virtualItems, totalSize } = useVirtualizerState({
     count: items.length,
     estimateSize,
     overscan,
@@ -82,18 +150,16 @@ export function MasonryVerticalVirtualizerDynamic<T>({
     lanes,
   })
 
-  const virtualItems = virtualizer.getVirtualItems()
-
   return (
     <div ref={parentRef} {...props}>
       <div
         style={{
-          height: `${virtualizer.getTotalSize()}px`,
+          height: `${totalSize}px`,
           width: '100%',
           position: 'relative',
         }}
       >
-        {virtualItems.map((virtualRow) => (
+        {virtualItems.map((virtualRow: VirtualItem) => (
           <div
             key={virtualRow.index}
             data-index={virtualRow.index}
