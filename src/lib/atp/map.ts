@@ -147,6 +147,30 @@ export function mapPosts(feed: AppBskyFeedDefs.FeedViewPost[], reduceReplies = t
   }, []);
 }
 
+export function mapReplies(feed: AppBskyFeedDefs.FeedViewPost[]): PostWithAuthor[] {
+  return feed.reduce((acc: PostWithAuthor[], post) => {
+    const postExists = acc.find(o =>
+      o.id == post.post.cid
+      || (isType<AppBskyFeedDefs.PostView>(post.reply?.parent, 'app.bsky.feed.defs#postView') && o.id == post.reply?.parent.cid)
+    );
+
+    if (postExists) {
+      return [...acc];
+    }
+
+    if (!!post.reply && !post.reason) {
+      const posts = [];
+      if (post.reply.parent && isType<AppBskyFeedDefs.PostView>(post.reply.parent, 'app.bsky.feed.defs#postView')) {
+        posts.push(mapPostWithAuthor(post.reply.parent, undefined, true));
+      }
+      posts.push(mapPostWithAuthor(post.post));
+      return [...acc, ...posts];
+    }
+
+    return [...acc, mapPostWithAuthor(post.post, post.reason)];
+  }, []);
+}
+
 export function mapThreads(thread: ThreadNode): ThreadResponseSchema {
   if (thread.type === 'post') {
     const { post, replies } = thread;

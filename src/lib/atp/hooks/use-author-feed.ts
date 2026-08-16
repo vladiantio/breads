@@ -2,7 +2,7 @@ import { InfiniteData, QueryKey, useInfiniteQuery } from '@tanstack/react-query'
 import { ok } from '@atcute/client';
 import { useAtpStore } from '../store';
 import { ResponseSchema } from '@/types/response-schema';
-import { mapPosts } from '../map';
+import { mapPosts, mapReplies } from '../map';
 import { TypeFilterKey } from '../types/type-filter-key';
 import { isType } from '../types/is-type';
 import type { ActorIdentifier } from '@atcute/lexicons';
@@ -42,7 +42,7 @@ export function useAuthorFeed({
       const limit = 30
       let filteredFeed: AppBskyFeedDefs.FeedViewPost[] = []
       let cursor = pageParam
-      const reduceReplies = filter !== 'posts_with_media' && filter !== 'posts_with_video' && typeFilter !== 'replies'
+      const reduceReplies = filter !== 'posts_with_media' && filter !== 'posts_with_video'
 
       while (filteredFeed.length < limit) {
         const authorFeedParams = {
@@ -96,7 +96,9 @@ export function useAuthorFeed({
         cursor = data.cursor
       }
 
-      const posts = mapPosts(filteredFeed, reduceReplies)
+      const posts = typeFilter === 'replies'
+        ? mapReplies(filteredFeed)
+        : mapPosts(filteredFeed, reduceReplies)
       return { posts, cursor }
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
