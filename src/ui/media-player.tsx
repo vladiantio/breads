@@ -57,6 +57,7 @@ import {
   useMediaSelector,
 } from "media-chrome/react/media-store";
 import * as React from "react";
+import type { BaseUIEvent } from "@base-ui/react";
 import * as ReactDOM from "react-dom";
 
 const ROOT_NAME = "MediaPlayer";
@@ -1247,7 +1248,6 @@ function MediaPlayerControlsOverlay({
 type MediaPlayerPlayProps = React.ComponentProps<typeof Button>;
 
 function MediaPlayerPlay({
-  asChild: _,
   children,
   className,
   disabled,
@@ -1261,7 +1261,7 @@ function MediaPlayerPlay({
   const isDisabled = disabled || context.disabled;
 
   const onPlayToggle = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
 
       if (event.defaultPrevented) return;
@@ -1311,7 +1311,6 @@ interface MediaPlayerSeekBackwardProps
 
 function MediaPlayerSeekBackward({
   seconds = SEEK_AMOUNT_SHORT,
-  asChild: _,
   children,
   className,
   disabled,
@@ -1327,7 +1326,7 @@ function MediaPlayerSeekBackward({
   const isDisabled = disabled || context.disabled;
 
   const onSeekBackward = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
 
       if (event.defaultPrevented) return;
@@ -1371,7 +1370,6 @@ interface MediaPlayerSeekForwardProps
 
 function MediaPlayerSeekForward({
   seconds = SEEK_AMOUNT_LONG,
-  asChild: _,
   children,
   className,
   disabled,
@@ -1389,7 +1387,7 @@ function MediaPlayerSeekForward({
   const isDisabled = disabled || context.disabled;
 
   const onSeekForward = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
 
       if (event.defaultPrevented) return;
@@ -2374,8 +2372,7 @@ function MediaPlayerTime({
 }
 
 interface MediaPlayerPlaybackSpeedProps
-  extends React.ComponentProps<typeof DropdownMenuTrigger>,
-    React.ComponentProps<typeof Button>,
+  extends React.ComponentProps<typeof Button>,
     Omit<React.ComponentProps<typeof DropdownMenu>, "dir">,
     Pick<React.ComponentProps<typeof DropdownMenuContent>, "sideOffset"> {
   speeds?: number[];
@@ -2387,7 +2384,6 @@ function MediaPlayerPlaybackSpeed({
   onOpenChange: onOpenChangeProp,
   sideOffset = FLOATING_MENU_SIDE_OFFSET,
   speeds = SPEEDS,
-  asChild: _,
   modal = false,
   className,
   disabled,
@@ -2500,7 +2496,7 @@ function MediaPlayerLoop({
   }, [context.mediaRef]);
 
   const onLoopToggle = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
 
@@ -2563,7 +2559,7 @@ function MediaPlayerFullscreen({
   const isDisabled = disabled || context.disabled;
 
   const onFullscreen = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
 
       if (event.defaultPrevented) return;
@@ -2619,7 +2615,7 @@ function MediaPlayerPiP({
   const isDisabled = disabled || context.disabled;
 
   const onPictureInPicture = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
 
       if (event.defaultPrevented) return;
@@ -2690,7 +2686,7 @@ function MediaPlayerCaptions({
 
   const isDisabled = disabled || context.disabled;
   const onCaptionsToggle = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
 
       if (event.defaultPrevented) return;
@@ -2740,7 +2736,7 @@ function MediaPlayerDownload({
   const isDisabled = disabled || context.disabled;
 
   const onDownload = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement>>) => {
       onClick?.(event);
 
       if (event.defaultPrevented) return;
@@ -2788,7 +2784,6 @@ function MediaPlayerSettings({
   onOpenChange: onOpenChangeProp,
   sideOffset = FLOATING_MENU_SIDE_OFFSET,
   speeds = SPEEDS,
-  asChild: _,
   modal = false,
   className,
   disabled,

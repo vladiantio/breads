@@ -81,29 +81,39 @@ export function PostCardMenu() {
             {(content && content.trim().length > 0
               && sourceLanguage != targetLanguage) ? (
               <>
-                <Button asChild className="justify-start h-12" size="lg" variant="ghost">
-                  <a
-                    href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <LanguagesIcon />
-                    <span>{t("post.translate.with")} Google Translate</span>
-                    <ArrowUpRightIcon className="ml-auto" />
-                  </a>
+                <Button
+                  render={
+                    <a
+                      href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  }
+                  className="justify-start h-12"
+                  size="lg"
+                  variant="ghost"
+                >
+                  <LanguagesIcon />
+                  <span>{t("post.translate.with")} Google Translate</span>
+                  <ArrowUpRightIcon className="ml-auto" />
                 </Button>
-                <Button asChild className="justify-start h-12" size="lg" variant="ghost">
-                  <a
-                    href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <LanguagesIcon />
-                    <span>{t("post.translate.with")} DeepL</span>
-                    <ArrowUpRightIcon className="ml-auto" />
-                  </a>
+                <Button
+                  render={
+                    <a
+                      href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  }
+                  className="justify-start h-12"
+                  size="lg"
+                  variant="ghost"
+                >
+                  <LanguagesIcon />
+                  <span>{t("post.translate.with")} DeepL</span>
+                  <ArrowUpRightIcon className="ml-auto" />
                 </Button>
               </>
             ) : null}
