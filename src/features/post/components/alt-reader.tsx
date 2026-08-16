@@ -34,9 +34,7 @@ export function AltReader({
   if (isMobile)
     return (
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>
-          <AltReaderButton />
-        </DrawerTrigger>
+        <DrawerTrigger render={<AltReaderButton />} />
         <DrawerContent>
           <div className="p-6 pb-12 text-pretty whitespace-pre-wrap">{alt}</div>
         </DrawerContent>

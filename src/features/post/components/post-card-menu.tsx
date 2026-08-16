@@ -73,9 +73,7 @@ export function PostCardMenu() {
   if (isMobile)
     return (
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>
-          <PostCardMenuButton />
-        </DrawerTrigger>
+        <DrawerTrigger render={<PostCardMenuButton />} />
         <DrawerContent>
           <div className="flex flex-col pb-6">
             {(content && content.trim().length > 0
