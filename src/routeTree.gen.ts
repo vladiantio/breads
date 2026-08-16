@@ -18,8 +18,12 @@ import { Route as AppSearchRouteImport } from './routes/_app.search'
 import { Route as AppNotificationsRouteImport } from './routes/_app.notifications'
 import { Route as AppHashtagTagRouteImport } from './routes/_app.hashtag.$tag'
 import { Route as AppProfileUsernameRouteRouteImport } from './routes/_app.profile.$username.route'
-import { Route as AppProfileUsernameIndexRouteImport } from './routes/_app.profile.$username.index'
+import { Route as AppProfileUsernameTabsRouteRouteImport } from './routes/_app.profile.$username._tabs.route'
+import { Route as AppProfileUsernameTabsIndexRouteImport } from './routes/_app.profile.$username._tabs.index'
 import { Route as AppProfileUsernamePostPostIdRouteImport } from './routes/_app.profile.$username.post.$postId'
+import { Route as AppProfileUsernameTabsVideosRouteImport } from './routes/_app.profile.$username._tabs.videos'
+import { Route as AppProfileUsernameTabsRepostsRouteImport } from './routes/_app.profile.$username._tabs.reposts'
+import { Route as AppProfileUsernameTabsMediaRouteImport } from './routes/_app.profile.$username._tabs.media'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -65,16 +69,40 @@ const AppProfileUsernameRouteRoute = AppProfileUsernameRouteRouteImport.update({
   path: '/profile/$username',
   getParentRoute: () => AppRoute,
 } as any)
-const AppProfileUsernameIndexRoute = AppProfileUsernameIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppProfileUsernameRouteRoute,
-} as any)
+const AppProfileUsernameTabsRouteRoute =
+  AppProfileUsernameTabsRouteRouteImport.update({
+    id: '/_tabs',
+    getParentRoute: () => AppProfileUsernameRouteRoute,
+  } as any)
+const AppProfileUsernameTabsIndexRoute =
+  AppProfileUsernameTabsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppProfileUsernameTabsRouteRoute,
+  } as any)
 const AppProfileUsernamePostPostIdRoute =
   AppProfileUsernamePostPostIdRouteImport.update({
     id: '/post/$postId',
     path: '/post/$postId',
     getParentRoute: () => AppProfileUsernameRouteRoute,
+  } as any)
+const AppProfileUsernameTabsVideosRoute =
+  AppProfileUsernameTabsVideosRouteImport.update({
+    id: '/videos',
+    path: '/videos',
+    getParentRoute: () => AppProfileUsernameTabsRouteRoute,
+  } as any)
+const AppProfileUsernameTabsRepostsRoute =
+  AppProfileUsernameTabsRepostsRouteImport.update({
+    id: '/reposts',
+    path: '/reposts',
+    getParentRoute: () => AppProfileUsernameTabsRouteRoute,
+  } as any)
+const AppProfileUsernameTabsMediaRoute =
+  AppProfileUsernameTabsMediaRouteImport.update({
+    id: '/media',
+    path: '/media',
+    getParentRoute: () => AppProfileUsernameTabsRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -84,10 +112,13 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/': typeof AppIndexRoute
-  '/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
+  '/profile/$username': typeof AppProfileUsernameTabsRouteRouteWithChildren
   '/hashtag/$tag': typeof AppHashtagTagRoute
-  '/profile/$username/': typeof AppProfileUsernameIndexRoute
+  '/profile/$username/media': typeof AppProfileUsernameTabsMediaRoute
+  '/profile/$username/reposts': typeof AppProfileUsernameTabsRepostsRoute
+  '/profile/$username/videos': typeof AppProfileUsernameTabsVideosRoute
   '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
+  '/profile/$username/': typeof AppProfileUsernameTabsIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -96,8 +127,11 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/': typeof AppIndexRoute
+  '/profile/$username': typeof AppProfileUsernameTabsIndexRoute
   '/hashtag/$tag': typeof AppHashtagTagRoute
-  '/profile/$username': typeof AppProfileUsernameIndexRoute
+  '/profile/$username/media': typeof AppProfileUsernameTabsMediaRoute
+  '/profile/$username/reposts': typeof AppProfileUsernameTabsRepostsRoute
+  '/profile/$username/videos': typeof AppProfileUsernameTabsVideosRoute
   '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
 }
 export interface FileRoutesById {
@@ -111,8 +145,12 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/profile/$username': typeof AppProfileUsernameRouteRouteWithChildren
   '/_app/hashtag/$tag': typeof AppHashtagTagRoute
-  '/_app/profile/$username/': typeof AppProfileUsernameIndexRoute
+  '/_app/profile/$username/_tabs': typeof AppProfileUsernameTabsRouteRouteWithChildren
+  '/_app/profile/$username/_tabs/media': typeof AppProfileUsernameTabsMediaRoute
+  '/_app/profile/$username/_tabs/reposts': typeof AppProfileUsernameTabsRepostsRoute
+  '/_app/profile/$username/_tabs/videos': typeof AppProfileUsernameTabsVideosRoute
   '/_app/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
+  '/_app/profile/$username/_tabs/': typeof AppProfileUsernameTabsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -125,8 +163,11 @@ export interface FileRouteTypes {
     | '/'
     | '/profile/$username'
     | '/hashtag/$tag'
-    | '/profile/$username/'
+    | '/profile/$username/media'
+    | '/profile/$username/reposts'
+    | '/profile/$username/videos'
     | '/profile/$username/post/$postId'
+    | '/profile/$username/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -135,8 +176,11 @@ export interface FileRouteTypes {
     | '/settings'
     | '/oauth/callback'
     | '/'
-    | '/hashtag/$tag'
     | '/profile/$username'
+    | '/hashtag/$tag'
+    | '/profile/$username/media'
+    | '/profile/$username/reposts'
+    | '/profile/$username/videos'
     | '/profile/$username/post/$postId'
   id:
     | '__root__'
@@ -149,8 +193,12 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/profile/$username'
     | '/_app/hashtag/$tag'
-    | '/_app/profile/$username/'
+    | '/_app/profile/$username/_tabs'
+    | '/_app/profile/$username/_tabs/media'
+    | '/_app/profile/$username/_tabs/reposts'
+    | '/_app/profile/$username/_tabs/videos'
     | '/_app/profile/$username/post/$postId'
+    | '/_app/profile/$username/_tabs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,12 +272,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileUsernameRouteRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/profile/$username/': {
-      id: '/_app/profile/$username/'
+    '/_app/profile/$username/_tabs': {
+      id: '/_app/profile/$username/_tabs'
+      path: ''
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof AppProfileUsernameTabsRouteRouteImport
+      parentRoute: typeof AppProfileUsernameRouteRoute
+    }
+    '/_app/profile/$username/_tabs/': {
+      id: '/_app/profile/$username/_tabs/'
       path: '/'
       fullPath: '/profile/$username/'
-      preLoaderRoute: typeof AppProfileUsernameIndexRouteImport
-      parentRoute: typeof AppProfileUsernameRouteRoute
+      preLoaderRoute: typeof AppProfileUsernameTabsIndexRouteImport
+      parentRoute: typeof AppProfileUsernameTabsRouteRoute
     }
     '/_app/profile/$username/post/$postId': {
       id: '/_app/profile/$username/post/$postId'
@@ -238,17 +293,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileUsernamePostPostIdRouteImport
       parentRoute: typeof AppProfileUsernameRouteRoute
     }
+    '/_app/profile/$username/_tabs/videos': {
+      id: '/_app/profile/$username/_tabs/videos'
+      path: '/videos'
+      fullPath: '/profile/$username/videos'
+      preLoaderRoute: typeof AppProfileUsernameTabsVideosRouteImport
+      parentRoute: typeof AppProfileUsernameTabsRouteRoute
+    }
+    '/_app/profile/$username/_tabs/reposts': {
+      id: '/_app/profile/$username/_tabs/reposts'
+      path: '/reposts'
+      fullPath: '/profile/$username/reposts'
+      preLoaderRoute: typeof AppProfileUsernameTabsRepostsRouteImport
+      parentRoute: typeof AppProfileUsernameTabsRouteRoute
+    }
+    '/_app/profile/$username/_tabs/media': {
+      id: '/_app/profile/$username/_tabs/media'
+      path: '/media'
+      fullPath: '/profile/$username/media'
+      preLoaderRoute: typeof AppProfileUsernameTabsMediaRouteImport
+      parentRoute: typeof AppProfileUsernameTabsRouteRoute
+    }
   }
 }
 
+interface AppProfileUsernameTabsRouteRouteChildren {
+  AppProfileUsernameTabsMediaRoute: typeof AppProfileUsernameTabsMediaRoute
+  AppProfileUsernameTabsRepostsRoute: typeof AppProfileUsernameTabsRepostsRoute
+  AppProfileUsernameTabsVideosRoute: typeof AppProfileUsernameTabsVideosRoute
+  AppProfileUsernameTabsIndexRoute: typeof AppProfileUsernameTabsIndexRoute
+}
+
+const AppProfileUsernameTabsRouteRouteChildren: AppProfileUsernameTabsRouteRouteChildren =
+  {
+    AppProfileUsernameTabsMediaRoute: AppProfileUsernameTabsMediaRoute,
+    AppProfileUsernameTabsRepostsRoute: AppProfileUsernameTabsRepostsRoute,
+    AppProfileUsernameTabsVideosRoute: AppProfileUsernameTabsVideosRoute,
+    AppProfileUsernameTabsIndexRoute: AppProfileUsernameTabsIndexRoute,
+  }
+
+const AppProfileUsernameTabsRouteRouteWithChildren =
+  AppProfileUsernameTabsRouteRoute._addFileChildren(
+    AppProfileUsernameTabsRouteRouteChildren,
+  )
+
 interface AppProfileUsernameRouteRouteChildren {
-  AppProfileUsernameIndexRoute: typeof AppProfileUsernameIndexRoute
+  AppProfileUsernameTabsRouteRoute: typeof AppProfileUsernameTabsRouteRouteWithChildren
   AppProfileUsernamePostPostIdRoute: typeof AppProfileUsernamePostPostIdRoute
 }
 
 const AppProfileUsernameRouteRouteChildren: AppProfileUsernameRouteRouteChildren =
   {
-    AppProfileUsernameIndexRoute: AppProfileUsernameIndexRoute,
+    AppProfileUsernameTabsRouteRoute:
+      AppProfileUsernameTabsRouteRouteWithChildren,
     AppProfileUsernamePostPostIdRoute: AppProfileUsernamePostPostIdRoute,
   }
 
