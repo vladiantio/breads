@@ -2074,7 +2074,7 @@ function MediaPlayerSeek({
       >
         <SliderPrimitive.Control
           data-slot="media-player-seek-control"
-          className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50"
+          className="relative flex size-full touch-none items-center select-none data-disabled:opacity-50"
         >
           <SliderPrimitive.Track
             data-slot="media-player-seek-track"
@@ -2289,7 +2289,7 @@ function MediaPlayerVolume({
           <PreviewCardPrimitive.Popup
             data-slot="media-player-volume-content"
             className={cn(
-              "dark bg-popover data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--transform-origin) rounded-md border py-4 px-2 shadow-md outline-hidden",
+              "dark bg-popover data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 origin-(--transform-origin) rounded-md border py-4 px-1 shadow-md outline-hidden",
               className
             )}
           >
@@ -2304,7 +2304,7 @@ function MediaPlayerVolume({
               max={1}
               step={0.1}
               className={cn(
-                "relative flex flex-col touch-none select-none items-center h-16 w-4 cursor-pointer",
+                "relative flex flex-col touch-none select-none items-center h-16 w-4 cursor-grab active:cursor-grabbing",
                 className
               )}
               disabled={isDisabled}
@@ -2313,7 +2313,7 @@ function MediaPlayerVolume({
               onValueCommitted={onVolumeCommit}
               orientation="vertical"
             >
-              <SliderPrimitive.Control className="relative flex h-full flex-col touch-none items-center select-none data-disabled:opacity-50">
+              <SliderPrimitive.Control className="relative flex size-full flex-col touch-none items-center select-none data-disabled:opacity-50">
                 <SliderPrimitive.Track className="relative grow overflow-hidden w-1 h-full rounded-full bg-accent">
                   <SliderPrimitive.Indicator className="absolute w-full bg-white will-change-[height]" />
                 </SliderPrimitive.Track>
