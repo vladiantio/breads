@@ -794,8 +794,7 @@ function MediaPlayerRootImpl({
   return <MediaPlayerContext value={contextValue}>{RootPrimitive}</MediaPlayerContext>;
 }
 
-interface MediaPlayerVideoProps
-  extends useRender.ComponentProps<"video"> {}
+type MediaPlayerVideoProps = useRender.ComponentProps<"video">;
 
 function MediaPlayerVideo({
   render,
@@ -847,8 +846,7 @@ function MediaPlayerVideo({
   return VideoPrimitive;
 }
 
-interface MediaPlayerAudioProps
-  extends useRender.ComponentProps<"audio"> {}
+type MediaPlayerAudioProps = useRender.ComponentProps<"audio">;
 
 function MediaPlayerAudio({
   render,
@@ -970,11 +968,10 @@ function MediaPlayerLoading({
     };
   }, [shouldShowLoading, loadingDelayMs]);
 
-  if (!shouldRender) return null;
-
   const LoadingPrimitive = useRender({
     defaultTagName: "div",
     render,
+    enabled: shouldRender,
     props: mergeProps<"div">(
       {
         role: "status",
@@ -1101,11 +1098,10 @@ function MediaPlayerError({
     return descriptionMap[error.code] ?? "An unknown error occurred";
   }, [description, error]);
 
-  if (!error) return null;
-
   const ErrorPrimitive = useRender({
     defaultTagName: "div",
     render,
+    enabled: !!error,
     props: mergeProps<"div">(
       {
         role: "alert",
@@ -1167,8 +1163,7 @@ function MediaPlayerError({
   return ErrorPrimitive;
 }
 
-interface MediaPlayerVolumeIndicatorProps
-  extends useRender.ComponentProps<"div"> {}
+type MediaPlayerVolumeIndicatorProps = useRender.ComponentProps<"div">;
 
 function MediaPlayerVolumeIndicator({
   render,
@@ -1184,8 +1179,6 @@ function MediaPlayerVolumeIndicator({
     (state) => state.volumeIndicatorVisible
   );
 
-  if (!volumeIndicatorVisible) return null;
-
   const effectiveVolume = mediaMuted ? 0 : mediaVolume;
   const volumePercentage = Math.round(effectiveVolume * 100);
   const barCount = 10;
@@ -1194,6 +1187,7 @@ function MediaPlayerVolumeIndicator({
   const VolumeIndicatorPrimitive = useRender({
     defaultTagName: "div",
     render,
+    enabled: volumeIndicatorVisible,
     props: mergeProps<"div">(
       {
         role: "status",
@@ -1245,8 +1239,7 @@ function MediaPlayerVolumeIndicator({
   return VolumeIndicatorPrimitive;
 }
 
-interface MediaPlayerControlsOverlayProps
-  extends useRender.ComponentProps<"div"> {}
+type MediaPlayerControlsOverlayProps = useRender.ComponentProps<"div">;
 
 function MediaPlayerControlsOverlay({
   render,
@@ -2187,8 +2180,7 @@ function MediaPlayerSeek({
   return SeekSlider;
 }
 
-interface MediaPlayerVolumeProps
-  extends React.ComponentProps<typeof SliderPrimitive.Root> {}
+type MediaPlayerVolumeProps = React.ComponentProps<typeof SliderPrimitive.Root>;
 
 function MediaPlayerVolume({
   className,
@@ -2362,26 +2354,8 @@ function MediaPlayerTime({
     };
   }, [variant, mediaCurrentTime, seekableEnd]);
 
-  if (variant === "remaining" || variant === "duration") {
-    return useRender({
-      defaultTagName: "div",
-      render,
-      props: mergeProps<"div">(
-        {
-          "data-slot": "media-player-time",
-          "data-variant": variant,
-          dir: context.dir,
-          "aria-label": variant === "remaining" ? "Remaining time" : "Duration",
-          className: cn(
-            "font-medium text-foreground/80 text-sm tabular-nums py-1 px-3 rounded-full bg-background/60",
-            className
-          ),
-          children: times[variant],
-        } as React.ComponentProps<"div">,
-        props
-      ),
-    });
-  }
+  const isSimple =
+    variant === "remaining" || variant === "duration";
 
   return useRender({
     defaultTagName: "div",
@@ -2391,11 +2365,21 @@ function MediaPlayerTime({
         "data-slot": "media-player-time",
         "data-variant": variant,
         dir: context.dir,
+        ...(isSimple
+          ? {
+              "aria-label":
+                variant === "remaining" ? "Remaining time" : "Duration",
+            }
+          : {}),
         className: cn(
-          "flex items-center gap-1 font-medium text-foreground/80 text-sm py-1 px-3 rounded-full bg-background/60",
+          isSimple
+            ? "font-medium text-foreground/80 text-sm tabular-nums py-1 px-3 rounded-full bg-background/60"
+            : "flex items-center gap-1 font-medium text-foreground/80 text-sm py-1 px-3 rounded-full bg-background/60",
           className
         ),
-        children: (
+        children: isSimple ? (
+          times[variant]
+        ) : (
           <>
             <span className="tabular-nums text-foreground" aria-label="Current time">
               {times.current}
