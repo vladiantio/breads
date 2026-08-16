@@ -310,9 +310,8 @@ function MediaPlayerRootImpl({
     : null;
 
   const isVideo =
-    (typeof HTMLVideoElement !== "undefined" &&
-      mediaRef.current instanceof HTMLVideoElement) ||
-    mediaRef.current?.tagName?.toLowerCase() === "mux-player";
+    typeof HTMLVideoElement !== "undefined" &&
+    mediaRef.current instanceof HTMLVideoElement;
 
   const onControlsShow = React.useCallback(() => {
     store.setState("controlsVisible", true);

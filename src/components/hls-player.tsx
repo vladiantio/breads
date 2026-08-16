@@ -1,54 +1,66 @@
 import { useEffect, useRef } from "react"
-import Hls, { ErrorData } from "hls.js"
+import type Hls from "hls.js"
+import type { ErrorData } from "hls.js"
 import { toast } from "sonner"
+import { useComposedRefs } from "@/lib/compose-refs"
 
-type HLSPlayerProps = {
+type HLSPlayerProps = Omit<React.ComponentPropsWithoutRef<"video">, "src"> & {
   src: string
   onError?: (error: ErrorEvent | ErrorData) => void
   onReady?: () => void
-} & Omit<React.ComponentPropsWithoutRef<"video">, "src" | "onError">
+  ref?: React.Ref<HTMLVideoElement>
+}
 
 export function HLSPlayer({
+  ref,
   src,
-  playsInline = true,
-  onError,
+  onError: onErrorProp,
   onReady,
   ...props
 }: HLSPlayerProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const composedRef = useComposedRefs(ref, videoRef)
 
   useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
     let hls: Hls | null = null
+    let cancelled = false
+    let nativeCleanup: (() => void) | null = null
 
     const initializePlayer = async () => {
-      if (!videoRef.current) return
+      if (cancelled) return
 
-      const Hls = (await import("hls.js")).default
+      const { default: HlsClass } = await import("hls.js")
 
-      if (Hls.isSupported()) {
-        hls = new Hls({
+      if (cancelled) return
+
+      if (HlsClass.isSupported()) {
+        hls = new HlsClass({
           enableWorker: true,
-          // lowLatencyMode: true,
         })
 
         hls.loadSource(src)
-        hls.attachMedia(videoRef.current)
+        hls.attachMedia(video)
 
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          onReady?.()
+        hls.on(HlsClass.Events.MANIFEST_PARSED, () => {
+          if (!cancelled) onReady?.()
         })
 
-        hls.on(Hls.Events.ERROR, (_, data) => {
+        hls.on(HlsClass.Events.ERROR, (_, data) => {
+          if (cancelled) return
+
           if (data.fatal) {
             switch (data.type) {
-              case Hls.ErrorTypes.NETWORK_ERROR:
+              case HlsClass.ErrorTypes.NETWORK_ERROR:
                 toast("Video", {
                   description: "Network error occurred",
                   duration: 3000,
                 })
                 hls?.startLoad()
                 break
-              case Hls.ErrorTypes.MEDIA_ERROR:
+              case HlsClass.ErrorTypes.MEDIA_ERROR:
                 toast("Video", {
                   description: "Media error occurred",
                   duration: 3000,
@@ -63,29 +75,40 @@ export function HLSPlayer({
                 hls?.destroy()
                 break
             }
-            onError?.(data)
+            onErrorProp?.(data)
           }
         })
-      } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         // For browsers that support HLS natively (Safari)
-        videoRef.current.src = src
-        videoRef.current.addEventListener("loadedmetadata", () => {
-          onReady?.()
-        })
+        video.src = src
 
-        videoRef.current.addEventListener("error", (e) => {
+        const onLoadedMetadata = () => {
+          if (!cancelled) onReady?.()
+        }
+
+        const onNativeError = (event: Event) => {
+          if (cancelled) return
+
           toast("Video", {
             description: "Video playback error",
             duration: 3000,
           })
-          onError?.(e)
-        })
+          onErrorProp?.(event as ErrorEvent)
+        }
+
+        video.addEventListener("loadedmetadata", onLoadedMetadata)
+        video.addEventListener("error", onNativeError)
+
+        nativeCleanup = () => {
+          video.removeEventListener("loadedmetadata", onLoadedMetadata)
+          video.removeEventListener("error", onNativeError)
+        }
       } else {
         toast("Video", {
           description: "HLS is not supported in this browser",
           duration: 3000,
         })
-        onError?.(new ErrorEvent("error", { message: "HLS not supported" }))
+        onErrorProp?.(new ErrorEvent("error", { message: "HLS not supported" }))
       }
     }
 
@@ -93,17 +116,11 @@ export function HLSPlayer({
 
     // Cleanup
     return () => {
-      if (hls) {
-        hls.destroy()
-      }
+      cancelled = true
+      hls?.destroy()
+      nativeCleanup?.()
     }
-  }, [src, onError, onReady])
+  }, [src, onErrorProp, onReady])
 
-  return (
-    <video
-      ref={videoRef}
-      playsInline={playsInline}
-      {...props}
-    />
-  )
+  return <video ref={composedRef} {...props} />
 }

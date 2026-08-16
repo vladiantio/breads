@@ -17,7 +17,7 @@ import {
   MediaPlayerSettings,
   MediaPlayerFullscreen,
 } from "@/ui/media-player";
-import MuxVideo from "@mux/mux-video-react";
+import { HLSPlayer } from "@/components/hls-player";
 
 interface EmbedVideoProps {
   view: AppBskyEmbedVideo.View
@@ -41,11 +41,11 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
         <div className="bg-accent border overflow-hidden rounded-lg size-full select-none">
           <MediaPlayer autoHide>
             <MediaPlayerVideo asChild>
-              <MuxVideo
+              <HLSPlayer
                 autoPlay
                 src={view.playlist}
                 poster={view.thumbnail}
-                type="application/vnd.apple.mpegurl"
+                playsInline
               />
             </MediaPlayerVideo>
             <MediaPlayerError />
