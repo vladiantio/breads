@@ -17,6 +17,7 @@ export function ProfileTabBar({ username }: ProfileTabBarProps) {
 
   const tabList = [
     { value: 'posts', label: t('profile.tabs.posts'), to: '/profile/$username' },
+    { value: 'replies', label: t('profile.tabs.replies'), to: '/profile/$username/replies' },
     { value: 'reposts', label: t('profile.tabs.reposts'), to: '/profile/$username/reposts' },
     { value: 'media', label: t('profile.tabs.media'), to: '/profile/$username/media' },
     { value: 'videos', label: t('profile.tabs.videos'), to: '/profile/$username/videos' },

@@ -42,7 +42,7 @@ export function useAuthorFeed({
       const limit = 30
       let filteredFeed: AppBskyFeedDefs.FeedViewPost[] = []
       let cursor = pageParam
-      const reduceReplies = filter !== 'posts_with_media' && filter !== 'posts_with_video'
+      const reduceReplies = filter !== 'posts_with_media' && filter !== 'posts_with_video' && typeFilter !== 'replies'
 
       while (filteredFeed.length < limit) {
         const authorFeedParams = {
@@ -81,6 +81,7 @@ export function useAuthorFeed({
           if (typeFilter === 'no_reposts') return filterApplied && !isRepost
           if (typeFilter === 'quotes') return filterApplied && isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view') && !isRepost
           if (typeFilter === 'quotes_and_reposts') return filterApplied && (isRepost || isType<AppBskyEmbedRecord.View>(item.post.embed, 'app.bsky.embed.record#view'))
+          if (typeFilter === 'replies') return filterApplied && isReply
           return filterApplied
         })
 

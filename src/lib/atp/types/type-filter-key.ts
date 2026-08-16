@@ -6,3 +6,4 @@ export type TypeFilterKey =
   | 'reposts'
   | 'quotes'
   | 'quotes_and_reposts'
+  | 'replies'

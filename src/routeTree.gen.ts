@@ -23,6 +23,7 @@ import { Route as AppProfileUsernameTabsIndexRouteImport } from './routes/_app.p
 import { Route as AppProfileUsernamePostPostIdRouteImport } from './routes/_app.profile.$username.post.$postId'
 import { Route as AppProfileUsernameTabsVideosRouteImport } from './routes/_app.profile.$username._tabs.videos'
 import { Route as AppProfileUsernameTabsRepostsRouteImport } from './routes/_app.profile.$username._tabs.reposts'
+import { Route as AppProfileUsernameTabsRepliesRouteImport } from './routes/_app.profile.$username._tabs.replies'
 import { Route as AppProfileUsernameTabsMediaRouteImport } from './routes/_app.profile.$username._tabs.media'
 
 const LoginRoute = LoginRouteImport.update({
@@ -98,6 +99,12 @@ const AppProfileUsernameTabsRepostsRoute =
     path: '/reposts',
     getParentRoute: () => AppProfileUsernameTabsRouteRoute,
   } as any)
+const AppProfileUsernameTabsRepliesRoute =
+  AppProfileUsernameTabsRepliesRouteImport.update({
+    id: '/replies',
+    path: '/replies',
+    getParentRoute: () => AppProfileUsernameTabsRouteRoute,
+  } as any)
 const AppProfileUsernameTabsMediaRoute =
   AppProfileUsernameTabsMediaRouteImport.update({
     id: '/media',
@@ -115,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/profile/$username': typeof AppProfileUsernameTabsRouteRouteWithChildren
   '/hashtag/$tag': typeof AppHashtagTagRoute
   '/profile/$username/media': typeof AppProfileUsernameTabsMediaRoute
+  '/profile/$username/replies': typeof AppProfileUsernameTabsRepliesRoute
   '/profile/$username/reposts': typeof AppProfileUsernameTabsRepostsRoute
   '/profile/$username/videos': typeof AppProfileUsernameTabsVideosRoute
   '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
@@ -130,6 +138,7 @@ export interface FileRoutesByTo {
   '/profile/$username': typeof AppProfileUsernameTabsIndexRoute
   '/hashtag/$tag': typeof AppHashtagTagRoute
   '/profile/$username/media': typeof AppProfileUsernameTabsMediaRoute
+  '/profile/$username/replies': typeof AppProfileUsernameTabsRepliesRoute
   '/profile/$username/reposts': typeof AppProfileUsernameTabsRepostsRoute
   '/profile/$username/videos': typeof AppProfileUsernameTabsVideosRoute
   '/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
@@ -147,6 +156,7 @@ export interface FileRoutesById {
   '/_app/hashtag/$tag': typeof AppHashtagTagRoute
   '/_app/profile/$username/_tabs': typeof AppProfileUsernameTabsRouteRouteWithChildren
   '/_app/profile/$username/_tabs/media': typeof AppProfileUsernameTabsMediaRoute
+  '/_app/profile/$username/_tabs/replies': typeof AppProfileUsernameTabsRepliesRoute
   '/_app/profile/$username/_tabs/reposts': typeof AppProfileUsernameTabsRepostsRoute
   '/_app/profile/$username/_tabs/videos': typeof AppProfileUsernameTabsVideosRoute
   '/_app/profile/$username/post/$postId': typeof AppProfileUsernamePostPostIdRoute
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/profile/$username'
     | '/hashtag/$tag'
     | '/profile/$username/media'
+    | '/profile/$username/replies'
     | '/profile/$username/reposts'
     | '/profile/$username/videos'
     | '/profile/$username/post/$postId'
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | '/profile/$username'
     | '/hashtag/$tag'
     | '/profile/$username/media'
+    | '/profile/$username/replies'
     | '/profile/$username/reposts'
     | '/profile/$username/videos'
     | '/profile/$username/post/$postId'
@@ -195,6 +207,7 @@ export interface FileRouteTypes {
     | '/_app/hashtag/$tag'
     | '/_app/profile/$username/_tabs'
     | '/_app/profile/$username/_tabs/media'
+    | '/_app/profile/$username/_tabs/replies'
     | '/_app/profile/$username/_tabs/reposts'
     | '/_app/profile/$username/_tabs/videos'
     | '/_app/profile/$username/post/$postId'
@@ -307,6 +320,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileUsernameTabsRepostsRouteImport
       parentRoute: typeof AppProfileUsernameTabsRouteRoute
     }
+    '/_app/profile/$username/_tabs/replies': {
+      id: '/_app/profile/$username/_tabs/replies'
+      path: '/replies'
+      fullPath: '/profile/$username/replies'
+      preLoaderRoute: typeof AppProfileUsernameTabsRepliesRouteImport
+      parentRoute: typeof AppProfileUsernameTabsRouteRoute
+    }
     '/_app/profile/$username/_tabs/media': {
       id: '/_app/profile/$username/_tabs/media'
       path: '/media'
@@ -319,6 +339,7 @@ declare module '@tanstack/react-router' {
 
 interface AppProfileUsernameTabsRouteRouteChildren {
   AppProfileUsernameTabsMediaRoute: typeof AppProfileUsernameTabsMediaRoute
+  AppProfileUsernameTabsRepliesRoute: typeof AppProfileUsernameTabsRepliesRoute
   AppProfileUsernameTabsRepostsRoute: typeof AppProfileUsernameTabsRepostsRoute
   AppProfileUsernameTabsVideosRoute: typeof AppProfileUsernameTabsVideosRoute
   AppProfileUsernameTabsIndexRoute: typeof AppProfileUsernameTabsIndexRoute
@@ -327,6 +348,7 @@ interface AppProfileUsernameTabsRouteRouteChildren {
 const AppProfileUsernameTabsRouteRouteChildren: AppProfileUsernameTabsRouteRouteChildren =
   {
     AppProfileUsernameTabsMediaRoute: AppProfileUsernameTabsMediaRoute,
+    AppProfileUsernameTabsRepliesRoute: AppProfileUsernameTabsRepliesRoute,
     AppProfileUsernameTabsRepostsRoute: AppProfileUsernameTabsRepostsRoute,
     AppProfileUsernameTabsVideosRoute: AppProfileUsernameTabsVideosRoute,
     AppProfileUsernameTabsIndexRoute: AppProfileUsernameTabsIndexRoute,
