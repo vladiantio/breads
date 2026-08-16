@@ -141,36 +141,40 @@ export function PostCardMenu() {
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <PostCardMenuButton />
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger render={<PostCardMenuButton />} />
       <DropdownMenuContent align="end" className="w-fit">
         {(content && content.trim().length > 0
           && sourceLanguage != targetLanguage) ? (
           <>
-            <DropdownMenuItem asChild className="cursor-pointer">
-              <a
-                href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <LanguagesIcon />
-                <span>{t("post.translate.with")} Google Translate</span>
-                <ArrowUpRightIcon className="ml-auto" />
-              </a>
+            <DropdownMenuItem
+              render={
+                <a
+                  href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              }
+              className="cursor-pointer"
+            >
+              <LanguagesIcon />
+              <span>{t("post.translate.with")} Google Translate</span>
+              <ArrowUpRightIcon className="ml-auto" />
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer">
-              <a
-                href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <LanguagesIcon />
-                <span>{t("post.translate.with")} DeepL</span>
-                <ArrowUpRightIcon className="ml-auto" />
-              </a>
+            <DropdownMenuItem
+              render={
+                <a
+                  href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              }
+              className="cursor-pointer"
+            >
+              <LanguagesIcon />
+              <span>{t("post.translate.with")} DeepL</span>
+              <ArrowUpRightIcon className="ml-auto" />
             </DropdownMenuItem>
           </>
         ) : null}

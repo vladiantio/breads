@@ -2371,10 +2371,13 @@ function MediaPlayerTime({
 }
 
 interface MediaPlayerPlaybackSpeedProps
-  extends React.ComponentProps<typeof Button>,
-    Omit<React.ComponentProps<typeof DropdownMenu>, "dir">,
-    Pick<React.ComponentProps<typeof DropdownMenuContent>, "sideOffset"> {
+  extends React.ComponentProps<typeof Button> {
   speeds?: number[];
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  modal?: boolean;
+  sideOffset?: number;
 }
 
 function MediaPlayerPlaybackSpeed({
@@ -2423,34 +2426,36 @@ function MediaPlayerPlaybackSpeed({
       onOpenChange={onOpenChange}
     >
       <MediaPlayerTooltip tooltip="Playback speed" shortcut={["<", ">"]}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            aria-controls={context.mediaId}
-            disabled={isDisabled}
-            {...props}
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "h-8 w-16 aria-[expanded=true]:bg-accent/50",
-              className
-            )}
-          >
-            {mediaPlaybackRate}x
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              type="button"
+              aria-controls={context.mediaId}
+              disabled={isDisabled}
+              {...props}
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "h-8 w-16 aria-[expanded=true]:bg-accent/50",
+                className
+              )}
+            >
+              {mediaPlaybackRate}x
+            </Button>
+          }
+        />
       </MediaPlayerTooltip>
       <DropdownMenuPortal container={context.portalContainer}>
         <DropdownMenuContent
           sideOffset={sideOffset}
           align="center"
-          className="min-w-[var(--radix-dropdown-menu-trigger-width)] data-[side=top]:mb-3.5"
+          className="min-w-(--anchor-width) data-[side=top]:mb-3.5"
         >
           {speeds.map((speed) => (
             <DropdownMenuItem
               key={speed}
               className="justify-between"
-              onSelect={() => onPlaybackRateChange(speed)}
+              onClick={() => onPlaybackRateChange(speed)}
             >
               {speed}x{mediaPlaybackRate === speed && <CheckIcon />}
             </DropdownMenuItem>
@@ -2889,25 +2894,27 @@ function MediaPlayerSettings({
       onOpenChange={onOpenChange}
     >
       <MediaPlayerTooltip tooltip="Settings">
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            aria-controls={context.mediaId}
-            aria-label="Settings"
-            data-disabled={isDisabled ? "" : undefined}
-            data-slot="media-player-settings"
-            disabled={isDisabled}
-            {...props}
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "size-8 aria-[expanded=true]:bg-accent/50",
-              className
-            )}
-          >
-            <SettingsIcon />
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              type="button"
+              aria-controls={context.mediaId}
+              aria-label="Settings"
+              data-disabled={isDisabled ? "" : undefined}
+              data-slot="media-player-settings"
+              disabled={isDisabled}
+              {...props}
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "size-8 aria-[expanded=true]:bg-accent/50",
+                className
+              )}
+            >
+              <SettingsIcon />
+            </Button>
+          }
+        />
       </MediaPlayerTooltip>
       <DropdownMenuPortal container={context.portalContainer}>
         <DropdownMenuContent
@@ -2929,7 +2936,7 @@ function MediaPlayerSettings({
                 <DropdownMenuItem
                   key={speed}
                   className="justify-between"
-                  onSelect={() => onPlaybackRateChange(speed)}
+                  onClick={() => onPlaybackRateChange(speed)}
                 >
                   {speed}x{mediaPlaybackRate === speed && <CheckIcon />}
                 </DropdownMenuItem>
@@ -2947,7 +2954,7 @@ function MediaPlayerSettings({
               <DropdownMenuSubContent>
                 <DropdownMenuItem
                   className="justify-between"
-                  onSelect={() => onRenditionChange("auto")}
+                  onClick={() => onRenditionChange("auto")}
                 >
                   Auto
                   {!selectedRenditionId && <CheckIcon />}
@@ -2972,7 +2979,7 @@ function MediaPlayerSettings({
                       <DropdownMenuItem
                         key={rendition.id}
                         className="justify-between"
-                        onSelect={() => onRenditionChange(rendition.id ?? "")}
+                        onClick={() => onRenditionChange(rendition.id ?? "")}
                       >
                         {label}
                         {selected && <CheckIcon />}
@@ -2992,7 +2999,7 @@ function MediaPlayerSettings({
             <DropdownMenuSubContent>
               <DropdownMenuItem
                 className="justify-between"
-                onSelect={onSubtitlesToggle}
+                onClick={onSubtitlesToggle}
               >
                 Off
                 {!isSubtitlesActive && <CheckIcon />}
@@ -3006,7 +3013,7 @@ function MediaPlayerSettings({
                   <DropdownMenuItem
                     key={`${subtitleTrack.kind}-${subtitleTrack.label}-${subtitleTrack.language}`}
                     className="justify-between"
-                    onSelect={() => onShowSubtitleTrack(subtitleTrack)}
+                    onClick={() => onShowSubtitleTrack(subtitleTrack)}
                   >
                     {subtitleTrack.label}
                     {isSelected && <CheckIcon />}

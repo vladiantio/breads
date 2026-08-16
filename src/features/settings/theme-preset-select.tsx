@@ -60,7 +60,10 @@ const ThemePresetSelect = ({ presets, currentPreset, onPresetChange }: ThemePres
   }
 
   return (
-    <Select value={value || ''} onValueChange={onPresetChange}>
+    <Select
+      value={value || ''}
+      onValueChange={(value) => onPresetChange(value ?? '')}
+    >
       <SelectTrigger className='h-12 w-full cursor-pointer'>
         <SelectValue placeholder='Chose Theme' />
       </SelectTrigger>
