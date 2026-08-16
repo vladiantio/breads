@@ -10,7 +10,7 @@ interface PostThreadHeaderProps {
 export function PostThreadHeader({ post }: PostThreadHeaderProps) {
   const { t } = useTranslation()
   return (
-    <div className="sticky top-0 z-[2] bg-background px-4 h-16 flex items-center gap-x-4">
+    <div className="sticky top-0 z-30 bg-background px-4 h-16 flex items-center gap-x-4">
       <GoBackButton className="-ml-1" />
       <div className="font-bold flex-1">
         {t("post.thread")}
