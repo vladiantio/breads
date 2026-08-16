@@ -1,18 +1,17 @@
 import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
-
-import { cn } from "@/lib/utils"
+import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cva, type VariantProps } from "class-variance-authority"
 
+import { cn } from "@/lib/utils"
+
 const tabsTriggerVariants = cva(
-  "hover:text-muted-foreground data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 inline-flex items-center justify-center rounded-sm px-3 py-2 text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0",
+  "hover:text-muted-foreground data-active:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 inline-flex items-center justify-center rounded-sm px-3 py-2 text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default:
-          "data-[state=active]:bg-accent data-[state=active]:shadow-xs",
+        default: "data-active:bg-accent data-active:shadow-xs",
         underline:
-          "data-[state=active]:after:bg-foreground relative after:absolute after:inset-x-0 after:mx-auto after:max-w-16 after:bottom-0 after:h-0.5 after:rounded-full",
+          "data-active:after:bg-foreground relative after:absolute after:inset-x-0 after:mx-auto after:max-w-16 after:bottom-0 after:h-0.5 after:rounded-full",
       },
     },
     defaultVariants: {
@@ -38,7 +37,7 @@ function Tabs({
   className,
   variant,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Root> & VariantProps<typeof tabsTriggerVariants>) {
+}: TabsPrimitive.Root.Props & VariantProps<typeof tabsTriggerVariants>) {
   const contextValue = React.useMemo<TabsContextType>(
     () => ({
       variant,
@@ -60,7 +59,7 @@ function Tabs({
 function TabsList({
   className,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.List>) {
+}: TabsPrimitive.List.Props) {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
@@ -76,11 +75,11 @@ function TabsList({
 function TabsTrigger({
   className,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+}: TabsPrimitive.Tab.Props) {
   const { variant } = useTabs()
 
   return (
-    <TabsPrimitive.Trigger
+    <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(tabsTriggerVariants({ variant, className }))}
       {...props}
@@ -91,9 +90,9 @@ function TabsTrigger({
 function TabsContent({
   className,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Content>) {
+}: TabsPrimitive.Panel.Props) {
   return (
-    <TabsPrimitive.Content
+    <TabsPrimitive.Panel
       data-slot="tabs-content"
       className={cn("flex-1 outline-none", className)}
       {...props}

@@ -16,7 +16,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipPortal,
   TooltipTrigger,
 } from "./tooltip";
 import { useComposedRefs } from "@/lib/compose-refs";
@@ -181,7 +180,7 @@ interface MediaPlayerContextValue {
   dir: Direction;
   rootRef: React.RefObject<HTMLDivElement | null>;
   mediaRef: React.RefObject<HTMLVideoElement | HTMLAudioElement | null>;
-  portalContainer: Element | DocumentFragment | null;
+  portalContainer: HTMLElement | null;
   tooltipDelayDuration: number;
   tooltipSideOffset: number;
   disabled: boolean;
@@ -3028,7 +3027,7 @@ function MediaPlayerSettings({
 }
 
 interface MediaPlayerPortalProps {
-  container?: Element | DocumentFragment | null;
+  container?: HTMLElement | null;
   children?: React.ReactNode;
 }
 
@@ -3049,6 +3048,7 @@ interface MediaPlayerTooltipProps
     Pick<React.ComponentProps<typeof TooltipContent>, "sideOffset"> {
   tooltip?: string;
   shortcut?: string | string[];
+  children: React.ReactElement;
 }
 
 function MediaPlayerTooltip({
@@ -3069,16 +3069,14 @@ function MediaPlayerTooltip({
     <Tooltip {...props} delayDuration={tooltipDelayDuration}>
       <TooltipTrigger
         className="text-foreground focus-visible:ring-ring/50"
-        asChild
+        render={children}
+      />
+      <TooltipContent
+        side="bottom"
+        sideOffset={tooltipSideOffset}
+        container={context.portalContainer}
+        className="flex items-center gap-2 border bg-popover px-2 py-1 font-medium text-popover-foreground data-[side=top]:mb-3.5 [&>span]:hidden"
       >
-        {children}
-      </TooltipTrigger>
-      <TooltipPortal container={context.portalContainer}>
-        <TooltipContent
-          side="bottom"
-          sideOffset={tooltipSideOffset}
-          className="flex items-center gap-2 border bg-popover px-2 py-1 font-medium text-popover-foreground data-[side=top]:mb-3.5 [&>span]:hidden"
-        >
           <p>{tooltip}</p>
           {Array.isArray(shortcut) ? (
             <div className="flex items-center gap-1">
@@ -3106,7 +3104,6 @@ function MediaPlayerTooltip({
             )
           )}
         </TooltipContent>
-      </TooltipPortal>
     </Tooltip>
   );
 }
