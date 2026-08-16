@@ -40,6 +40,7 @@ const TextSegment: React.FC<{
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleStopPropagation}
+        className="relative z-20"
       >
         {segment.text}
       </a>
@@ -55,6 +56,7 @@ const TextSegment: React.FC<{
           to="/profile/$username"
           params={{ username: handle }}
           onClick={handleStopPropagation}
+          className="relative z-20"
         >
           {segment.text}
         </Link>
@@ -69,6 +71,7 @@ const TextSegment: React.FC<{
         to="/hashtag/$tag"
         params={{ tag: feature.tag }}
         onClick={handleStopPropagation}
+        className="relative z-20"
       >
         {segment.text}
       </Link>
@@ -173,7 +176,7 @@ export function RichTextRenderer({
           e.stopPropagation()
           setTagsExpanded(!tagsExpanded)
         }}
-        className="text-warning hover:underline active:opacity-60"
+        className="text-warning hover:underline active:opacity-60 relative z-20"
       >
         {tagsExpanded ? t("post.tags.showLess") : t("post.tags.more", { moreTagsCount })}
       </button>

@@ -1,6 +1,7 @@
 import { PropsWithChildren, useState } from "react";
 import { Button } from "@/ui/button";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
 interface EmbedToggleProps extends PropsWithChildren, React.HTMLAttributes<HTMLButtonElement> {
@@ -29,13 +30,14 @@ export function EmbedToggle({
         variant="outline"
         onClick={handleEmbedToggle}
         {...props}
+        className={cn("relative z-20", props.className)}
       >
         { showEmbed ? <EyeOffIcon /> : <EyeIcon /> }
         { showEmbed ? t("post.embed.hide") : t("post.embed.show") } {label}
       </Button>
 
       {showEmbed ? (
-        <div onClick={(e) => e.stopPropagation()}>
+        <div className="relative z-20" onClick={(e) => e.stopPropagation()}>
           {children}
         </div>
       ) : null}

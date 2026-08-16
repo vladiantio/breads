@@ -24,6 +24,7 @@
   "post.thread": "Hilo",
   "post.pinned": "Fijado",
   "post.repostedBy": "Reposteado por {{repostedBy}}",
+  "post.viewPost": "Ver publicación",
   "post.actions.reply": "Responder",
   "post.actions.repost": "Repost",
   "post.actions.share": "Compartir",

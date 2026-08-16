@@ -7,7 +7,7 @@ import { convertRichTextToPlainText } from "@/lib/atp/utils"
 import { PostCardActions } from "./post-card-actions"
 import { PostCardContent } from "./post-card-content"
 import { PostCardHeader } from "./post-card-header"
-import { useNavigate } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
 import { isInvalidHandle } from "@/lib/atp/strings/handles"
 import { AppBskyFeedDefs } from "@atcute/bluesky"
@@ -29,7 +29,6 @@ export function PostCard({
   isEmbed = false,
   authorFeed,
 }: PostCardProps) {
-  const navigate = useNavigate()
   const { t } = useTranslation()
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp()
 
@@ -38,21 +37,8 @@ export function PostCard({
   const [ isLiked, setIsLiked ] = useState(false)
   const [ isReposted, setIsReposted ] = useState(false)
   const validHandle = isInvalidHandle(post.author.username) ? post.author.id : post.author.username
+  const postId = post.uri.split("app.bsky.feed.post/")[1]
   const isSameAuthorFeed = authorFeed ? post.author.id == authorFeed.id : false
-
-  const handlePostClick = (e: React.MouseEvent) => {
-    if (isEmbed)
-      e.stopPropagation()
-
-    if (!isDetail)
-      navigate({
-        to: "/profile/$username/post/$postId",
-        params: {
-          username: validHandle,
-          postId: post.uri.split("app.bsky.feed.post/")[1],
-        },
-      })
-  }
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -145,11 +131,18 @@ export function PostCard({
     <PostCardContext value={contextValue}>
       <article
         className={cn(
-          "transition-[background-color] rounded-lg",
+          "relative transition-[background-color] rounded-lg",
           !isDetail && "cursor-pointer hover:bg-card active:bg-card/60"
         )}
-        onClick={handlePostClick}
       >
+        {!isDetail ? (
+          <Link
+            to="/profile/$username/post/$postId"
+            params={{ username: validHandle, postId }}
+            aria-label={t("post.viewPost")}
+            className="absolute inset-0 z-10 rounded-lg"
+          />
+        ) : null}
         {isType<AppBskyFeedDefs.ReasonPin>(post.reason, 'app.bsky.feed.defs#reasonPin')
         ? (
           <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
@@ -174,6 +167,7 @@ export function PostCard({
                 displayName={post.author.displayName}
                 src={post.author.avatar}
                 clickable={!isSameAuthorFeed}
+                className="relative z-20"
               />
               <div className="flex-1 min-w-0">
                 <PostCardHeader />
@@ -194,6 +188,7 @@ export function PostCard({
                   displayName={post.author.displayName}
                   src={post.author.avatar}
                   clickable
+                  className="relative z-20"
                 />
               </div>
             </div>

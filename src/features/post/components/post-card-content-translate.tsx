@@ -63,7 +63,7 @@ export function PostCardContentTranslate() {
       ) : (translatedContent && showTranslatedContent) ? (
         <Button
           variant="link"
-          className="block h-auto p-0"
+          className="block h-auto p-0 relative z-20"
           onClick={translate}
         >
           {t("post.translate.done")} <strong>Translator API</strong>
@@ -71,7 +71,7 @@ export function PostCardContentTranslate() {
       ) : (
         <Button
           variant="link"
-          className="block h-auto p-0"
+          className="block h-auto p-0 relative z-20"
           onClick={translate}
         >
           {t("post.translate.action")}

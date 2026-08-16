@@ -24,7 +24,7 @@ export function PostCardActions() {
   } = usePostCard()
 
   return (
-    <div className="flex items-center justify-between gap-x-1 mt-4 -mx-3">
+    <div className="flex items-center justify-between gap-x-1 mt-4 -mx-3 relative z-20">
       <Button
         title={t("post.actions.reply")}
         variant="ghost"

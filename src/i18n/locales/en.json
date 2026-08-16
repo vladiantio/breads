@@ -24,6 +24,7 @@
   "post.thread": "Thread",
   "post.pinned": "Pinned",
   "post.repostedBy": "Reposted by {{repostedBy}}",
+  "post.viewPost": "View post",
   "post.actions.reply": "Reply",
   "post.actions.repost": "Repost",
   "post.actions.share": "Share",

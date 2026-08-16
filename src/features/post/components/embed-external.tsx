@@ -68,11 +68,18 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
         label="GIF"
         {...hoverProps}
       >
-        <EmbedGif
-          thumb={view.thumb}
-          title={view.title}
-          uri={view.uri}
-        />
+        <a
+          href={view.uri}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <EmbedGif
+            thumb={view.thumb}
+            title={view.title}
+            uri={view.uri}
+          />
+        </a>
       </EmbedToggle>
     )
   } else if (ytUriRegex.test(view.uri)) {
@@ -81,11 +88,12 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
         id={ytUriRegex.exec(view.uri)![1]}
         title={view.title}
         onClick={(e) => e.stopPropagation()}
+        className="relative z-20"
       />
     )
   } else {
     return (
-      <div className="bg-background border rounded-lg overflow-hidden relative transition-[scale] active:scale-[98%]">
+      <div className="bg-background border rounded-lg overflow-hidden relative z-20 transition-[scale] active:scale-[98%]">
         {view.thumb && (
           <div className="bg-secondary border-b">
             <img
