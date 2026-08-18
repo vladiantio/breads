@@ -5,10 +5,8 @@ import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel"
 import { cn } from "@/lib/utils"
 import { AltReader } from "./alt-reader"
 import { ImageZoom } from "@/ui/image-zoom"
+import { calculateAspectRatio } from "@/utils/media"
 import { useTranslation } from "react-i18next"
-
-const aspectRatioMin = 0.5
-const aspectRatioMax = 2
 
 interface EmbedImagesProps {
   views: AppBskyEmbedImages.ViewImage[]
@@ -42,7 +40,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
           >
             {views.map(image => {
               const { aspectRatio } = image
-              const aspectRatioValue = Math.min(aspectRatioMax, Math.max(aspectRatioMin, aspectRatio ? aspectRatio.width / aspectRatio.height : 1))
+              const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)
               return (
                 <CarouselItem
                   key={image.thumb}
@@ -85,7 +83,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
         >
           {views.map(image => {
             const { aspectRatio } = image
-            const aspectRatioValue = Math.min(aspectRatioMax, Math.max(aspectRatioMin, aspectRatio ? aspectRatio.width / aspectRatio.height : 1))
+            const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)
             return (
               <div
                 key={image.thumb}

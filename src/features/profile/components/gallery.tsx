@@ -15,10 +15,8 @@ import {
 import { HLSPlayer } from "@/components/hls-player"
 import { isMobileDevice } from "@/lib/browser"
 import { MasonryVerticalVirtualizerDynamic } from "@/ui/virtualizer"
+import { calculateAspectRatio } from "@/utils/media"
 import { formatNumber } from "@/utils/number"
-
-const aspectRatioMin = 0.5
-const aspectRatioMax = 2
 
 interface GalleryProps {
   posts: PostWithAuthor[]
@@ -30,7 +28,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
   const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb
   const alt = post.embedVideo ? post.embedVideo.alt : post.embedImages?.[0].alt
   const aspectRatio = post.embedVideo ? post.embedVideo.aspectRatio : post.embedImages?.[0].aspectRatio
-  const aspectRatioValue = Math.min(aspectRatioMax, Math.max(aspectRatioMin, aspectRatio ? aspectRatio.width / aspectRatio.height : 1))
+  const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)
   const handleHovered = (hovered: boolean) => {
     if (isMobileDevice()) return
     setIsHovered(hovered)
