@@ -18,6 +18,7 @@ import {
   MediaPlayerFullscreen,
 } from "@/ui/media-player";
 import { HLSPlayer } from "@/components/hls-player";
+import { calculateAspectRatio } from "@/utils/media";
 
 interface EmbedVideoProps {
   view: AppBskyEmbedVideo.View
@@ -26,7 +27,7 @@ interface EmbedVideoProps {
 export function EmbedVideo({ view }: EmbedVideoProps) {
   const { hoverProps } = useImagePreload(view.thumbnail);
   const { t } = useTranslation();
-  const aspectRatio = view.aspectRatio ? view.aspectRatio.width / view.aspectRatio.height : 1
+  const aspectRatio = calculateAspectRatio(view.aspectRatio?.width, view.aspectRatio?.height)
 
   return (
     <EmbedToggle
