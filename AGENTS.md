@@ -4,7 +4,7 @@ A minimal Bluesky client (web + Tauri desktop). React 19, Vite 7, TypeScript str
 
 ## Commands
 
-- `pnpm dev` — Vite dev server on port **5790**, host **127.0.0.1** (AT Protocol OAuth forbids `localhost`; both are load-bearing — Tauri's `devUrl` and the OAuth redirect URI depend on them, don't change without updating `src-tauri/tauri.conf.json` and `vite.config.ts`)
+- `pnpm dev` — Vite dev server on port **5790**, binds **all interfaces** so phones on the LAN can reach it (e.g. `http://<machine-ip>:5790`). The OAuth redirect URI and Tauri's `devUrl` stay on **127.0.0.1** (AT Protocol OAuth forbids `localhost`; `SERVER_HOST` in `vite.config.ts` is load-bearing for them, don't change it without updating `src-tauri/tauri.conf.json`). Note: origins other than `localhost`/`127.0.0.1` served over plain HTTP are **not secure contexts**, so OAuth login is unavailable there (anonymous browsing still works) — sign in only from `http://127.0.0.1:5790` or HTTPS.
 - `pnpm build` — `tsc -b && vite build`; **typecheck happens only via build** (no separate typecheck script)
 - `pnpm lint` — `oxlint && eslint` (both run; oxlint catches most, eslint adds react-hooks/react-refresh rules)
 - `pnpm test` — `vitest run` (happy-dom); unit tests are colocated in `src/` as `*.test.ts` and are strict-typechecked by `pnpm build` (no @testing-library/react — component rendering tests are out of scope)

@@ -20,21 +20,39 @@ import {
 import { PUBLIC_ENDPOINT } from './constants/endpoints';
 import type { ActorIdentifier, Did } from '@atcute/lexicons';
 
-configureOAuth({
-  metadata: {
-    client_id: import.meta.env.VITE_OAUTH_CLIENT_ID,
-    redirect_uri: import.meta.env.VITE_OAUTH_REDIRECT_URI,
-  },
-  identityResolver: new LocalActorResolver({
-    handleResolver: new XrpcHandleResolver({ serviceUrl: PUBLIC_ENDPOINT }),
-    didDocumentResolver: new CompositeDidDocumentResolver({
-      methods: {
-        plc: new PlcDidDocumentResolver(),
-        web: new WebDidDocumentResolver(),
-      },
+// `configureOAuth` spins up atcute's session database, which uses the Web Locks
+// API (`navigator.locks`) to serialize session mutations across documents. Web
+// Locks only exists in secure contexts, so on plain-HTTP origins — e.g. Chrome
+// Mobile reaching the dev server through the Android emulator alias `10.0.2.2`
+// or a LAN IP instead of `127.0.0.1` — calling it during module evaluation
+// throws and blanks the whole app. Skip it when the API is missing so anonymous
+// browsing still works from any origin; auth entry points fail with a clear error.
+const isOAuthAvailable = (): boolean =>
+  typeof globalThis.navigator !== 'undefined' &&
+  typeof globalThis.navigator.locks !== 'undefined';
+
+if (isOAuthAvailable()) {
+  configureOAuth({
+    metadata: {
+      client_id: import.meta.env.VITE_OAUTH_CLIENT_ID,
+      redirect_uri: import.meta.env.VITE_OAUTH_REDIRECT_URI,
+    },
+    identityResolver: new LocalActorResolver({
+      handleResolver: new XrpcHandleResolver({ serviceUrl: PUBLIC_ENDPOINT }),
+      didDocumentResolver: new CompositeDidDocumentResolver({
+        methods: {
+          plc: new PlcDidDocumentResolver(),
+          web: new WebDidDocumentResolver(),
+        },
+      }),
     }),
-  }),
-});
+  });
+} else {
+  console.warn(
+    '[atp] OAuth unavailable: the Web Locks API requires a secure context ' +
+      '(https, localhost, or 127.0.0.1). Login is disabled on this origin.',
+  );
+}
 
 function createClient(agent?: OAuthUserAgent): Client {
   return new Client({
@@ -62,6 +80,12 @@ export const useAtpStore = create<AtpState>()(
       isAuthenticated: false,
 
       startAuth: async (identifier: string) => {
+        if (!isOAuthAvailable()) {
+          throw new Error(
+            'Login requires a secure connection. Open the app from localhost/127.0.0.1 or HTTPS on this device.',
+          );
+        }
+
         const authUrl = await createAuthorizationUrl({
           target: { type: 'account', identifier: identifier as ActorIdentifier },
           scope: import.meta.env.VITE_OAUTH_SCOPE,
@@ -97,7 +121,11 @@ export const useAtpStore = create<AtpState>()(
             const agent = new OAuthUserAgent(session);
             await agent.signOut();
           } catch {
-            deleteStoredSession(did as Did);
+            try {
+              deleteStoredSession(did as Did);
+            } catch {
+              // OAuth may be unavailable (non-secure context); nothing to clean up
+            }
           }
         }
 

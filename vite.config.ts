@@ -9,6 +9,11 @@ import metadata from './public/oauth-client-metadata.json' with { type: 'json' }
 
 const SERVER_HOST = '127.0.0.1'
 const SERVER_PORT = 5790
+// The dev server binds all interfaces so Chrome Mobile / other devices on the
+// LAN can reach it (a phone can't connect to the host's 127.0.0.1). SERVER_HOST
+// stays 127.0.0.1 for the OAuth redirect URI and Tauri's devUrl — both are still
+// served on loopback, so desktop dev and OAuth flows are unaffected.
+const SERVER_BIND_HOST = '0.0.0.0'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -49,7 +54,7 @@ export default defineConfig({
     },
   },
   server: {
-    host: SERVER_HOST,
+    host: SERVER_BIND_HOST,
     port: SERVER_PORT,
   },
   build: {
