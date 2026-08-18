@@ -26,20 +26,18 @@ interface EmbedVideoProps {
 export function EmbedVideo({ view }: EmbedVideoProps) {
   const { hoverProps } = useImagePreload(view.thumbnail);
   const { t } = useTranslation();
+  const aspectRatio = view.aspectRatio ? view.aspectRatio.width / view.aspectRatio.height : 1
 
   return (
     <EmbedToggle
       label={t("post.embed.video")}
       {...hoverProps}
     >
-      <div
-        className="grid grid-cols-1 grid-rows-1 max-h-[30rem]"
-        style={{
-          aspectRatio: view.aspectRatio ? view.aspectRatio.width / view.aspectRatio.height : 1
-        }}
-      >
-        <div className="bg-accent border overflow-hidden rounded-lg size-full select-none">
-          <MediaPlayer autoHide>
+        <div
+          className="bg-accent border overflow-hidden rounded-lg select-none h-full max-h-[30rem] w-auto"
+          style={{ aspectRatio }}
+        >
+          <MediaPlayer className="size-full" autoHide>
             <MediaPlayerVideo
               render={
                 <HLSPlayer
@@ -47,6 +45,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
                   src={view.playlist}
                   poster={view.thumbnail}
                   playsInline
+                  className="size-full"
                 />
               }
             />
@@ -72,7 +71,6 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
             <MediaPlayerLoading />
           </MediaPlayer>
         </div>
-      </div>
     </EmbedToggle>
   );
 }
