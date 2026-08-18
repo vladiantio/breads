@@ -1,8 +1,8 @@
 {
-  "client_id": "https://example.com/oauth-client-metadata.json",
+  "client_id": "https://breads.pages.dev/oauth-client-metadata.json",
   "client_name": "Breads",
-  "client_uri": "https://example.com",
-  "redirect_uris": ["https://example.com/oauth/callback"],
+  "client_uri": "https://breads.pages.dev",
+  "redirect_uris": ["https://breads.pages.dev/oauth/callback"],
   "scope": "atproto transition:generic",
   "grant_types": ["authorization_code", "refresh_token"],
   "response_types": ["code"],
