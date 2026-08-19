@@ -72,12 +72,19 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
       {views.map(image => {
         const { aspectRatio } = image
         const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)
+        const intrinsicWidth = aspectRatio?.width
+        const intrinsicHeight = aspectRatio?.height
         return (
           <div
             key={image.thumb}
             className="max-h-[30rem]"
             style={{
-              flexBasis: `${aspectRatioValue * 100}%`,
+              flexBasis: views.length > 1 ? `${aspectRatioValue * 100}%` : undefined,
+              width: views.length === 1
+                ? intrinsicWidth
+                  ? `min(100%, ${intrinsicWidth}px, ${aspectRatioValue * 30}rem)`
+                  : `min(100%, ${aspectRatioValue * 30}rem)`
+                : undefined,
               aspectRatio: aspectRatioValue,
             }}
           >
@@ -95,8 +102,8 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
                 style={{
                   aspectRatio: aspectRatioValue
                 }}
-                width={image.aspectRatio?.width}
-                height={image.aspectRatio?.height}
+                width={intrinsicWidth}
+                height={intrinsicHeight}
               />
             </ImageZoom>
             {image.alt && (
