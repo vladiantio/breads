@@ -313,8 +313,8 @@ function MediaPlayerRootImpl({
   const dragging = useStoreSelector((state) => state.dragging);
   const menuOpen = useStoreSelector((state) => state.menuOpen);
 
-  const hideControlsTimeoutRef = React.useRef<number | null>(null);
-  const volumeIndicatorTimeoutRef = React.useRef<number | null>(null);
+  const hideControlsTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const volumeIndicatorTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const mediaPaused = useMediaSelector((state) => state.mediaPaused ?? true);
   const isFullscreen = useMediaSelector(
@@ -961,7 +961,7 @@ function MediaPlayerLoading({
   const loadingDelayMs = shouldUseDelay ? delayMs : 0;
 
   const [shouldRender, setShouldRender] = React.useState(false);
-  const timeoutRef = React.useRef<number | null>(null);
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     if (timeoutRef.current) {
