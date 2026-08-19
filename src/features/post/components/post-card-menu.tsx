@@ -24,8 +24,6 @@ import { cn } from "@/lib/utils"
 import { Separator } from "@/ui/separator"
 import { detectLocale } from "@/i18n/languages"
 
-type AltReaderButtonProps = React.ComponentProps<"button">
-
 const targetLanguage = detectLocale()
 const getGTranslateUrl = (source: string, target: string, content: string) => `https://translate.google.com/?sl=${source}&tl=${target}&text=${encodeURIComponent(content)}&op=translate`
 const getDeeplUrl = (source: string, target: string, content: string) => `https://www.deepl.com/translator#${source}/${target}/${encodeURIComponent(content)}`
@@ -34,7 +32,7 @@ function PostCardMenuButton({
   className,
   onClick: onClickProp,
   ...props
-}: AltReaderButtonProps) {
+}: React.ComponentProps<"button">) {
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     onClickProp?.(e)
