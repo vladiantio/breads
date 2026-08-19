@@ -3,7 +3,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/ui/carousel"
 import { cn } from "@/lib/utils"
 import { AltReader } from "./alt-reader"
 import { ImageZoom } from "@/ui/image-zoom"
-import { calculateAspectRatio } from "@/utils/media"
+import { calculateAspectRatio, getEmbedImageFrameStyle } from "@/utils/media"
 
 interface EmbedImagesProps {
   views: AppBskyEmbedImages.ViewImage[]
@@ -78,15 +78,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
           <div
             key={image.thumb}
             className="max-h-[30rem]"
-            style={{
-              flexBasis: views.length > 1 ? `${aspectRatioValue * 100}%` : undefined,
-              width: views.length === 1
-                ? intrinsicWidth
-                  ? `min(100%, ${intrinsicWidth}px, ${aspectRatioValue * 30}rem)`
-                  : `min(100%, ${aspectRatioValue * 30}rem)`
-                : undefined,
-              aspectRatio: aspectRatioValue,
-            }}
+            style={getEmbedImageFrameStyle(views.length, aspectRatioValue, intrinsicWidth)}
           >
             <ImageZoom
               className="h-full w-fit bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
