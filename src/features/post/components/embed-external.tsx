@@ -64,7 +64,6 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
         href={view.uri}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={(e) => e.stopPropagation()}
         className="relative z-20"
       >
         <EmbedGif
@@ -79,7 +78,6 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
       <YTEmbed
         id={ytUriRegex.exec(view.uri)![1]}
         title={view.title}
-        onClick={(e) => e.stopPropagation()}
         className="relative z-20"
       />
     )
@@ -107,7 +105,6 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
             href={view.uri}
             rel="noopener noreferrer"
             target="_blank"
-            onClick={(e) => e.stopPropagation()}
           >
             {view.title}
           </a>

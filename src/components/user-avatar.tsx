@@ -58,7 +58,6 @@ export function UserAvatar({
           alt={name}
           loading="lazy"
           className={cn("border object-cover rounded-full", sizeClasses[size], className)}
-          onClick={(e) => e.stopPropagation()}
         />
       </ImageZoom>
     )

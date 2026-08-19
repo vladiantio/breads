@@ -26,14 +26,13 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
 
   return (
     <div
-      className="bg-accent border overflow-hidden rounded-lg select-none h-full max-h-[30rem] w-auto"
+      className="bg-accent border overflow-hidden rounded-lg select-none h-full max-h-[30rem] w-auto relative z-20"
       style={{ aspectRatio }}
     >
       <MediaPlayer className="size-full" autoHide>
         <MediaPlayerVideo
           render={
             <HLSPlayer
-              autoPlay
               src={view.playlist}
               poster={view.thumbnail}
               playsInline

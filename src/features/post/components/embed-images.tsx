@@ -15,12 +15,11 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
     return (
       <Carousel
         className={cn(
-          "-mr-4",
+          "-mr-4 relative z-20",
           isDetail ? "-ml-4" : "-ml-18",
           "mask-x-from-[calc(100%_-_var(--spacing)_*_4)] mask-x-to-100%",
         )}
         opts={{ dragFree: true }}
-        onClick={(e) => e.stopPropagation()}
       >
         <CarouselContent
           className={cn(
@@ -69,10 +68,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
     )
 
   return (
-    <div
-      className="flex gap-x-2"
-      onClick={(e) => e.stopPropagation()}
-    >
+    <div className="flex gap-x-2 relative z-20">
       {views.map(image => {
         const { aspectRatio } = image
         const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)

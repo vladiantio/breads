@@ -34,7 +34,6 @@ export function AuthorLink({
             to="/profile/$username"
             params={{ username: validHandle }}
             className="font-semibold text-foreground truncate hover:underline active:opacity-60 relative z-20"
-            onClick={(e) => e.stopPropagation()}
           >
             {displayName || sanitizeHandle(username)}
           </Link>

@@ -85,7 +85,6 @@ export function PostCardMenu() {
                       href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
                     />
                   }
                   className="justify-start h-12"
@@ -102,7 +101,6 @@ export function PostCardMenu() {
                       href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
                     />
                   }
                   className="justify-start h-12"
@@ -150,7 +148,6 @@ export function PostCardMenu() {
                   href={getGTranslateUrl(sourceLanguage, targetLanguage, content)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
                 />
               }
               className="cursor-pointer"
@@ -165,7 +162,6 @@ export function PostCardMenu() {
                   href={getDeeplUrl(sourceLanguage, targetLanguage, content)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
                 />
               }
               className="cursor-pointer"
