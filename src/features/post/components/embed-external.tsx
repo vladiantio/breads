@@ -2,6 +2,13 @@ import { AppBskyEmbedExternal } from "@atcute/bluesky";
 import { parseGif } from "@/lib/embed-player";
 import { YTEmbed } from "@/components/yt-embed";
 import { GlobeIcon } from "lucide-react";
+import {
+  MediaPlayer,
+  MediaPlayerControls,
+  MediaPlayerError,
+  MediaPlayerPlay,
+  MediaPlayerVideo,  
+} from "@/ui/media-player";
 
 const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
 const ytUriRegex = /(?:(?:youtu.be\/)|(?:\/v\/)|(?:\/u\/\w\/)|(?:\/embed\/)|(?:\/watch\?)|(?:\/shorts\/))\??(?:v=)?([^#&?]*)/;
@@ -21,35 +28,57 @@ function EmbedGif({
   if (parsedGif) {
     return (
       <div
-        className="max-h-[26rem] w-fit"
+        className="max-h-[26rem] w-fit relative z-20"
         style={{
           aspectRatio: parsedGif.dimensions.width / parsedGif.dimensions.height
         }}
       >
-        <video
-          autoPlay
-          disablePictureInPicture
-          loop
-          poster={thumb}
-          src={parsedGif.playerUri}
-          title={title}
-          height={parsedGif.dimensions.height}
-          width={parsedGif.dimensions.width}
-          className="max-h-full max-w-full rounded-lg border object-contain"
-        />
+        <MediaPlayer className="max-h-full max-w-full" autoHide>
+          <MediaPlayerVideo
+            render={
+              <video
+                disablePictureInPicture
+                loop
+                poster={thumb}
+                src={parsedGif.playerUri}
+                title={title}
+                height={parsedGif.dimensions.height}
+                width={parsedGif.dimensions.width}
+                className="max-h-full max-w-full rounded-lg border object-contain"
+              />
+            }
+          />
+          <MediaPlayerError />
+          <MediaPlayerControls placement="middle">
+            <MediaPlayerPlay
+              className="bg-background/30 rounded-full size-16 [&_svg:not([class*='size-'])]:size-8"
+            />
+          </MediaPlayerControls>
+        </MediaPlayer>
+        <a
+          href={uri}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute left-2 bottom-2 dark bg-background/50 text-foreground backdrop-blur-sm py-1.5 px-3 font-bold text-xs rounded-md transition-all hover:bg-accent/50"
+        >GIF</a>
       </div>
     )
   }
 
   return (
-    <div className="mt-4 max-h-[26rem]">
+    <a
+      href={uri}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block max-h-[26rem] w-fit relative z-20"
+    >
       <img
         src={uri}
         alt={title}
         className="max-h-full max-w-full rounded-lg border object-cover"
         loading="lazy"
       />
-    </div>
+    </a>
   )
 }
 
@@ -60,18 +89,11 @@ interface EmbedExternalProps {
 export function EmbedExternal({ view }: EmbedExternalProps) {
   if (gifUriRegex.test(view.uri)) {
     return (
-      <a
-        href={view.uri}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="relative z-20"
-      >
-        <EmbedGif
-          thumb={view.thumb}
-          title={view.title}
-          uri={view.uri}
-        />
-      </a>
+      <EmbedGif
+        thumb={view.thumb}
+        title={view.title}
+        uri={view.uri}
+      />
     )
   } else if (ytUriRegex.test(view.uri)) {
     return (
