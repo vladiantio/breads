@@ -17,7 +17,7 @@ function EmbedGif({
   uri,
   thumb,
 }: EmbedGifProps) {
-  const parsedGif = parseGif(new URL(uri));
+  const parsedGif = parseGif(uri);
   if (parsedGif) {
     return (
       <div
