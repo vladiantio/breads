@@ -141,5 +141,5 @@ export function parseKlipyGif(urlp: URL): GifParsed | null {
 
 export function parseGif(url: URL | string) {
   const urlp = typeof url === "string" ? new URL(url) : url
-  return parseTenorGif(urlp) ?? parseTenorGif(urlp)
+  return parseTenorGif(urlp) ?? parseKlipyGif(urlp)
 }
