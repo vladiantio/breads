@@ -78,6 +78,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
             className="max-h-[30rem]"
             style={{
               flexBasis: `${aspectRatioValue * 100}%`,
+              aspectRatio: aspectRatioValue,
             }}
           >
             <ImageZoom
