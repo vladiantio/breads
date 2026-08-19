@@ -4,6 +4,11 @@ import { cn } from "@/lib/utils"
 import { AltReader } from "./alt-reader"
 import { ImageZoom } from "@/ui/image-zoom"
 import { calculateAspectRatio, getEmbedImageFrameStyle } from "@/utils/media"
+import { useAppSettings } from "@/features/settings/app-settings-context"
+import { useTranslation } from "react-i18next"
+import { useState } from "react"
+import { Button } from "@/ui/button"
+import { EyeIcon } from "lucide-react"
 
 interface EmbedImagesProps {
   views: AppBskyEmbedImages.ViewImage[]
@@ -11,8 +16,13 @@ interface EmbedImagesProps {
 }
 
 export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
-  if (views.length > 2)
-    return (
+  const { hideMedia } = useAppSettings()
+  const { t } = useTranslation()
+  const [revealed, setRevealed] = useState(false)
+  const hidden = hideMedia && !revealed
+
+  const media = views.length > 2
+    ? (
       <Carousel
         className={cn(
           "-mr-4 relative z-20",
@@ -66,48 +76,67 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
         </CarouselContent>
       </Carousel>
     )
+    : (
+      <div className="flex gap-x-2 relative z-20">
+        {views.map(image => {
+          const { aspectRatio } = image
+          const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)
+          const intrinsicWidth = aspectRatio?.width
+          const intrinsicHeight = aspectRatio?.height
+          return (
+            <div
+              key={image.thumb}
+              className="max-h-[30rem]"
+              style={getEmbedImageFrameStyle(views.length, aspectRatioValue, intrinsicWidth)}
+            >
+              <ImageZoom
+                className="h-full w-fit bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
+                zoomImg={{
+                  src: image.fullsize
+                }}
+              >
+                <img
+                  src={image.thumb}
+                  alt={image.alt}
+                  className="h-full max-h-[30rem] w-auto object-contain"
+                  loading="lazy"
+                  style={{
+                    aspectRatio: aspectRatioValue
+                  }}
+                  width={intrinsicWidth}
+                  height={intrinsicHeight}
+                />
+              </ImageZoom>
+              {image.alt && (
+                <div className="relative">
+                  <div className="absolute left-4 bottom-4">
+                    <AltReader alt={image.alt} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    )
+
+  if (!hidden) return media
 
   return (
-    <div className="flex gap-x-2 relative z-20">
-      {views.map(image => {
-        const { aspectRatio } = image
-        const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)
-        const intrinsicWidth = aspectRatio?.width
-        const intrinsicHeight = aspectRatio?.height
-        return (
-          <div
-            key={image.thumb}
-            className="max-h-[30rem]"
-            style={getEmbedImageFrameStyle(views.length, aspectRatioValue, intrinsicWidth)}
-          >
-            <ImageZoom
-              className="h-full w-fit bg-accent border rounded-lg overflow-hidden select-none transition-[scale] active:scale-[98%]"
-              zoomImg={{
-                src: image.fullsize
-              }}
-            >
-              <img
-                src={image.thumb}
-                alt={image.alt}
-                className="h-full max-h-[30rem] w-auto object-contain"
-                loading="lazy"
-                style={{
-                  aspectRatio: aspectRatioValue
-                }}
-                width={intrinsicWidth}
-                height={intrinsicHeight}
-              />
-            </ImageZoom>
-            {image.alt && (
-              <div className="relative">
-                <div className="absolute left-4 bottom-4">
-                  <AltReader alt={image.alt} />
-                </div>
-              </div>
-            )}
-          </div>
-        )
-      })}
+    <div className="relative z-20">
+      <div className="pointer-events-none blur-md select-none" aria-hidden>
+        {media}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setRevealed(true)}
+        >
+          <EyeIcon />
+          {t("post.embed.show")}
+        </Button>
+      </div>
     </div>
   )
 }

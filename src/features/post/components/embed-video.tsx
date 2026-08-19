@@ -16,6 +16,10 @@ import {
 } from "@/ui/media-player";
 import { HLSPlayer } from "@/components/hls-player";
 import { calculateAspectRatio } from "@/utils/media";
+import { useAppSettings } from "@/features/settings/app-settings-context";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { Button } from "@/ui/button";
 
 interface EmbedVideoProps {
   view: AppBskyEmbedVideo.View
@@ -23,8 +27,12 @@ interface EmbedVideoProps {
 
 export function EmbedVideo({ view }: EmbedVideoProps) {
   const aspectRatio = calculateAspectRatio(view.aspectRatio?.width, view.aspectRatio?.height)
+  const { hideMedia } = useAppSettings()
+  const { t } = useTranslation()
+  const [revealed, setRevealed] = useState(false)
+  const hidden = hideMedia && !revealed
 
-  return (
+  const player = (
     <div
       className="bg-accent border overflow-hidden rounded-lg select-none h-full max-h-[30rem] w-auto relative z-20"
       style={{ aspectRatio }}
@@ -66,6 +74,36 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
         </MediaPlayerControls>
         <MediaPlayerLoading />
       </MediaPlayer>
+    </div>
+  )
+
+  if (!hidden) return player
+
+  return (
+    <div className="relative z-20">
+      <div
+        className="bg-accent border overflow-hidden rounded-lg select-none h-full max-h-[30rem] w-auto pointer-events-none blur-md"
+        style={{ aspectRatio }}
+        aria-hidden
+      >
+        {view.thumbnail && (
+          <img
+            src={view.thumbnail}
+            alt={view.alt}
+            className="size-full object-contain"
+            loading="lazy"
+          />
+        )}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setRevealed(true)}
+        >
+          {t("post.embed.show")}
+        </Button>
+      </div>
     </div>
   );
 }

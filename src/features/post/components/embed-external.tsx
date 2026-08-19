@@ -1,14 +1,18 @@
 import { AppBskyEmbedExternal } from "@atcute/bluesky";
 import { parseGif } from "@/lib/embed-player";
 import { YTEmbed } from "@/components/yt-embed";
-import { GlobeIcon } from "lucide-react";
+import { EyeIcon, GlobeIcon } from "lucide-react";
 import {
   MediaPlayer,
   MediaPlayerControls,
   MediaPlayerError,
   MediaPlayerPlay,
-  MediaPlayerVideo,  
+  MediaPlayerVideo,
 } from "@/ui/media-player";
+import { useAppSettings } from "@/features/settings/app-settings-context";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { Button } from "@/ui/button";
 
 const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
 const ytUriRegex = /(?:(?:youtu.be\/)|(?:\/v\/)|(?:\/u\/\w\/)|(?:\/embed\/)|(?:\/watch\?)|(?:\/shorts\/))\??(?:v=)?([^#&?]*)/;
@@ -87,8 +91,15 @@ interface EmbedExternalProps {
 }
 
 export function EmbedExternal({ view }: EmbedExternalProps) {
+  const { hideMedia } = useAppSettings()
+  const { t } = useTranslation()
+  const [revealed, setRevealed] = useState(false)
+  const hidden = hideMedia && !revealed
+
+  let content: React.ReactNode
+
   if (gifUriRegex.test(view.uri)) {
-    return (
+    content = (
       <EmbedGif
         thumb={view.thumb}
         title={view.title}
@@ -96,7 +107,7 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
       />
     )
   } else if (ytUriRegex.test(view.uri)) {
-    return (
+    content = (
       <YTEmbed
         id={ytUriRegex.exec(view.uri)![1]}
         title={view.title}
@@ -104,7 +115,7 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
       />
     )
   } else {
-    return (
+    content = (
       <div className="bg-background border rounded-lg overflow-hidden relative z-20 transition-[scale] active:scale-[98%]">
         {view.thumb && (
           <div className="bg-secondary border-b">
@@ -135,4 +146,24 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
       </div>
     )
   }
+
+  if (!hidden) return content
+
+  return (
+    <div className="relative z-20">
+      <div className="pointer-events-none blur-md select-none" aria-hidden>
+        {content}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setRevealed(true)}
+        >
+          <EyeIcon />
+          {t("post.embed.show")}
+        </Button>
+      </div>
+    </div>
+  )
 }

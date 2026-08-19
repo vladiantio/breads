@@ -3,6 +3,7 @@ import { PostWithAuthor } from "@/types/response-schema"
 import { Link } from "@tanstack/react-router"
 import {
   AlertCircleIcon,
+  EyeIcon,
   FilmIcon,
   HeartIcon,
   ImageIcon,
@@ -17,6 +18,8 @@ import { isMobileDevice } from "@/lib/browser"
 import { MasonryVerticalVirtualizerDynamic } from "@/ui/virtualizer"
 import { calculateAspectRatio } from "@/utils/media"
 import { formatNumber } from "@/utils/number"
+import { useAppSettings } from "@/features/settings/app-settings-context"
+import { useTranslation } from "react-i18next"
 
 interface GalleryProps {
   posts: PostWithAuthor[]
@@ -25,6 +28,10 @@ interface GalleryProps {
 function MediaCard({ post }: { post: PostWithAuthor }) {
   const [isHovered, setIsHovered] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
+  const [revealed, setRevealed] = useState(false)
+  const { hideMedia } = useAppSettings()
+  const { t } = useTranslation()
+  const hidden = hideMedia && !revealed
   const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb
   const alt = post.embedVideo ? post.embedVideo.alt : post.embedImages?.[0].alt
   const aspectRatio = post.embedVideo ? post.embedVideo.aspectRatio : post.embedImages?.[0].aspectRatio
@@ -54,10 +61,10 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
             <img
               src={thumb}
               alt={alt}
-              className="object-cover object-top-left size-full"
+              className={hidden ? "object-cover object-top-left size-full blur-md select-none" : "object-cover object-top-left size-full"}
               loading="lazy"
             />
-            {(post.embedVideo && isHovered) && (
+            {(post.embedVideo && isHovered && !hidden) && (
               <>
                 <HLSPlayer
                   src={post.embedVideo.playlist}
@@ -91,7 +98,19 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
                 <ImageIcon />
               )}
             </div>
-            {(post.likes > 0 || post.replies > 0 || post.reposts > 0) && (
+            {hidden && (
+              <div className="absolute inset-0 z-[2] flex items-center justify-center">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1.5 bg-background/80 backdrop-blur-sm text-foreground px-3 py-2 rounded-full text-sm font-medium shadow-sm [&>svg]:size-4 hover:bg-accent"
+                  onClick={() => setRevealed(true)}
+                >
+                  <EyeIcon />
+                  {t("post.embed.show")}
+                </button>
+              </div>
+            )}
+            {(post.likes > 0 || post.replies > 0 || post.reposts > 0) && !hidden && (
               <div className="dark absolute bottom-2 left-2 bg-background/50 backdrop-blur-sm text-foreground px-3 py-2 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-xs">
                 {post.likes > 0 && (
                   <div className="flex items-center gap-1"><HeartIcon /><span>{formatNumber(post.likes)}</span></div>

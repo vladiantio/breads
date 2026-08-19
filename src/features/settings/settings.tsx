@@ -1,5 +1,6 @@
 import { ThemePresetSelect } from "./theme-preset-select"
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group"
+import { Switch } from "@/ui/switch"
 import { useTheme } from "@/theme/theme-context"
 import { presets } from "@/utils/theme-presets"
 import { Moon, Sun, SunMoon } from "lucide-react"
@@ -7,10 +8,12 @@ import { GoBackButton } from "@/components/go-back-button"
 import { useTranslation } from "react-i18next"
 import { locales } from "@/i18n/languages"
 import { changeLocale } from "@/i18n/i18n"
+import { useAppSettings } from "./app-settings-context"
 
 export function Settings() {
   const { theme, themeSettings, setTheme, setThemeSettings } = useTheme()
   const { t, i18n } = useTranslation()
+  const { hideMedia, setHideMedia } = useAppSettings()
 
   const handlePresetChange = (preset: string) => {
     setThemeSettings({
@@ -92,6 +95,20 @@ export function Settings() {
               </label>
             ))}
           </RadioGroup>
+        </div>
+        <div>
+          <p className="mb-1">{t("settings.media")}</p>
+          <div className="flex items-center justify-between gap-x-4">
+            <div>
+              <p>{t("settings.hideMedia")}</p>
+              <p className="text-muted-foreground text-sm">{t("settings.hideMediaDescription")}</p>
+            </div>
+            <Switch
+              checked={hideMedia}
+              onCheckedChange={setHideMedia}
+              aria-label={t("settings.hideMedia")}
+            />
+          </div>
         </div>
       </div>
     </>
