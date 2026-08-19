@@ -1,9 +1,7 @@
 import { AppBskyEmbedExternal } from "@atcute/bluesky";
-import { EmbedToggle } from "./embed-toggle";
 import { parseTenorGif } from "@/lib/embed-player";
 import { YTEmbed } from "@/components/yt-embed";
 import { GlobeIcon } from "lucide-react";
-import { useImagePreload } from "@/hooks/use-image-preload";
 
 const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
 const ytUriRegex = /(?:(?:youtu.be\/)|(?:\/v\/)|(?:\/u\/\w\/)|(?:\/embed\/)|(?:\/watch\?)|(?:\/shorts\/))\??(?:v=)?([^#&?]*)/;
@@ -60,27 +58,21 @@ interface EmbedExternalProps {
 }
 
 export function EmbedExternal({ view }: EmbedExternalProps) {
-  const { hoverProps } = useImagePreload(view.thumb);
-
   if (gifUriRegex.test(view.uri)) {
     return (
-      <EmbedToggle
-        label="GIF"
-        {...hoverProps}
+      <a
+        href={view.uri}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className="relative z-20"
       >
-        <a
-          href={view.uri}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <EmbedGif
-            thumb={view.thumb}
-            title={view.title}
-            uri={view.uri}
-          />
-        </a>
-      </EmbedToggle>
+        <EmbedGif
+          thumb={view.thumb}
+          title={view.title}
+          uri={view.uri}
+        />
+      </a>
     )
   } else if (ytUriRegex.test(view.uri)) {
     return (
