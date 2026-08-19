@@ -1,5 +1,5 @@
 import { AppBskyEmbedExternal } from "@atcute/bluesky";
-import { parseTenorGif } from "@/lib/embed-player";
+import { parseGif } from "@/lib/embed-player";
 import { YTEmbed } from "@/components/yt-embed";
 import { GlobeIcon } from "lucide-react";
 
@@ -17,13 +17,13 @@ function EmbedGif({
   uri,
   thumb,
 }: EmbedGifProps) {
-  const tenorGif = parseTenorGif(new URL(uri));
-  if (tenorGif.success) {
+  const parsedGif = parseGif(new URL(uri));
+  if (parsedGif) {
     return (
       <div
         className="max-h-[26rem] w-fit"
         style={{
-          aspectRatio: tenorGif.dimensions.width / tenorGif.dimensions.height
+          aspectRatio: parsedGif.dimensions.width / parsedGif.dimensions.height
         }}
       >
         <video
@@ -31,26 +31,26 @@ function EmbedGif({
           disablePictureInPicture
           loop
           poster={thumb}
-          src={tenorGif.playerUri}
+          src={parsedGif.playerUri}
           title={title}
-          height={tenorGif.dimensions.height}
-          width={tenorGif.dimensions.width}
+          height={parsedGif.dimensions.height}
+          width={parsedGif.dimensions.width}
           className="max-h-full max-w-full rounded-lg border object-contain"
         />
       </div>
     )
-  } else {
-    return (
-      <div className="mt-4 max-h-[26rem]">
-        <img
-          src={uri}
-          alt={title}
-          className="max-h-full max-w-full rounded-lg border object-cover"
-          loading="lazy"
-        />
-      </div>
-    )
   }
+
+  return (
+    <div className="mt-4 max-h-[26rem]">
+      <img
+        src={uri}
+        alt={title}
+        className="max-h-full max-w-full rounded-lg border object-cover"
+        loading="lazy"
+      />
+    </div>
+  )
 }
 
 interface EmbedExternalProps {
