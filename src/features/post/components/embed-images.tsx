@@ -134,7 +134,7 @@ export function EmbedImages({ views, isDetail }: EmbedImagesProps) {
           onClick={() => setRevealed(true)}
         >
           <EyeIcon />
-          {t("post.embed.show")}
+          {t("post.embed.show")} {views.length > 1 ? t("post.embed.images") : t("post.embed.image")}
         </Button>
       </div>
     </div>

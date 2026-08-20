@@ -95,10 +95,12 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
   const { t } = useTranslation()
   const [revealed, setRevealed] = useState(false)
   const hidden = hideMedia && !revealed
+  const isGif = gifUriRegex.test(view.uri)
+  const isYt = ytUriRegex.test(view.uri)
 
   let content: React.ReactNode
 
-  if (gifUriRegex.test(view.uri)) {
+  if (isGif) {
     content = (
       <EmbedGif
         thumb={view.thumb}
@@ -106,7 +108,7 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
         uri={view.uri}
       />
     )
-  } else if (ytUriRegex.test(view.uri)) {
+  } else if (isYt) {
     content = (
       <YTEmbed
         id={ytUriRegex.exec(view.uri)![1]}
@@ -161,7 +163,7 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
           onClick={() => setRevealed(true)}
         >
           <EyeIcon />
-          {t("post.embed.show")}
+          {t("post.embed.show")} {isGif ? "GIF" : isYt ? t("post.embed.ytVideo") : t("post.embed.externalLink")}
         </Button>
       </div>
     </div>

@@ -45,6 +45,8 @@
   "post.embed.image": "image",
   "post.embed.images": "images",
   "post.embed.video": "video",
+  "post.embed.externalLink": "external link",
+  "post.embed.ytVideo": "YouTube video",
   "post.translate.action": "Translate",
   "post.translate.inProgress": "Translating...",
   "post.translate.with": "Translate with",

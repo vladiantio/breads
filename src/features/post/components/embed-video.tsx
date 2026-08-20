@@ -20,6 +20,7 @@ import { useAppSettings } from "@/features/settings/app-settings-context";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Button } from "@/ui/button";
+import { EyeIcon } from "lucide-react";
 
 interface EmbedVideoProps {
   view: AppBskyEmbedVideo.View
@@ -101,7 +102,8 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
           size="sm"
           onClick={() => setRevealed(true)}
         >
-          {t("post.embed.show")}
+          <EyeIcon />
+          {t("post.embed.show")} {t("post.embed.video")}
         </Button>
       </div>
     </div>
