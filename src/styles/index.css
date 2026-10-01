@@ -5,18 +5,24 @@
 
 @layer base {
   * {
-    @apply border-border decoration-1 outline-ring/50;
+    border-color: var(--border);
+    text-decoration-thickness: 1px;
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
   }
   html {
-    @apply motion-safe:scroll-smooth;
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
   }
   body {
-    @apply antialiased bg-background min-h-dvh text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  [role=button], button {
-    @apply cursor-pointer;
-  }
-  :disabled {
-    @apply cursor-default;
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
