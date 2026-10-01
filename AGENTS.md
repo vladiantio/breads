@@ -6,7 +6,7 @@ A minimal Bluesky client (web + Tauri desktop). React 19, Vite 7, TypeScript str
 
 - `pnpm dev` — Vite dev server on port **5790**, binds **all interfaces** so phones on the LAN can reach it (e.g. `http://<machine-ip>:5790`). The OAuth redirect URI and Tauri's `devUrl` stay on **127.0.0.1** (AT Protocol OAuth forbids `localhost`; `SERVER_HOST` in `vite.config.ts` is load-bearing for them, don't change it without updating `src-tauri/tauri.conf.json`). Note: origins other than `localhost`/`127.0.0.1` served over plain HTTP are **not secure contexts**, so OAuth login is unavailable there (anonymous browsing still works) — sign in only from `http://127.0.0.1:5790` or HTTPS.
 - `pnpm build` — `tsc -b && vite build`; **typecheck happens only via build** (no separate typecheck script)
-- `pnpm lint` — `oxlint && eslint` (both run; oxlint catches most, eslint adds react-hooks/react-refresh rules)
+- `pnpm lint` — `oxlint` only (`.oxlintrc.json` is the single linter config, with the `react` plugin covering hooks + fast-refresh rules). Existing `// eslint-disable-next-line <rule>` comments in `src/` still work — oxlint honors the `eslint-*` directive keywords — but rule names must be oxlint's (`react/refs`, not `react-hooks/refs`).
 - `pnpm test` — `vitest run` (happy-dom); unit tests are colocated in `src/` as `*.test.ts` and are strict-typechecked by `pnpm build` (no @testing-library/react — component rendering tests are out of scope)
 - `pnpm tauri dev` / `pnpm tauri build` — desktop app via `@tauri-apps/cli`; Rust code in `src-tauri/` is a thin wrapper
 - No CI, no pre-commit hooks

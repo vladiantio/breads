@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint && eslint",
+    "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run"
   },
@@ -47,7 +47,6 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
     "@tanstack/react-router-devtools": "^1.131.16",
     "@tanstack/router-plugin": "^1.131.16",
     "@tauri-apps/cli": "^2.6.2",
@@ -57,15 +56,10 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.4",
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.38.0",
-    "eslint-plugin-oxlint": "^1.23.0",
-    "eslint-plugin-react-hooks": "^7.0.0",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "globals": "^15.15.0",
     "happy-dom": "^20.11.2",
-    "oxlint": "^1.23.0",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.24.1",
     "vite": "^7.1.2",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^4.1.10"

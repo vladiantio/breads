@@ -1,0 +1,57 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "unicorn", "oxc"],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-case-declarations": "error",
+    "no-empty": "error",
+    "no-fallthrough": "error",
+    "no-prototype-builtins": "error",
+    "no-regex-spaces": "error",
+    "no-unexpected-multiline": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-array-constructor": "error",
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "typescript/no-unsafe-function-type": "error",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/exhaustive-effect-dependencies": "warn",
+    "react/memo-dependencies": "warn",
+    "react/static-components": "warn",
+    "react/use-memo": "warn",
+    "react/void-use-memo": "warn",
+    "react/preserve-manual-memoization": "warn",
+    "react/unsupported-syntax": "warn",
+    "react/globals": "warn",
+    "react/purity": "warn",
+    "react/immutability": "warn",
+    "react/refs": "warn",
+    "react/set-state-in-effect": "warn",
+    "react/set-state-in-render": "warn",
+    "react/no-deriving-state-in-effects": "warn",
+    "react/incompatible-library": "warn",
+    "react/error-boundaries": "warn",
+    "react/no-unstable-nested-components": "warn",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  },
+  "overrides": [
+    {
+      // TanStack Router route modules must export `Route` next to their
+      // component, so fast-refresh safety is not a goal for them.
+      "files": ["src/routes/**"],
+      "rules": {
+        "react/only-export-components": "off"
+      }
+    }
+  ]
+}
