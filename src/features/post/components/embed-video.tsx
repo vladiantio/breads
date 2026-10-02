@@ -15,6 +15,7 @@ import {
   MediaPlayerFullscreen,
 } from "@/ui/media-player";
 import { HLSPlayer } from "@/components/hls-player";
+import { DownloadBlobButton } from "./download-blob-button";
 import { calculateAspectRatio } from "@/utils/media";
 import { useAppSettings } from "@/features/settings/app-settings-context";
 import { useTranslation } from "react-i18next";
@@ -75,6 +76,11 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
         </MediaPlayerControls>
         <MediaPlayerLoading />
       </MediaPlayer>
+      <DownloadBlobButton
+        className="absolute top-2 right-2 z-30"
+        url={view.playlist}
+        cid={view.cid}
+      />
     </div>
   )
 
