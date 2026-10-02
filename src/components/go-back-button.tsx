@@ -4,10 +4,7 @@ import { useRouter } from "@tanstack/react-router"
 import { ArrowLeft } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-export function GoBackButton({
-  className,
-  ...props
-}: React.ComponentProps<typeof Button>) {
+export function GoBackButton({ className, ...props }: React.ComponentProps<typeof Button>) {
   const { history } = useRouter()
   const { t } = useTranslation()
 
