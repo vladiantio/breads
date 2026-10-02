@@ -11,35 +11,26 @@ interface ProfilePostsProps {
 }
 
 export function ProfilePosts({ actor, user }: ProfilePostsProps) {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isFetchingNextPage
-  } = useAuthorFeed({
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useAuthorFeed({
     actor,
-    typeFilter: 'no_reposts',
+    typeFilter: "no_reposts",
   })
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data])
 
   if (isLoading)
-    return <>
-      {Array.from({ length: 30 }).map((_, i) => (
-        <PostCardSkeleton key={i} />
-      ))}
-    </>
+    return (
+      <>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <PostCardSkeleton key={i} />
+        ))}
+      </>
+    )
 
   return (
     <>
-      <PostFeed
-        posts={posts}
-        authorFeed={user}
-      />
-      {isFetchingNextPage && Array.from({ length: 30 }).map((_, i) => (
-        <PostCardSkeleton key={i} />
-      ))}
+      <PostFeed posts={posts} authorFeed={user} />
+      {isFetchingNextPage && Array.from({ length: 30 }).map((_, i) => <PostCardSkeleton key={i} />)}
       <LoadMoreButton
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}

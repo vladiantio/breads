@@ -27,7 +27,7 @@ const processLine = (line: string) => {
               className={aClassName}
               to="/profile/$username"
               params={{
-                username: handle
+                username: handle,
               }}
             >
               {word}
@@ -61,10 +61,7 @@ const processLine = (line: string) => {
       const email = word.match(emailRegex)![1]
       return (
         <Fragment key={`word-${wordIndex}`}>
-          <a
-            className={aClassName}
-            href={`mailto:${email}`}
-          >
+          <a className={aClassName} href={`mailto:${email}`}>
             {word}
           </a>
           {space}
@@ -76,7 +73,8 @@ const processLine = (line: string) => {
     else {
       return (
         <Fragment key={`word-${wordIndex}`}>
-          {word}{space}
+          {word}
+          {space}
         </Fragment>
       )
     }
@@ -94,7 +92,8 @@ export const parseBio = (text: string) => {
 
     return (
       <Fragment key={`line-${lineIndex}`}>
-        {processLine(line)}{newLine}
+        {processLine(line)}
+        {newLine}
       </Fragment>
     )
   })

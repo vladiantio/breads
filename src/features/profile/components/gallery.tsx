@@ -34,7 +34,9 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
   const hidden = hideMedia && !revealed
   const thumb = post.embedVideo ? post.embedVideo.thumbnail : post.embedImages?.[0].thumb
   const alt = post.embedVideo ? post.embedVideo.alt : post.embedImages?.[0].alt
-  const aspectRatio = post.embedVideo ? post.embedVideo.aspectRatio : post.embedImages?.[0].aspectRatio
+  const aspectRatio = post.embedVideo
+    ? post.embedVideo.aspectRatio
+    : post.embedImages?.[0].aspectRatio
   const aspectRatioValue = calculateAspectRatio(aspectRatio?.width, aspectRatio?.height)
   const handleHovered = (hovered: boolean) => {
     if (isMobileDevice()) return
@@ -46,7 +48,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
       <div
         className="bg-accent border overflow-hidden relative rounded-lg w-full"
         style={{
-          aspectRatio: aspectRatioValue
+          aspectRatio: aspectRatioValue,
         }}
         onMouseOver={() => handleHovered(true)}
         onMouseLeave={() => handleHovered(false)}
@@ -61,10 +63,14 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
             <img
               src={thumb}
               alt={alt}
-              className={hidden ? "object-cover object-top-left size-full blur-md select-none" : "object-cover object-top-left size-full"}
+              className={
+                hidden
+                  ? "object-cover object-top-left size-full blur-md select-none"
+                  : "object-cover object-top-left size-full"
+              }
               loading="lazy"
             />
-            {(post.embedVideo && isHovered && !hidden) && (
+            {post.embedVideo && isHovered && !hidden && (
               <>
                 <HLSPlayer
                   src={post.embedVideo.playlist}
@@ -79,13 +85,9 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
                   aria-label={isMuted ? "Unmute" : "Mute"}
                   aria-pressed={isMuted}
                   className="dark absolute z-[1] bottom-2 right-2 bg-background/50 backdrop-blur-sm text-foreground p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
-                  onClick={() => setIsMuted(prev => !prev)}
+                  onClick={() => setIsMuted((prev) => !prev)}
                 >
-                  {isMuted ? (
-                    <VolumeOffIcon />
-                  ) : (
-                    <Volume2Icon />
-                  )}
+                  {isMuted ? <VolumeOffIcon /> : <Volume2Icon />}
                 </button>
               </>
             )}
@@ -113,13 +115,22 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
             {(post.likes > 0 || post.replies > 0 || post.reposts > 0) && !hidden && (
               <div className="dark absolute bottom-2 left-2 bg-background/50 backdrop-blur-sm text-foreground px-3 py-2 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-xs">
                 {post.likes > 0 && (
-                  <div className="flex items-center gap-1"><HeartIcon /><span>{formatNumber(post.likes)}</span></div>
+                  <div className="flex items-center gap-1">
+                    <HeartIcon />
+                    <span>{formatNumber(post.likes)}</span>
+                  </div>
                 )}
                 {post.replies > 0 && (
-                  <div className="flex items-center gap-1"><MessageCircleIcon /><span>{formatNumber(post.replies)}</span></div>
+                  <div className="flex items-center gap-1">
+                    <MessageCircleIcon />
+                    <span>{formatNumber(post.replies)}</span>
+                  </div>
                 )}
                 {post.reposts > 0 && (
-                  <div className="flex items-center gap-1"><RepeatIcon /><span>{formatNumber(post.reposts)}</span></div>
+                  <div className="flex items-center gap-1">
+                    <RepeatIcon />
+                    <span>{formatNumber(post.reposts)}</span>
+                  </div>
                 )}
               </div>
             )}
@@ -129,7 +140,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
           to="/profile/$username/post/$postId"
           params={{
             username: post.author.username,
-            postId: post.uri.split('app.bsky.feed.post/')[1]
+            postId: post.uri.split("app.bsky.feed.post/")[1],
           }}
           className="before:absolute before:inset-0"
           onMouseEnter={() => handleHovered(true)}
@@ -147,18 +158,14 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
   )
 }
 
-export function Gallery({
-  posts,
-}: GalleryProps) {
+export function Gallery({ posts }: GalleryProps) {
   const filteredPosts = posts.filter((post) => post.embedImages?.length || post.embedVideo)
 
   return (
     <MasonryVerticalVirtualizerDynamic
       className="p-1"
       items={filteredPosts}
-      render={(post) => (
-        <MediaCard post={post} />
-      )}
+      render={(post) => <MediaCard post={post} />}
     />
   )
 }

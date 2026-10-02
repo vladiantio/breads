@@ -13,10 +13,7 @@ interface AuthorHoverCardProps {
   children: React.ReactElement
 }
 
-export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
-  handle,
-  children,
-}) => {
+export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({ handle, children }) => {
   const [enabled, setEnabled] = useState(false)
 
   const {
@@ -25,11 +22,7 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
     isLoading: isLoadingActor,
   } = useResolveHandle({ handle, enabled })
 
-  const {
-    data,
-    error: profileError,
-    isLoading: isLoadingProfile,
-  } = useProfile({ actor, enabled })
+  const { data, error: profileError, isLoading: isLoadingProfile } = useProfile({ actor, enabled })
 
   if (isMobileDevice()) return children
 
@@ -40,12 +33,11 @@ export const AuthorHoverCard: FC<AuthorHoverCardProps> = ({
         closeDelay={200}
         onMouseEnter={() => setEnabled(true)}
         render={children}
-      >
-      </HoverCardTrigger>
+      ></HoverCardTrigger>
       <HoverCardContent className="w-96 p-6 rounded-xl">
-        {(isLoadingActor || isLoadingProfile) ? (
+        {isLoadingActor || isLoadingProfile ? (
           <Spinner />
-        ) : (actorError || profileError) ? (
+        ) : actorError || profileError ? (
           <p className="flex items-center gap-x-3">
             <AlertCircleIcon />
             {actorError?.message ?? profileError?.message}

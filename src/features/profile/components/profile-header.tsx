@@ -1,20 +1,17 @@
-import { FC } from 'react';
-import { User } from '@/types/response-schema';
-import { ProfileDisplay } from './profile-display';
-import { AuthorHeader } from './author-header';
+import { FC } from "react"
+import { User } from "@/types/response-schema"
+import { ProfileDisplay } from "./profile-display"
+import { AuthorHeader } from "./author-header"
 
 interface ProfileHeaderProps {
-  user: User;
-  isCurrentUser: boolean;
+  user: User
+  isCurrentUser: boolean
 }
 
 const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
   return (
     <>
-      <AuthorHeader
-        user={user}
-        isCurrentUser={isCurrentUser}
-      />
+      <AuthorHeader user={user} isCurrentUser={isCurrentUser} />
 
       <div className="px-4 pb-4">
         {user.banner ? (
@@ -27,7 +24,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user, isCurrentUser }) => {
         <ProfileDisplay user={user} />
       </div>
     </>
-  );
-};
+  )
+}
 
-export { ProfileHeader };
+export { ProfileHeader }

@@ -1,21 +1,19 @@
-import type { AppBskyActorDefs } from "@atcute/bluesky";
-import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification";
-import TrustedVerifierIcon from "@/icons/trusted-verifier.svg?react";
-import VerifiedAccountIcon from "@/icons/verified-account.svg?react";
+import type { AppBskyActorDefs } from "@atcute/bluesky"
+import { useSimpleVerificationState } from "@/lib/atp/hooks/use-verification"
+import TrustedVerifierIcon from "@/icons/trusted-verifier.svg?react"
+import VerifiedAccountIcon from "@/icons/verified-account.svg?react"
 
 export function VerifiedBadge({
   className,
   verification,
 }: {
-  className?: string,
+  className?: string
   verification?: AppBskyActorDefs.VerificationState
 }) {
-  const { isVerified, role } = useSimpleVerificationState({ verification });
+  const { isVerified, role } = useSimpleVerificationState({ verification })
 
-  if (isVerified && role === 'verifier')
-    return (<TrustedVerifierIcon className={className} />);
-  else if (isVerified)
-    return (<VerifiedAccountIcon className={className} />);
+  if (isVerified && role === "verifier") return <TrustedVerifierIcon className={className} />
+  else if (isVerified) return <VerifiedAccountIcon className={className} />
 
-  return null;
+  return null
 }

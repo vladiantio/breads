@@ -22,12 +22,14 @@ export function AuthorLink({
   verification,
   onlyText,
 }: AuthorLinkProps) {
-  const validHandle = isInvalidHandle(username) ? did ?? username : username
+  const validHandle = isInvalidHandle(username) ? (did ?? username) : username
 
   return (
     <div className={cn("inline-flex items-center gap-x-2 overflow-hidden", className)}>
       {onlyText ? (
-        <span className="font-semibold text-foreground truncate">{displayName || sanitizeHandle(username)}</span>
+        <span className="font-semibold text-foreground truncate">
+          {displayName || sanitizeHandle(username)}
+        </span>
       ) : (
         <AuthorHoverCard handle={validHandle}>
           <Link
@@ -39,10 +41,7 @@ export function AuthorLink({
           </Link>
         </AuthorHoverCard>
       )}
-      <VerifiedBadge
-        className="size-3 shrink-0"
-        verification={verification}
-      />
+      <VerifiedBadge className="size-3 shrink-0" verification={verification} />
     </div>
   )
 }

@@ -10,18 +10,13 @@ interface AuthorHeaderProps {
   isCurrentUser?: boolean
 }
 
-export function AuthorHeader({
-  user,
-  isCurrentUser = false,
-}: AuthorHeaderProps) {
+export function AuthorHeader({ user, isCurrentUser = false }: AuthorHeaderProps) {
   const { t } = useTranslation()
   return (
     <div className="sticky top-0 z-[2] bg-background px-4 h-16 flex items-center justify-between gap-x-4">
       <GoBackButton className="-ml-1" />
       <div className="text-center text-sm overflow-hidden [&>*]:truncate">
-        {user.displayName && (
-          <p className="font-semibold">{user.displayName}</p>
-        )}
+        {user.displayName && <p className="font-semibold">{user.displayName}</p>}
         {user.username && (
           <p className="text-muted-foreground">{sanitizeHandle(user.username, "@")}</p>
         )}

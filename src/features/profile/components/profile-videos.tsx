@@ -5,15 +5,9 @@ import { LoadMoreButton } from "@/components/load-more-button"
 import { Gallery } from "./gallery"
 
 export function ProfileVideos({ actor }: { actor: string }) {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isFetchingNextPage
-  } = useAuthorFeed({
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useAuthorFeed({
     actor,
-    filter: 'posts_with_video',
+    filter: "posts_with_video",
   })
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data])
@@ -27,9 +21,7 @@ export function ProfileVideos({ actor }: { actor: string }) {
 
   return (
     <>
-      <Gallery
-        posts={posts}
-      />
+      <Gallery posts={posts} />
       <LoadMoreButton
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
