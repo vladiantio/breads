@@ -23,32 +23,27 @@ interface PostCardProps {
   authorFeed?: User
 }
 
-export function PostCard({
-  post,
-  isDetail = false,
-  isEmbed = false,
-  authorFeed,
-}: PostCardProps) {
+export function PostCard({ post, isDetail = false, isEmbed = false, authorFeed }: PostCardProps) {
   const { t } = useTranslation()
   // const { toggleLike, toggleRepost, postLikeStatus, postRepostStatus } = useApp()
 
   // const isLiked = postLikeStatus[post.id]
   // const isReposted = postRepostStatus[post.id]
-  const [ isLiked, setIsLiked ] = useState(false)
-  const [ isReposted, setIsReposted ] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
+  const [isReposted, setIsReposted] = useState(false)
   const validHandle = isInvalidHandle(post.author.username) ? post.author.id : post.author.username
   const postId = post.uri.split("app.bsky.feed.post/")[1]
   const isSameAuthorFeed = authorFeed ? post.author.id == authorFeed.id : false
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setIsLiked(status => !status)
+    setIsLiked((status) => !status)
     // toggleLike(post.id)
   }
 
   const handleRepost = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setIsReposted(status => !status)
+    setIsReposted((status) => !status)
     // toggleRepost(post.id)
   }
 
@@ -106,7 +101,10 @@ export function PostCard({
     })
   }
 
-  const repostedBy = isType<AppBskyFeedDefs.ReasonRepost>(post.reason, 'app.bsky.feed.defs#reasonRepost')
+  const repostedBy = isType<AppBskyFeedDefs.ReasonRepost>(
+    post.reason,
+    "app.bsky.feed.defs#reasonRepost",
+  )
     ? post.reason?.by?.displayName
     : null
 
@@ -132,7 +130,7 @@ export function PostCard({
       <article
         className={cn(
           "relative transition-[background-color] rounded-lg",
-          !isDetail && "cursor-pointer hover:bg-card active:bg-card/60"
+          !isDetail && "cursor-pointer hover:bg-card active:bg-card/60",
         )}
       >
         {!isDetail ? (
@@ -143,14 +141,12 @@ export function PostCard({
             className="absolute inset-0 z-10 rounded-lg"
           />
         ) : null}
-        {isType<AppBskyFeedDefs.ReasonPin>(post.reason, 'app.bsky.feed.defs#reasonPin')
-        ? (
+        {isType<AppBskyFeedDefs.ReasonPin>(post.reason, "app.bsky.feed.defs#reasonPin") ? (
           <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">
             <PinIcon className="size-4 ml-6" />
             {t("post.pinned")}
           </div>
-        )
-        : null }
+        ) : null}
 
         {repostedBy ? (
           <div className="flex items-center gap-x-4 text-sm text-muted-foreground pt-4 px-4 -mb-2">

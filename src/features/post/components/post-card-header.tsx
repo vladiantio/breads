@@ -6,17 +6,16 @@ import { cn } from "@/lib/utils"
 
 export function PostCardHeader() {
   const {
-    post: {
-      author,
-      timestamp,
-    },
+    post: { author, timestamp },
     isSameAuthorFeed,
     isDetail,
     isEmbed,
   } = usePostCard()
 
   return (
-    <div className={cn("flex w-full", (isDetail || isEmbed) ? "flex-col h-12" : "items-center gap-x-2")}>
+    <div
+      className={cn("flex w-full", isDetail || isEmbed ? "flex-col h-12" : "items-center gap-x-2")}
+    >
       <AuthorLink
         did={author.id}
         username={author.username}
@@ -26,8 +25,12 @@ export function PostCardHeader() {
       />
       <div className="inline-flex items-center gap-x-2 overflow-hidden text-muted-foreground shrink-[10]">
         <span className="truncate">{sanitizeHandle(author.username, "@")}</span>
-        <span aria-hidden="true" role="separator">·</span>
-        <time dateTime={timestamp} className="shrink-0">{formatTimestamp(timestamp)}</time>
+        <span aria-hidden="true" role="separator">
+          ·
+        </span>
+        <time dateTime={timestamp} className="shrink-0">
+          {formatTimestamp(timestamp)}
+        </time>
       </div>
     </div>
   )

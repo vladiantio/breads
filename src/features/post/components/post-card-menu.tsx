@@ -5,14 +5,14 @@ import {
   LanguagesIcon,
   LinkIcon,
   MoreHorizontal,
-  XCircle
+  XCircle,
 } from "lucide-react"
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/ui/dropdown-menu"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/ui/button"
@@ -25,8 +25,10 @@ import { Separator } from "@/ui/separator"
 import { detectLocale } from "@/i18n/languages"
 
 const targetLanguage = detectLocale()
-const getGTranslateUrl = (source: string, target: string, content: string) => `https://translate.google.com/?sl=${source}&tl=${target}&text=${encodeURIComponent(content)}&op=translate`
-const getDeeplUrl = (source: string, target: string, content: string) => `https://www.deepl.com/translator#${source}/${target}/${encodeURIComponent(content)}`
+const getGTranslateUrl = (source: string, target: string, content: string) =>
+  `https://translate.google.com/?sl=${source}&tl=${target}&text=${encodeURIComponent(content)}&op=translate`
+const getDeeplUrl = (source: string, target: string, content: string) =>
+  `https://www.deepl.com/translator#${source}/${target}/${encodeURIComponent(content)}`
 
 function PostCardMenuButton({
   className,
@@ -57,10 +59,7 @@ export function PostCardMenu() {
     onCopyText,
     onNotInterested,
     onReport,
-    post: {
-      content,
-      langs,
-    }
+    post: { content, langs },
   } = usePostCard()
   const [open, setOpen] = useState(false)
   const isMobile = isMobileDevice()
@@ -74,8 +73,7 @@ export function PostCardMenu() {
         <DrawerTrigger render={<PostCardMenuButton />} />
         <DrawerContent>
           <div className="flex flex-col pb-6">
-            {(content && content.trim().length > 0
-              && sourceLanguage != targetLanguage) ? (
+            {content && content.trim().length > 0 && sourceLanguage != targetLanguage ? (
               <>
                 <Button
                   render={
@@ -120,11 +118,21 @@ export function PostCardMenu() {
               <span>{t("post.menu.copyText")}</span>
             </Button>
             <Separator />
-            <Button onClick={onNotInterested} className="justify-start h-12" size="lg" variant="ghost">
+            <Button
+              onClick={onNotInterested}
+              className="justify-start h-12"
+              size="lg"
+              variant="ghost"
+            >
               <XCircle />
               <span>{t("post.menu.notInterested")}</span>
             </Button>
-            <Button onClick={onReport} className="justify-start h-12" size="lg" variant="ghost-destructive">
+            <Button
+              onClick={onReport}
+              className="justify-start h-12"
+              size="lg"
+              variant="ghost-destructive"
+            >
               <Flag />
               <span>{t("post.menu.report")}</span>
             </Button>
@@ -137,8 +145,7 @@ export function PostCardMenu() {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger render={<PostCardMenuButton />} />
       <DropdownMenuContent align="end" className="w-fit">
-        {(content && content.trim().length > 0
-          && sourceLanguage != targetLanguage) ? (
+        {content && content.trim().length > 0 && sourceLanguage != targetLanguage ? (
           <>
             <DropdownMenuItem
               render={

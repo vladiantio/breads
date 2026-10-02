@@ -1,21 +1,22 @@
-import { AppBskyEmbedExternal } from "@atcute/bluesky";
-import { parseGif } from "@/lib/embed-player";
-import { YTEmbed } from "@/components/yt-embed";
-import { EyeIcon, GlobeIcon } from "lucide-react";
+import { AppBskyEmbedExternal } from "@atcute/bluesky"
+import { parseGif } from "@/lib/embed-player"
+import { YTEmbed } from "@/components/yt-embed"
+import { EyeIcon, GlobeIcon } from "lucide-react"
 import {
   MediaPlayer,
   MediaPlayerControls,
   MediaPlayerError,
   MediaPlayerPlay,
   MediaPlayerVideo,
-} from "@/ui/media-player";
-import { useAppSettings } from "@/features/settings/app-settings-context";
-import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { Button } from "@/ui/button";
+} from "@/ui/media-player"
+import { useAppSettings } from "@/features/settings/app-settings-context"
+import { useTranslation } from "react-i18next"
+import { useState } from "react"
+import { Button } from "@/ui/button"
 
-const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/;
-const ytUriRegex = /(?:(?:youtu.be\/)|(?:\/v\/)|(?:\/u\/\w\/)|(?:\/embed\/)|(?:\/watch\?)|(?:\/shorts\/))\??(?:v=)?([^#&?]*)/;
+const gifUriRegex = /\.gif(\?[\w\d=&-]*)?$/
+const ytUriRegex =
+  /(?:(?:youtu.be\/)|(?:\/v\/)|(?:\/u\/\w\/)|(?:\/embed\/)|(?:\/watch\?)|(?:\/shorts\/))\??(?:v=)?([^#&?]*)/
 
 interface EmbedGifProps {
   uri: string
@@ -23,18 +24,14 @@ interface EmbedGifProps {
   thumb?: string
 }
 
-function EmbedGif({
-  title,
-  uri,
-  thumb,
-}: EmbedGifProps) {
-  const parsedGif = parseGif(uri);
+function EmbedGif({ title, uri, thumb }: EmbedGifProps) {
+  const parsedGif = parseGif(uri)
   if (parsedGif) {
     return (
       <div
         className="max-h-[26rem] w-fit relative z-20"
         style={{
-          aspectRatio: parsedGif.dimensions.width / parsedGif.dimensions.height
+          aspectRatio: parsedGif.dimensions.width / parsedGif.dimensions.height,
         }}
       >
         <MediaPlayer className="max-h-full max-w-full" autoHide>
@@ -54,9 +51,7 @@ function EmbedGif({
           />
           <MediaPlayerError />
           <MediaPlayerControls placement="middle">
-            <MediaPlayerPlay
-              className="bg-background/30 rounded-full size-16 [&_svg:not([class*='size-'])]:size-8"
-            />
+            <MediaPlayerPlay className="bg-background/30 rounded-full size-16 [&_svg:not([class*='size-'])]:size-8" />
           </MediaPlayerControls>
         </MediaPlayer>
         <a
@@ -64,7 +59,9 @@ function EmbedGif({
           target="_blank"
           rel="noopener noreferrer"
           className="absolute left-2 bottom-2 dark bg-background/50 text-foreground backdrop-blur-sm py-1.5 px-3 font-bold text-xs rounded-md transition-all hover:bg-accent/50"
-        >GIF</a>
+        >
+          GIF
+        </a>
       </div>
     )
   }
@@ -101,20 +98,10 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
   let content: React.ReactNode
 
   if (isGif) {
-    content = (
-      <EmbedGif
-        thumb={view.thumb}
-        title={view.title}
-        uri={view.uri}
-      />
-    )
+    content = <EmbedGif thumb={view.thumb} title={view.title} uri={view.uri} />
   } else if (isYt) {
     content = (
-      <YTEmbed
-        id={ytUriRegex.exec(view.uri)![1]}
-        title={view.title}
-        className="relative z-20"
-      />
+      <YTEmbed id={ytUriRegex.exec(view.uri)![1]} title={view.title} className="relative z-20" />
     )
   } else {
     content = (
@@ -133,7 +120,7 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
         <div className="flex flex-col gap-y-1 py-4 px-4">
           <small className="text-muted-foreground flex items-center gap-x-1">
             <GlobeIcon size="1em" />
-            {new URL(view.uri).hostname.replace('www.', '')}
+            {new URL(view.uri).hostname.replace("www.", "")}
           </small>
           <a
             className="line-clamp-2 text-pretty before:absolute before:inset-0 before:block before:size-full"
@@ -157,13 +144,10 @@ export function EmbedExternal({ view }: EmbedExternalProps) {
         {content}
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => setRevealed(true)}
-        >
+        <Button variant="secondary" size="sm" onClick={() => setRevealed(true)}>
           <EyeIcon />
-          {t("post.embed.show")} {isGif ? "GIF" : isYt ? t("post.embed.ytVideo") : t("post.embed.externalLink")}
+          {t("post.embed.show")}{" "}
+          {isGif ? "GIF" : isYt ? t("post.embed.ytVideo") : t("post.embed.externalLink")}
         </Button>
       </div>
     </div>

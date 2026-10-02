@@ -1,12 +1,10 @@
-import { Skeleton } from '@/ui/skeleton'
+import { Skeleton } from "@/ui/skeleton"
 
 interface PostCardSkeletonProps {
   isDetail?: boolean
 }
 
-export const PostCardSkeleton: React.FC<PostCardSkeletonProps> = ({
-  isDetail = false,
-}) => (
+export const PostCardSkeleton: React.FC<PostCardSkeletonProps> = ({ isDetail = false }) => (
   <article>
     {isDetail ? (
       <div className="px-4 pb-4">

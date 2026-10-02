@@ -9,12 +9,7 @@ import { useTranslation } from "react-i18next"
 export function PostCardActions() {
   const { t } = useTranslation()
   const {
-    post: {
-      likes,
-      replies,
-      reposts,
-      viewer,
-    },
+    post: { likes, replies, reposts, viewer },
     isLiked,
     isReposted,
     onLike,
@@ -33,9 +28,7 @@ export function PostCardActions() {
         disabled={viewer?.replyDisabled}
       >
         <MessageCircle className="size-5" />
-        {replies > 0 && (
-          <span>{formatNumber(replies)}</span>
-        )}
+        {replies > 0 && <span>{formatNumber(replies)}</span>}
       </Button>
 
       <Button
@@ -44,9 +37,7 @@ export function PostCardActions() {
         className={cn("rounded-full", isReposted && "!text-green-500")}
         onClick={onRepost}
       >
-        {isReposted
-          ? <Repeat1 className="size-5" />
-          : <Repeat className="size-5" />}
+        {isReposted ? <Repeat1 className="size-5" /> : <Repeat className="size-5" />}
         {reposts + (isReposted ? 1 : 0) > 0 && (
           <span>{formatNumber(reposts + (isReposted ? 1 : 0))}</span>
         )}
@@ -58,12 +49,8 @@ export function PostCardActions() {
         className={cn("rounded-full", isLiked && "!text-red-500")}
         onClick={onLike}
       >
-        <Heart
-          className={cn("size-5", isLiked && "fill-current")}
-        />
-        {likes + (isLiked ? 1 : 0) > 0 && (
-          <span>{formatNumber(likes + (isLiked ? 1 : 0))}</span>
-        )}
+        <Heart className={cn("size-5", isLiked && "fill-current")} />
+        {likes + (isLiked ? 1 : 0) > 0 && <span>{formatNumber(likes + (isLiked ? 1 : 0))}</span>}
       </Button>
 
       <Button

@@ -7,19 +7,11 @@ interface PostFeedProps {
   authorFeed?: User
 }
 
-export function PostFeed({
-  posts,
-  authorFeed,
-}: PostFeedProps) {
+export function PostFeed({ posts, authorFeed }: PostFeedProps) {
   return (
     <RowVirtualizerDynamic
       items={posts}
-      render={(post) => (
-        <PostCard
-          post={post}
-          authorFeed={authorFeed}
-        />
-      )}
+      render={(post) => <PostCard post={post} authorFeed={authorFeed} />}
     />
   )
 }

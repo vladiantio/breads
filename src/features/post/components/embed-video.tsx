@@ -1,4 +1,4 @@
-import { AppBskyEmbedVideo } from "@atcute/bluesky";
+import { AppBskyEmbedVideo } from "@atcute/bluesky"
 import {
   MediaPlayer,
   MediaPlayerVideo,
@@ -13,15 +13,15 @@ import {
   MediaPlayerTime,
   MediaPlayerSettings,
   MediaPlayerFullscreen,
-} from "@/ui/media-player";
-import { HLSPlayer } from "@/components/hls-player";
-import { DownloadBlobButton } from "./download-blob-button";
-import { calculateAspectRatio } from "@/utils/media";
-import { useAppSettings } from "@/features/settings/app-settings-context";
-import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { Button } from "@/ui/button";
-import { EyeIcon } from "lucide-react";
+} from "@/ui/media-player"
+import { HLSPlayer } from "@/components/hls-player"
+import { DownloadBlobButton } from "./download-blob-button"
+import { calculateAspectRatio } from "@/utils/media"
+import { useAppSettings } from "@/features/settings/app-settings-context"
+import { useTranslation } from "react-i18next"
+import { useState } from "react"
+import { Button } from "@/ui/button"
+import { EyeIcon } from "lucide-react"
 
 interface EmbedVideoProps {
   view: AppBskyEmbedVideo.View
@@ -53,9 +53,7 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
         <MediaPlayerError />
         <MediaPlayerVolumeIndicator />
         <MediaPlayerControls placement="middle">
-          <MediaPlayerPlay
-            className="bg-background/30 rounded-full size-16 [&_svg:not([class*='size-'])]:size-8"
-          />
+          <MediaPlayerPlay className="bg-background/30 rounded-full size-16 [&_svg:not([class*='size-'])]:size-8" />
         </MediaPlayerControls>
         <MediaPlayerControls
           placement="bottom"
@@ -103,15 +101,11 @@ export function EmbedVideo({ view }: EmbedVideoProps) {
         )}
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => setRevealed(true)}
-        >
+        <Button variant="secondary" size="sm" onClick={() => setRevealed(true)}>
           <EyeIcon />
           {t("post.embed.show")} {t("post.embed.video")}
         </Button>
       </div>
     </div>
-  );
+  )
 }

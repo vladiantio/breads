@@ -18,10 +18,7 @@ export function PostCardContentTranslate() {
   const { t } = useTranslation()
 
   const {
-    post: {
-      content,
-      langs,
-    },
+    post: { content, langs },
   } = usePostCard()
 
   const sourceLanguage = useMemo(() => langs?.[0] ?? "en", [langs])
@@ -30,7 +27,7 @@ export function PostCardContentTranslate() {
     e.stopPropagation()
 
     if (translatedContent && !error) {
-      setShowTranslatedContent(prev => !prev)
+      setShowTranslatedContent((prev) => !prev)
       return
     }
 
@@ -40,12 +37,12 @@ export function PostCardContentTranslate() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const win = self as typeof self & { Translator: any }
       const availability = await win.Translator.availability({ sourceLanguage, targetLanguage })
-      if (availability === 'unavailable')
+      if (availability === "unavailable")
         throw new Error(`${sourceLanguage} - ${targetLanguage} pair is not supported.`)
       const translator = await win.Translator.create({ sourceLanguage, targetLanguage })
       const stream = translator.translateStreaming(content.trim())
       for await (const chunk of stream) {
-        setTranslatedContent(prev => prev + chunk)
+        setTranslatedContent((prev) => prev + chunk)
       }
     } catch (e) {
       setError((e as Error).message)
@@ -53,31 +50,23 @@ export function PostCardContentTranslate() {
     setIsTranslating(false)
   }
 
-  return (content 
-    && content.trim().length > 0 
-    && isTranslatorSupported 
-    && sourceLanguage != targetLanguage) ? (
+  return content &&
+    content.trim().length > 0 &&
+    isTranslatorSupported &&
+    sourceLanguage != targetLanguage ? (
     <>
       {isTranslating ? (
         <ShiningText className="block text-sm">{t("post.translate.inProgress")}</ShiningText>
-      ) : (translatedContent && showTranslatedContent) ? (
-        <Button
-          variant="link"
-          className="block h-auto p-0 relative z-20"
-          onClick={translate}
-        >
+      ) : translatedContent && showTranslatedContent ? (
+        <Button variant="link" className="block h-auto p-0 relative z-20" onClick={translate}>
           {t("post.translate.done")} <strong>Translator API</strong>
         </Button>
       ) : (
-        <Button
-          variant="link"
-          className="block h-auto p-0 relative z-20"
-          onClick={translate}
-        >
+        <Button variant="link" className="block h-auto p-0 relative z-20" onClick={translate}>
           {t("post.translate.action")}
         </Button>
       )}
-      {(translatedContent && showTranslatedContent) && (
+      {translatedContent && showTranslatedContent && (
         <div className="thread-content">{translatedContent}</div>
       )}
       {error && (

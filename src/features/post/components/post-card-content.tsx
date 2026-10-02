@@ -11,24 +11,16 @@ import { PostCardContentTranslate } from "./post-card-content-translate"
 
 export function PostCardContent() {
   const {
-    post: {
-      content,
-      facets,
-      embedImages,
-      embedVideo,
-      embedExternal,
-      embedPost,
-      labelInfo,
-    },
+    post: { content, facets, embedImages, embedVideo, embedExternal, embedPost, labelInfo },
     isDetail,
     isEmbed,
   } = usePostCard()
 
   return (
-    <div className={cn("space-y-4", (isDetail || isEmbed) ? "mt-4" : "mt-1")}>
-      {content && content.trim().length > 0
-        ? <RichTextRenderer text={content} facets={facets} />
-        : null}
+    <div className={cn("space-y-4", isDetail || isEmbed ? "mt-4" : "mt-1")}>
+      {content && content.trim().length > 0 ? (
+        <RichTextRenderer text={content} facets={facets} />
+      ) : null}
 
       <PostCardContentTranslate />
 
@@ -40,23 +32,14 @@ export function PostCardContent() {
       )}
 
       {!labelInfo && embedImages && embedImages.length > 0 && (
-        <EmbedImages
-          views={embedImages}
-          isDetail={isDetail || isEmbed}
-        />
+        <EmbedImages views={embedImages} isDetail={isDetail || isEmbed} />
       )}
 
-      {!labelInfo && embedVideo && (
-        <EmbedVideo view={embedVideo} />
-      )}
+      {!labelInfo && embedVideo && <EmbedVideo view={embedVideo} />}
 
-      {embedExternal && (
-        <EmbedExternal view={embedExternal} />
-      )}
+      {embedExternal && <EmbedExternal view={embedExternal} />}
 
-      {embedPost && (
-        <EmbedPost post={embedPost} />
-      )}
+      {embedPost && <EmbedPost post={embedPost} />}
     </div>
   )
 }
