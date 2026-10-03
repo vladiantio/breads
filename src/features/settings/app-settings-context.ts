@@ -14,8 +14,7 @@ const initialState: AppSettingsProviderState = {
   setHideMedia: () => null,
 }
 
-export const AppSettingsProviderContext =
-  createContext<AppSettingsProviderState>(initialState)
+export const AppSettingsProviderContext = createContext<AppSettingsProviderState>(initialState)
 
 export const useAppSettings = () => {
   const context = useContext(AppSettingsProviderContext)

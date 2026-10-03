@@ -20,32 +20,26 @@ export function Settings() {
       theme: {
         preset,
         styles: presets[preset],
-      }
+      },
     })
   }
 
   const themeOptions = [
-    { label: t("settings.theme.system"), value: 'system', icon: SunMoon },
-    { label: t("settings.theme.light"), value: 'light', icon: Sun },
-    { label: t("settings.theme.dark"), value: 'dark', icon: Moon },
+    { label: t("settings.theme.system"), value: "system", icon: SunMoon },
+    { label: t("settings.theme.light"), value: "light", icon: Sun },
+    { label: t("settings.theme.dark"), value: "dark", icon: Moon },
   ]
 
   return (
     <>
       <div className="sticky top-0 z-[1] bg-background px-4 h-16 flex items-center justify-between gap-x-4">
         <GoBackButton className="-ml-1" />
-        <div className="font-bold flex-1">
-          {t("nav.settings")}
-        </div>
+        <div className="font-bold flex-1">{t("nav.settings")}</div>
       </div>
       <div className="p-4 space-y-4">
         <div>
           <p className="mb-1">{t("settings.colorMode")}</p>
-          <RadioGroup
-            className="grid grid-cols-3 gap-2"
-            value={theme}
-            onValueChange={setTheme}
-          >
+          <RadioGroup className="grid grid-cols-3 gap-2" value={theme} onValueChange={setTheme}>
             {themeOptions.map((option) => (
               <label
                 key={option.value}
@@ -89,9 +83,7 @@ export function Settings() {
                   value={value}
                   className="sr-only after:absolute after:inset-0"
                 />
-                <p className="text-foreground text-sm leading-none font-medium">
-                  {label}
-                </p>
+                <p className="text-foreground text-sm leading-none font-medium">{label}</p>
               </label>
             ))}
           </RadioGroup>

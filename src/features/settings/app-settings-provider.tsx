@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react"
 
-import {
-  AppSettingsProviderContext,
-  initialAppSettings,
-} from "./app-settings-context"
+import { AppSettingsProviderContext, initialAppSettings } from "./app-settings-context"
 
 type AppSettingsProviderProps = {
   children: React.ReactNode
@@ -18,7 +15,7 @@ export function AppSettingsProvider({
     () =>
       (typeof localStorage.getItem(storageKey) === "string"
         ? JSON.parse(localStorage.getItem(storageKey) as string).hideMedia
-        : initialAppSettings.hideMedia) ?? initialAppSettings.hideMedia
+        : initialAppSettings.hideMedia) ?? initialAppSettings.hideMedia,
   )
 
   useEffect(() => {
@@ -51,9 +48,5 @@ export function AppSettingsProvider({
     },
   }
 
-  return (
-    <AppSettingsProviderContext value={value}>
-      {children}
-    </AppSettingsProviderContext>
-  )
+  return <AppSettingsProviderContext value={value}>{children}</AppSettingsProviderContext>
 }
