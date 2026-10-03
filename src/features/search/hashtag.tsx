@@ -13,42 +13,26 @@ export function Hashtag({ tag }: { tag: string }) {
   const q = `#${tag}`
   const { history } = useRouter()
   const { t } = useTranslation()
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isFetchingNextPage,
-    refetch
-  } = usePostsSearch({ q })
+  const { data, error, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage, refetch } =
+    usePostsSearch({ q })
 
   const posts = useMemo(() => data?.pages.map((page) => page.posts).flat() ?? [], [data])
 
   return (
     <>
       <div className="sticky top-0 z-[1] bg-background px-4 h-16 flex items-center justify-between gap-x-4">
-        <Button
-          variant="ghost"
-          className="rounded-full !p-2 -ml-1"
-          onClick={() => history.go(-1)}
-        >
+        <Button variant="ghost" className="rounded-full !p-2 -ml-1" onClick={() => history.go(-1)}>
           <ArrowLeft className="size-5" />
         </Button>
-        <div className="font-bold flex-1">
-          {q}
-        </div>
+        <div className="font-bold flex-1">{q}</div>
       </div>
-      {isLoading ? Array.from({ length: 30 }).map((_, i) => (
-        <PostCardSkeleton key={i} />
-      )) : (
+      {isLoading ? (
+        Array.from({ length: 30 }).map((_, i) => <PostCardSkeleton key={i} />)
+      ) : (
         <>
-          <PostFeed
-            posts={posts}
-          />
-          {isFetchingNextPage && Array.from({ length: 30 }).map((_, i) => (
-            <PostCardSkeleton key={i} />
-          ))}
+          <PostFeed posts={posts} />
+          {isFetchingNextPage &&
+            Array.from({ length: 30 }).map((_, i) => <PostCardSkeleton key={i} />)}
           {!error && (
             <div className="py-4 text-center">
               <Button
@@ -57,9 +41,7 @@ export function Hashtag({ tag }: { tag: string }) {
                 disabled={!hasNextPage || isFetchingNextPage}
               >
                 {isFetchingNextPage && <Spinner />}
-                {hasNextPage
-                  ? t("common.pagination.loadMore")
-                  : t("common.pagination.none")}
+                {hasNextPage ? t("common.pagination.loadMore") : t("common.pagination.none")}
                 {hasNextPage && <ArrowDownIcon />}
               </Button>
             </div>

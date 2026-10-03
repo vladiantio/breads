@@ -2,7 +2,7 @@ import { AuthorLink } from "../profile/components/author-link"
 import { UserAvatar } from "@/components/user-avatar"
 import { DebouncedInput } from "@/ui/debounced-input"
 import { InputAddOns, InputAddOnLabel } from "@/ui/input-add-ons"
-import SearchIcon from '@/icons/search.svg?react'
+import SearchIcon from "@/icons/search.svg?react"
 import { useActorsSearch } from "@/lib/atp/hooks/use-actors-search"
 import { isInvalidHandle, sanitizeHandle } from "@/lib/atp/strings/handles"
 import { AppBskyActorDefs } from "@atcute/bluesky"
@@ -10,11 +10,7 @@ import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
-function AuthorItem({
-  actor
-}: {
-  actor: AppBskyActorDefs.ProfileViewBasic
-}) {
+function AuthorItem({ actor }: { actor: AppBskyActorDefs.ProfileViewBasic }) {
   const navigate = useNavigate()
 
   return (
@@ -23,18 +19,14 @@ function AuthorItem({
       role="button"
       onClick={() => {
         navigate({
-          to: '/profile/$username',
+          to: "/profile/$username",
           params: {
             username: isInvalidHandle(actor.handle) ? actor.did : actor.handle,
           },
         })
       }}
     >
-      <UserAvatar
-        username={actor.handle}
-        displayName={actor.displayName}
-        src={actor.avatar}
-      />
+      <UserAvatar username={actor.handle} displayName={actor.displayName} src={actor.avatar} />
       <div className="flex flex-col flex-1 min-w-0">
         <AuthorLink
           did={actor.did}
@@ -42,18 +34,16 @@ function AuthorItem({
           username={actor.handle}
           verification={actor.verification}
         />
-        <p className="text-muted-foreground truncate">{sanitizeHandle(actor.handle, '@')}</p>
+        <p className="text-muted-foreground truncate">{sanitizeHandle(actor.handle, "@")}</p>
       </div>
     </div>
   )
 }
 
 export function Search() {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState("")
   const { t } = useTranslation()
-  const {
-    data,
-  } = useActorsSearch({ q: query })
+  const { data } = useActorsSearch({ q: query })
 
   return (
     <>
@@ -73,10 +63,7 @@ export function Search() {
       </div>
 
       {data?.map((actor) => (
-        <AuthorItem
-          key={actor.did}
-          actor={actor}
-        />
+        <AuthorItem key={actor.did} actor={actor} />
       ))}
     </>
   )
