@@ -11,6 +11,67 @@ type HLSPlayerProps = Omit<React.ComponentPropsWithoutRef<"video">, "src"> & {
   ref?: React.Ref<HTMLVideoElement>
 }
 
+type VideoRendition = {
+  id: string
+  width?: number
+  height?: number
+  bitrate?: number
+}
+
+/**
+ * Bridges hls.js levels to the W3C `videoRenditions` interface that
+ * media-chrome reads. Chrome/Firefox don't implement it natively, so we
+ * polyfill it on the video element: the Quality submenu in MediaPlayerSettings
+ * listens to `addrendition`/`change` events and sets `selectedIndex`.
+ */
+function createVideoRenditions(applySelection: (index: number) => void) {
+  const target = new EventTarget()
+  const list = [] as unknown as VideoRendition[] & {
+    selectedIndex: number
+    item: (index: number) => VideoRendition | null
+    addEventListener: EventTarget["addEventListener"]
+    removeEventListener: EventTarget["removeEventListener"]
+    dispatchEvent: EventTarget["dispatchEvent"]
+  }
+
+  let selectedIndex = -1
+
+  Object.defineProperty(list, "selectedIndex", {
+    configurable: true,
+    get: () => selectedIndex,
+    set: (value: number) => {
+      if (value === selectedIndex) return
+      selectedIndex = value
+      // -1 means Auto
+      applySelection(value)
+      target.dispatchEvent(new Event("change"))
+    },
+  })
+
+  list.item = (index) => list[index] ?? null
+  list.addEventListener = target.addEventListener.bind(target)
+  list.removeEventListener = target.removeEventListener.bind(target)
+  list.dispatchEvent = target.dispatchEvent.bind(target)
+
+  return {
+    list,
+    setLevels(levels: { width?: number; height?: number; bitrate?: number }[]) {
+      list.splice(
+        0,
+        list.length,
+        ...levels.map((level, index) => ({
+          id: String(index),
+          width: level.width,
+          height: level.height,
+          bitrate: level.bitrate,
+        }))
+      )
+      selectedIndex = -1
+      target.dispatchEvent(new Event("addrendition"))
+    },
+  }
+}
+
 export function HLSPlayer({
   ref,
   src,
@@ -19,7 +80,27 @@ export function HLSPlayer({
   ...props
 }: HLSPlayerProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const composedRef = useComposedRefs(ref, videoRef)
+  const hlsRef = useRef<Hls | null>(null)
+  const renditionsRef = useRef<ReturnType<typeof createVideoRenditions> | null>(
+    null
+  )
+
+  if (renditionsRef.current === null) {
+    // eslint-disable-next-line react/refs
+    renditionsRef.current = createVideoRenditions((index) => {
+      if (hlsRef.current) hlsRef.current.currentLevel = index
+    })
+  }
+
+  const composedRef = useComposedRefs((video) => {
+    if (video && !("videoRenditions" in video)) {
+      Object.defineProperty(video, "videoRenditions", {
+        configurable: true,
+        get: () => renditionsRef.current?.list,
+      })
+    }
+    videoRef.current = video
+  }, ref)
 
   useEffect(() => {
     const video = videoRef.current
@@ -40,12 +121,20 @@ export function HLSPlayer({
         hls = new HlsClass({
           enableWorker: true,
         })
+        hlsRef.current = hls
 
         hls.loadSource(src)
         hls.attachMedia(video)
 
         hls.on(HlsClass.Events.MANIFEST_PARSED, () => {
-          if (!cancelled) onReady?.()
+          if (!cancelled) {
+            renditionsRef.current?.setLevels(hls?.levels ?? [])
+            onReady?.()
+          }
+        })
+
+        hls.on(HlsClass.Events.LEVELS_UPDATED, () => {
+          if (!cancelled) renditionsRef.current?.setLevels(hls?.levels ?? [])
         })
 
         hls.on(HlsClass.Events.ERROR, (_, data) => {
@@ -117,6 +206,7 @@ export function HLSPlayer({
     // Cleanup
     return () => {
       cancelled = true
+      hlsRef.current = null
       hls?.destroy()
       nativeCleanup?.()
     }
