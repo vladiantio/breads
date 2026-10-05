@@ -79,19 +79,19 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
                   disablePictureInPicture
                   loop
                   muted={isMuted}
-                  className="object-contain absolute inset-0 size-full backdrop-blur-md"
+                  className="object-contain absolute inset-0 size-full bg-black"
                 />
                 <button
                   aria-label={isMuted ? "Unmute" : "Mute"}
                   aria-pressed={isMuted}
-                  className="dark absolute z-[1] bottom-2 right-2 bg-background/50 backdrop-blur-sm text-foreground p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
+                  className="dark absolute z-[1] bottom-2 right-2 bg-background text-foreground p-2 rounded-full [&>svg]:size-4 transition-all hover:bg-accent/50"
                   onClick={() => setIsMuted((prev) => !prev)}
                 >
                   {isMuted ? <VolumeOffIcon /> : <Volume2Icon />}
                 </button>
               </>
             )}
-            <div className="dark absolute top-2 right-2 bg-background/50 backdrop-blur-sm text-foreground p-2 rounded-full [&>svg]:size-4">
+            <div className="dark absolute top-2 right-2 bg-background text-foreground p-2 rounded-full [&>svg]:size-4">
               {post.embedVideo ? (
                 <FilmIcon />
               ) : post.embedImages!.length > 1 ? (
@@ -104,7 +104,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
               <div className="absolute inset-0 z-[2] flex items-center justify-center">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-1.5 bg-background/80 backdrop-blur-sm text-foreground px-3 py-2 rounded-full text-sm font-medium shadow-sm [&>svg]:size-4 hover:bg-accent"
+                  className="inline-flex items-center gap-1.5 bg-background text-foreground px-3 py-2 rounded-full text-sm font-medium shadow-sm [&>svg]:size-4 hover:bg-accent"
                   onClick={() => setRevealed(true)}
                 >
                   <EyeIcon />
@@ -113,7 +113,7 @@ function MediaCard({ post }: { post: PostWithAuthor }) {
               </div>
             )}
             {(post.likes > 0 || post.replies > 0 || post.reposts > 0) && !hidden && (
-              <div className="dark absolute bottom-2 left-2 bg-background/50 backdrop-blur-sm text-foreground px-3 py-2 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-xs">
+              <div className="dark absolute bottom-2 left-2 bg-background text-foreground px-3 py-2 rounded-full [&_svg]:size-4 flex gap-2 font-semibold text-xs">
                 {post.likes > 0 && (
                   <div className="flex items-center gap-1">
                     <HeartIcon />
