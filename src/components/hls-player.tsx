@@ -56,17 +56,31 @@ function createVideoRenditions(applySelection: (index: number) => void) {
   return {
     list,
     setLevels(levels: { width?: number; height?: number; bitrate?: number }[]) {
-      list.splice(
-        0,
-        list.length,
-        ...levels.map((level, index) => ({
-          id: String(index),
-          width: level.width,
-          height: level.height,
-          bitrate: level.bitrate,
-        }))
-      )
-      selectedIndex = -1
+      const next = levels.map((level, index) => ({
+        id: String(index),
+        width: level.width,
+        height: level.height,
+        bitrate: level.bitrate,
+      }))
+
+      const changed =
+        next.length !== list.length ||
+        next.some(
+          (level, i) =>
+            level.width !== list[i]?.width ||
+            level.height !== list[i]?.height ||
+            level.bitrate !== list[i]?.bitrate
+        )
+      if (!changed) return
+
+      list.splice(0, list.length, ...next)
+
+      if (selectedIndex >= list.length) {
+        selectedIndex = -1
+        // Auto (-1); keep hls.js in sync so the UI and playback agree
+        applySelection(-1)
+        target.dispatchEvent(new Event("change"))
+      }
       target.dispatchEvent(new Event("addrendition"))
     },
   }
@@ -85,30 +99,32 @@ export function HLSPlayer({
     null
   )
 
-  if (renditionsRef.current === null) {
-    // eslint-disable-next-line react/refs
-    renditionsRef.current = createVideoRenditions((index) => {
-      if (hlsRef.current) hlsRef.current.currentLevel = index
-    })
-  }
-
-  const composedRef = useComposedRefs((video) => {
-    if (video && !("videoRenditions" in video)) {
-      Object.defineProperty(video, "videoRenditions", {
-        configurable: true,
-        get: () => renditionsRef.current?.list,
-      })
-    }
-    videoRef.current = video
-  }, ref)
+  const composedRef = useComposedRefs(ref, videoRef)
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
+    const renditions = createVideoRenditions((index) => {
+      if (hlsRef.current) hlsRef.current.currentLevel = index
+    })
+    renditionsRef.current = renditions
+
+    if (!("videoRenditions" in video)) {
+      Object.defineProperty(video, "videoRenditions", {
+        configurable: true,
+        get: () => renditionsRef.current?.list,
+      })
+    }
+
+
     let hls: Hls | null = null
     let cancelled = false
     let nativeCleanup: (() => void) | null = null
+
+    const syncLevels = () => {
+      if (!cancelled) renditionsRef.current?.setLevels(hls?.levels ?? [])
+    }
 
     const initializePlayer = async () => {
       if (cancelled) return
@@ -128,14 +144,12 @@ export function HLSPlayer({
 
         hls.on(HlsClass.Events.MANIFEST_PARSED, () => {
           if (!cancelled) {
-            renditionsRef.current?.setLevels(hls?.levels ?? [])
+            syncLevels()
             onReady?.()
           }
         })
 
-        hls.on(HlsClass.Events.LEVELS_UPDATED, () => {
-          if (!cancelled) renditionsRef.current?.setLevels(hls?.levels ?? [])
-        })
+        hls.on(HlsClass.Events.LEVELS_UPDATED, syncLevels)
 
         hls.on(HlsClass.Events.ERROR, (_, data) => {
           if (cancelled) return
@@ -207,6 +221,7 @@ export function HLSPlayer({
     return () => {
       cancelled = true
       hlsRef.current = null
+      renditionsRef.current = null
       hls?.destroy()
       nativeCleanup?.()
     }
