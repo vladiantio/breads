@@ -121,6 +121,10 @@ export function HLSPlayer({
     let hls: Hls | null = null
     let cancelled = false
     let nativeCleanup: (() => void) | null = null
+    let started = false
+    let stoppedForOffscreen = false
+    let offscreenTimer: ReturnType<typeof setTimeout> | null = null
+    let observer: IntersectionObserver | null = null
 
     const syncLevels = () => {
       if (!cancelled) renditionsRef.current?.setLevels(hls?.levels ?? [])
@@ -215,11 +219,60 @@ export function HLSPlayer({
       }
     }
 
-    initializePlayer()
+    const start = () => {
+      if (started || cancelled) return
+      started = true
+      initializePlayer()
+    }
+
+    const pauseForOffscreen = () => {
+      if (!started || stoppedForOffscreen || offscreenTimer !== null) return
+
+      // Dwell briefly so quick scroll-throughs don't tear down playback
+      offscreenTimer = setTimeout(() => {
+        offscreenTimer = null
+        if (cancelled) return
+        stoppedForOffscreen = true
+        video.pause()
+        hls?.stopLoad()
+      }, 2000)
+    }
+
+    const resumeFromOffscreen = () => {
+      if (offscreenTimer !== null) {
+        clearTimeout(offscreenTimer)
+        offscreenTimer = null
+      }
+      if (!stoppedForOffscreen) return
+      stoppedForOffscreen = false
+      hls?.startLoad()
+    }
+
+    if (typeof IntersectionObserver === "undefined") {
+      start()
+    } else {
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              if (!started) start()
+              else resumeFromOffscreen()
+            } else {
+              pauseForOffscreen()
+            }
+          }
+        },
+        // Start loading just before the video scrolls into view
+        { rootMargin: "300px" }
+      )
+      observer.observe(video)
+    }
 
     // Cleanup
     return () => {
       cancelled = true
+      observer?.disconnect()
+      if (offscreenTimer !== null) clearTimeout(offscreenTimer)
       hlsRef.current = null
       renditionsRef.current = null
       hls?.destroy()
