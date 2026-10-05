@@ -18,6 +18,16 @@ type VideoRendition = {
   bitrate?: number
 }
 
+type HlsConfig = ConstructorParameters<NonNullable<typeof import("hls.js").default>>[0]
+
+const HLS_CONFIG = {
+  enableWorker: true,
+  // Keep buffers small: mobile browsers evict large buffers under memory
+  // pressure, so big values only cost RAM
+  maxBufferLength: 30,
+  maxMaxBufferLength: 60,
+} satisfies HlsConfig
+
 /**
  * Bridges hls.js levels to the W3C `videoRenditions` interface that
  * media-chrome reads. Chrome/Firefox don't implement it natively, so we
@@ -130,6 +140,17 @@ export function HLSPlayer({
       if (!cancelled) renditionsRef.current?.setLevels(hls?.levels ?? [])
     }
 
+    // hls.js can emit repeated fatal errors during a network flap; don't
+    // stack duplicate toasts
+    let lastToast = { description: "", at: 0 }
+    const toastError = (description: string) => {
+      const now = Date.now()
+      if (description === lastToast.description && now - lastToast.at < 5000)
+        return
+      lastToast = { description, at: now }
+      toast("Video", { description, duration: 3000 })
+    }
+
     const initializePlayer = async () => {
       if (cancelled) return
 
@@ -138,9 +159,7 @@ export function HLSPlayer({
       if (cancelled) return
 
       if (HlsClass.isSupported()) {
-        hls = new HlsClass({
-          enableWorker: true,
-        })
+        hls = new HlsClass(HLS_CONFIG)
         hlsRef.current = hls
 
         hls.loadSource(src)
@@ -161,24 +180,15 @@ export function HLSPlayer({
           if (data.fatal) {
             switch (data.type) {
               case HlsClass.ErrorTypes.NETWORK_ERROR:
-                toast("Video", {
-                  description: "Network error occurred",
-                  duration: 3000,
-                })
+                toastError("Network error occurred")
                 hls?.startLoad()
                 break
               case HlsClass.ErrorTypes.MEDIA_ERROR:
-                toast("Video", {
-                  description: "Media error occurred",
-                  duration: 3000,
-                })
+                toastError("Media error occurred")
                 hls?.recoverMediaError()
                 break
               default:
-                toast("Video", {
-                  description: "An unrecoverable error occurred",
-                  duration: 3000,
-                })
+                toastError("An unrecoverable error occurred")
                 hls?.destroy()
                 break
             }
